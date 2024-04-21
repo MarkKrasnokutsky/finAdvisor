@@ -18,11 +18,6 @@ public class TemplateController {
     @GetMapping(value = {"/stock/{secid}/{limit}/{start}"})
     public String stockData(Model model, @PathVariable String secid, @PathVariable int limit, @PathVariable int start) {
         ArrayList<Stock> stockData = serviceStock.fetchStocks(secid, limit, start);
-        for (Stock item : stockData) {
-            System.out.println(item.getShortname() + '\n');
-            System.out.println(item.getSecid() + '\n');
-            System.out.println(item.getTradedate().toString() + '\n');
-        }
         ArrayList<Stock> lastFractalData = serviceStock.findLastFractal(stockData);
         model.addAttribute("stockData", stockData);
         model.addAttribute("lastFractalData", lastFractalData);

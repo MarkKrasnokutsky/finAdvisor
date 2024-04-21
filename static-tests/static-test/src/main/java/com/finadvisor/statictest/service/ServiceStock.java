@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -69,26 +70,12 @@ public class ServiceStock {
     public ArrayList<Stock> findLastFractal(ArrayList<Stock> allStockData) {
         ArrayList<Stock> lastFractal = new ArrayList<>();
         for (int i = 0; i < allStockData.size() - 4; i++) {
-            double lowX = allStockData.get(i).getLow();
-            double lowX_1 = allStockData.get(i + 1).getLow();
-            double lowX_2 = allStockData.get(i + 2).getLow();
-            double lowX_3 = allStockData.get(i + 3).getLow();
-            double lowX_4 = allStockData.get(i + 4).getLow();
-            if (lowX > lowX_1) {
-                if (lowX_1 > lowX_2) {
-                    if (lowX_2 < lowX_3) {
-                        if (lowX_3 < lowX_4) {
-                            lastFractal.add(allStockData.get(i));
-                            lastFractal.add(allStockData.get(i + 1));
-                            lastFractal.add(allStockData.get(i + 2));
-                            lastFractal.add(allStockData.get(i + 3));
-                            lastFractal.add(allStockData.get(i + 4));
-                            break;
-                        }
-                    }
-                }
+            List<Stock> subListLow = allStockData.subList(i, i + 5);
+            if (subListLow.get(0).getLow() > subListLow.get(1).getLow() && subListLow.get(1).getLow() > subListLow.get(2).getLow()
+                    && subListLow.get(2).getLow() < subListLow.get(3).getLow() && subListLow.get(3).getLow() < subListLow.get(4).getLow()) {
+                lastFractal.addAll(subListLow);
+                break;
             }
-
         }
         return lastFractal;
     }
