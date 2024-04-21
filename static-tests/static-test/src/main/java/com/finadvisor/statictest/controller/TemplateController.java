@@ -23,7 +23,9 @@ public class TemplateController {
             System.out.println(item.getSecid() + '\n');
             System.out.println(item.getTradedate().toString() + '\n');
         }
+        ArrayList<Stock> lastFractalData = serviceStock.findLastFractal(stockData);
         model.addAttribute("stockData", stockData);
+        model.addAttribute("lastFractalData", lastFractalData);
         return "index";
     }
 }
