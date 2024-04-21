@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 @Service
@@ -20,6 +21,7 @@ public class ServiceStock {
         String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + shortNameStock + ".xml?limit=" + limit + "&start=" + start;
         RestTemplate restTemplate = new RestTemplate();
         String xmlResponse = restTemplate.getForObject(apiUrl, String.class);
+        System.out.println(xmlResponse);
         // Парсинг и сохранение всех элементов <row> в базу данных
             return parseXmlResponse(xmlResponse);
     }
@@ -55,7 +57,7 @@ public class ServiceStock {
                 stock.setShortname(shortname);
                 stocks.add(stock);
             }
-
+            Collections.reverse(stocks);
             return stocks;
         } catch (IOException e) {
             // Обработка ошибки парсинга XML
@@ -63,5 +65,31 @@ public class ServiceStock {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+    public ArrayList<Stock> findLastFractal(ArrayList<Stock> allStockData) {
+        ArrayList<Stock> lastFractal = new ArrayList<>();
+        for (int i = 0; i < allStockData.size() - 4; i++) {
+            double lowX = allStockData.get(i).getLow();
+            double lowX_1 = allStockData.get(i + 1).getLow();
+            double lowX_2 = allStockData.get(i + 2).getLow();
+            double lowX_3 = allStockData.get(i + 3).getLow();
+            double lowX_4 = allStockData.get(i + 4).getLow();
+            if (lowX > lowX_1) {
+                if (lowX_1 > lowX_2) {
+                    if (lowX_2 < lowX_3) {
+                        if (lowX_3 < lowX_4) {
+                            lastFractal.add(allStockData.get(i));
+                            lastFractal.add(allStockData.get(i + 1));
+                            lastFractal.add(allStockData.get(i + 2));
+                            lastFractal.add(allStockData.get(i + 3));
+                            lastFractal.add(allStockData.get(i + 4));
+                            break;
+                        }
+                    }
+                }
+            }
+
+        }
+        return lastFractal;
     }
 }
