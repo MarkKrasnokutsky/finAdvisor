@@ -11,7 +11,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -20,6 +22,7 @@ public class ServiceStock {
         String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + shortNameStock + ".xml?limit=" + limit + "&start=" + start;
         RestTemplate restTemplate = new RestTemplate();
         String xmlResponse = restTemplate.getForObject(apiUrl, String.class);
+        System.out.println(xmlResponse);
         // Парсинг и сохранение всех элементов <row> в базу данных
             return parseXmlResponse(xmlResponse);
     }
@@ -55,7 +58,7 @@ public class ServiceStock {
                 stock.setShortname(shortname);
                 stocks.add(stock);
             }
-
+            Collections.reverse(stocks);
             return stocks;
         } catch (IOException e) {
             // Обработка ошибки парсинга XML
@@ -63,5 +66,17 @@ public class ServiceStock {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+    public ArrayList<Stock> findLastFractal(ArrayList<Stock> allStockData) {
+        ArrayList<Stock> lastFractal = new ArrayList<>();
+        for (int i = 0; i < allStockData.size() - 4; i++) {
+            List<Stock> subListLow = allStockData.subList(i, i + 5);
+            if (subListLow.get(0).getLow() > subListLow.get(1).getLow() && subListLow.get(1).getLow() > subListLow.get(2).getLow()
+                    && subListLow.get(2).getLow() < subListLow.get(3).getLow() && subListLow.get(3).getLow() < subListLow.get(4).getLow()) {
+                lastFractal.addAll(subListLow);
+                break;
+            }
+        }
+        return lastFractal;
     }
 }
