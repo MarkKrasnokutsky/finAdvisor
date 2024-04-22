@@ -31,4 +31,10 @@ public class Stock {
     @Getter
     @Setter
     private Date tradedate;
+
+    @Override
+    public String toString() {
+        return "TRADEDATE:" +  this.tradedate + ", SECID:" + this.secid + ", SHORTNAME:" + this.shortname + ", OPEN:" + this.open + ",LOW:"
+                + this.low + ", HIGH:" + this.high + ", CLOSE:" + this.close;
+    }
 }

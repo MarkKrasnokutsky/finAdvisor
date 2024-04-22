@@ -16,12 +16,26 @@
 </ul>
 <span>----------------------------------------------------------</span>
 <h1>
-    Last fractal stock Data
+    Данные о сигнале
 </h1>
 <ul>
-    {{#lastFractalData}}
+   <h1>Данные о фрактале</h1>
+    {{#subListFractal}}
         <li>TRADEDATE: {{tradedate}}, SECID: {{secid}}, SHORTNAME: {{shortname}}, OPEN: {{open}} LOW: {{low}}, HIGH: {{high}}, CLOSE: {{close}}</li>
-    {{/lastFractalData}}
+    {{/subListFractal}}
+    <h1>Пробойная свеча</h1>
+    {{#breakdown}}
+        <li>TRADEDATE: {{tradedate}}, SECID: {{secid}}, SHORTNAME: {{shortname}}, OPEN: {{open}} LOW: {{low}}, HIGH: {{high}}, CLOSE: {{close}}</li>
+    {{/breakdown}}
+    <h1>Сигнальная свеча</h1>
+    {{#signal}}
+        <li>TRADEDATE: {{tradedate}}, SECID: {{secid}}, SHORTNAME: {{shortname}}, OPEN: {{open}} LOW: {{low}}, HIGH: {{high}}, CLOSE: {{close}}</li>
+    {{/signal}}
+    <h1>Точка входа</h1>
+    {{#longPoint}}
+        <li>TRADEDATE: {{tradedate}}, SECID: {{secid}}, SHORTNAME: {{shortname}}, OPEN: {{open}} LOW: {{low}}, HIGH: {{high}}, CLOSE: {{close}}</li>
+    {{/longPoint}}
 </ul>
+
 </body>
 </html>
