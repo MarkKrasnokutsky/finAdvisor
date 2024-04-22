@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 
@@ -18,9 +17,9 @@ public class TemplateController {
     @GetMapping(value = {"/stock/{secid}/{limit}/{start}"})
     public String stockData(Model model, @PathVariable String secid, @PathVariable int limit, @PathVariable int start) {
         ArrayList<Stock> stockData = serviceStock.fetchStocks(secid, limit, start);
-        ArrayList<Stock> lastFractalData = serviceStock.findLastFractal(stockData);
+        ArrayList<Stock> lastFractalData = serviceStock.findLastSignal(stockData);
         model.addAttribute("stockData", stockData);
-        model.addAttribute("lastFractalData", lastFractalData);
+        model.addAttribute("lastSignalData", lastFractalData);
         return "index";
     }
 }
