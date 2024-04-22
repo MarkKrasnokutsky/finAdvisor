@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -22,9 +21,8 @@ public class ServiceStock {
         String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + shortNameStock + ".xml?limit=" + limit + "&start=" + start;
         RestTemplate restTemplate = new RestTemplate();
         String xmlResponse = restTemplate.getForObject(apiUrl, String.class);
-        System.out.println(xmlResponse);
         // Парсинг и сохранение всех элементов <row> в базу данных
-            return parseXmlResponse(xmlResponse);
+        return parseXmlResponse(xmlResponse);
     }
     private ArrayList<Stock> parseXmlResponse(String xmlResponse) {
         try {
@@ -58,7 +56,7 @@ public class ServiceStock {
                 stock.setShortname(shortname);
                 stocks.add(stock);
             }
-            Collections.reverse(stocks);
+            //Collections.reverse(stocks);
             return stocks;
         } catch (IOException e) {
             // Обработка ошибки парсинга XML
@@ -67,16 +65,44 @@ public class ServiceStock {
             throw new RuntimeException(e);
         }
     }
-    public ArrayList<Stock> findLastFractal(ArrayList<Stock> allStockData) {
-        ArrayList<Stock> lastFractal = new ArrayList<>();
-        for (int i = 0; i < allStockData.size() - 4; i++) {
+    public ArrayList<Stock> findLastSignal(ArrayList<Stock> allStockData) {
+        ArrayList<Stock> lastSignal = new ArrayList<>();
+        for (int i = allStockData.size() - 5; i >= 0; i--) {
+            // Выборка предположительного фрактала
             List<Stock> subListLow = allStockData.subList(i, i + 5);
+            // Проверка на истинный фрактал и его минимум
             if (subListLow.get(0).getLow() > subListLow.get(1).getLow() && subListLow.get(1).getLow() > subListLow.get(2).getLow()
                     && subListLow.get(2).getLow() < subListLow.get(3).getLow() && subListLow.get(3).getLow() < subListLow.get(4).getLow()) {
-                lastFractal.addAll(subListLow);
-                break;
+                if (i + 5 + 1 + 10 <= allStockData.size()) {
+                    // Двигаемся на 10 свечей вперед, не учитывая первые две после фаркатала
+                    for (int j = i + 5 + 1, count_j = 0; j < allStockData.size() && count_j < 10; j++, count_j++) {
+                        // Проврка на пробойную свечу
+                        if (subListLow.get(2).getLow() > allStockData.get(j).getLow()) {
+                            if (j + 6 <= allStockData.size()) {
+                                // Двигаемся на 5 свечей вперед от пробойной свечи
+                                for (int k = j + 1, count_k = 0; k < allStockData.size() && count_k < 5; k++, count_k++) {
+                                    // Проверка на сигнальную свечу И на НЕ истинный пробой
+                                    if(allStockData.get(j).getOpen() < allStockData.get(k).getClose() && !(allStockData.get(j).getLow() > allStockData.get(k).getClose())) {
+                                        if (k + 1 < allStockData.size()) {
+                                            Stock stockLongOpen = allStockData.get(k + 1);
+                                            // Истинный фрактал
+                                            lastSignal.addAll(subListLow);
+                                            // Пробойная свеча
+                                            lastSignal.add(allStockData.get(j));
+                                            // Сигнальная свеча
+                                            lastSignal.add(allStockData.get(k));
+                                            // Точка входа
+                                            lastSignal.add(stockLongOpen);
+                                            return lastSignal;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
-        return lastFractal;
+        return null;
     }
 }
