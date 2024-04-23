@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -30,7 +31,7 @@ public class Stock {
     private String shortname;
     @Getter
     @Setter
-    private Date tradedate;
+    private LocalDate tradedate;
 
     @Override
     public String toString() {
