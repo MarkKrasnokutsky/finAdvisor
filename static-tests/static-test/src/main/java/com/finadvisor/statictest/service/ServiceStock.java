@@ -73,9 +73,9 @@ public class ServiceStock {
             // Проверка на истинный фрактал и его минимум
             if (subListLow.get(0).getLow() > subListLow.get(1).getLow() && subListLow.get(1).getLow() > subListLow.get(2).getLow()
                     && subListLow.get(2).getLow() < subListLow.get(3).getLow() && subListLow.get(3).getLow() < subListLow.get(4).getLow()) {
-                if (i + 5 + 1 + 10 <= allStockData.size()) {
+                if (i + 5 + 10 <= allStockData.size()) {
                     // Двигаемся на 10 свечей вперед, не учитывая первые две после фаркатала
-                    for (int j = i + 5 + 1, count_j = 0; j < allStockData.size() && count_j < 10; j++, count_j++) {
+                    for (int j = i + 5, count_j = 0; j < allStockData.size() && count_j < 10; j++, count_j++) {
                         // Проврка на пробойную свечу
                         if (subListLow.get(2).getLow() > allStockData.get(j).getLow()) {
                             if (j + 6 <= allStockData.size()) {
@@ -84,7 +84,16 @@ public class ServiceStock {
                                     // Проверка на сигнальную свечу И на НЕ истинный пробой
                                     if(allStockData.get(j).getOpen() < allStockData.get(k).getClose() && !(allStockData.get(j).getLow() > allStockData.get(k).getClose())) {
                                         if (k + 1 < allStockData.size()) {
-                                            Stock stockLongOpen = allStockData.get(k + 1);
+                                            Stock stockLongOpen = new Stock();
+                                            stockLongOpen.setSecid(allStockData.get(k).getSecid());
+                                            // Закрытие в n день. Сигнал в n + 1 день в 9:30
+                                            stockLongOpen.setTradedate(allStockData.get(k).getTradedate());
+                                            stockLongOpen.setOpen(allStockData.get(k).getClose());
+                                            stockLongOpen.setLow(0);
+                                            stockLongOpen.setHigh(0);
+                                            stockLongOpen.setClose(0);
+                                            stockLongOpen.setShortname(allStockData.get(k).getShortname());
+                                            //Stock stockLongOpen = allStockData.get(k + 1);
                                             // Истинный фрактал
                                             lastSignal.addAll(subListLow);
                                             // Пробойная свеча
@@ -103,6 +112,6 @@ public class ServiceStock {
                 }
             }
         }
-        return null;
+        return lastSignal;
     }
 }
