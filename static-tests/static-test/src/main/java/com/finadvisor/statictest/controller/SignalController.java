@@ -1,5 +1,6 @@
 package com.finadvisor.statictest.controller;
 
+import com.finadvisor.statictest.repository.SignalRepository;
 import com.finadvisor.statictest.service.ServiceSignal;
 import com.finadvisor.statictest.service.ServiceStock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 public class SignalController {
     @Autowired
     private ServiceSignal serviceSignal;
+    @Autowired
+    private SignalRepository signalRepository;
     @GetMapping("/fetchSignals")
     ResponseEntity getSignals() {
         try {
@@ -20,5 +23,13 @@ public class SignalController {
             return ResponseEntity.badRequest().body("Error");
         }
     }
-
+    @GetMapping("/signals_get")
+    ResponseEntity findLastSignal() {
+        try {
+            return ResponseEntity.ok(signalRepository.findAll());
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error");
+        }
+    }
 }
