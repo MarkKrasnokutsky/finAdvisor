@@ -24,30 +24,60 @@ public class ServiceSignal {
     private final SignalRepository signalRepository;
     public List<StockSignal> fetchAllStockEvents() {
         List<Instrument> allStocks = this.stockRepository.findAll();
-        int start = 0; // усредненное для всех выборка за последние полгода
         for (Instrument instrument : allStocks) {
-            String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrument.getSecid() + ".xml?limit=" + 100 + "&start=" + start;
+            int last = getLastHistoryInstrument(instrument);
+            String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrument.getSecid() + ".xml?limit=" + 100 + "&start=" + last;
             RestTemplate restTemplate = new RestTemplate();
             String xmlResponse = restTemplate.getForObject(apiUrl, String.class);
             // Парсинг и сохранение всех элементов <row> в базу данных
-            ArrayList<Stock> signalData = findLastSignal(Objects.requireNonNull(parseXmlResponse(xmlResponse)));
-            if (signalData == null || signalData.isEmpty()) {
-                continue; // Skip this iteration if parsing failed or no data was found
+            ArrayList<Stock> stockData = parseXmlResponse(xmlResponse);
+            ArrayList<Stock> signalData = findLastSignal(stockData);
+            System.out.println(last);
+            System.out.println(stockData.size());
+            System.out.println(signalData.size());
+            if (stockData.isEmpty() || signalData.isEmpty()) {
+                continue;
             }
-            StockSignal stockSignal = new StockSignal();
-            stockSignal.setDate(signalData.get(7).getTradedate());
-            stockSignal.setShortname(signalData.get(7).getShortname());
-            stockSignal.setSecid(signalData.get(7).getSecid());
-            stockSignal.setOpen(signalData.get(7).getOpen());
-            this.signalRepository.save(stockSignal);
+            saveStockSignal(signalData);
         }
         return this.signalRepository.findAll();
     }
+
+    private int getLastHistoryInstrument(Instrument instrument) {
+        int start = 0;
+        while(true) {
+            String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrument.getSecid() + ".xml?limit=" + 100 + "&start=" + start;
+            RestTemplate restTemplate = new RestTemplate();
+            String xmlResponse = restTemplate.getForObject(apiUrl, String.class);
+            ArrayList<Stock> stockData = parseXmlResponse(xmlResponse);
+            if (stockData.size() < 100) {
+                return start;
+            }
+            if (stockData.isEmpty()) {
+                return Math.max(0, start - 100);
+            }
+            start += 100;
+        }
+    }
+
+    private void saveStockSignal(ArrayList<Stock> signalData) {
+        StockSignal stockSignal = new StockSignal();
+        stockSignal.setDate(signalData.get(7).getTradedate());
+        stockSignal.setShortname(signalData.get(7).getShortname());
+        stockSignal.setSecid(signalData.get(7).getSecid());
+        stockSignal.setOpen(signalData.get(7).getOpen());
+        this.signalRepository.save(stockSignal);
+    }
+
     private ArrayList<Stock> parseXmlResponse(String xmlResponse) {
         try {
             XmlMapper xmlMapper = new XmlMapper();
-            JsonNode node = xmlMapper.readTree(xmlResponse).get("data").get("rows").get("row");
+            JsonNode rootNode = xmlMapper.readTree(xmlResponse).get("data").get("rows");
+            JsonNode node = rootNode != null ? rootNode.get("row") : null; // Check if rootNode is not null before getting "row"
             ArrayList<Stock> stocks = new ArrayList<>();
+            if (node == null || !node.isArray()) { // Check if node is null or not an array
+                return stocks; // Return empty list if "row" node does not exist or is not an array
+            }
             for (JsonNode item : node) {
                 String shortname = item.get("SHORTNAME").asText();
                 String secid = item.get("SECID").asText();
