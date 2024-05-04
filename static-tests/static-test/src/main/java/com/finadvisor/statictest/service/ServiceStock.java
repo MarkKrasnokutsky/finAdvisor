@@ -2,7 +2,6 @@ package com.finadvisor.statictest.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import com.finadvisor.statictest.entity.Stock;
 import com.finadvisor.statictest.model.Instrument;
 import com.finadvisor.statictest.repository.StockRepository;
 import lombok.AllArgsConstructor;
@@ -10,9 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service

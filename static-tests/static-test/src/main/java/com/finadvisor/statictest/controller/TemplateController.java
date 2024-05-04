@@ -1,6 +1,6 @@
 package com.finadvisor.statictest.controller;
 
-import com.finadvisor.statictest.entity.Stock;
+import com.finadvisor.statictest.dto.Stock;
 import com.finadvisor.statictest.service.ServiceSignalsTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

@@ -2,7 +2,7 @@ package com.finadvisor.statictest.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.finadvisor.statictest.entity.Stock;
+import com.finadvisor.statictest.dto.Stock;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
