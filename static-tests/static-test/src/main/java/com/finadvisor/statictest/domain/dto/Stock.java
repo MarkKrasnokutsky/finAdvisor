@@ -1,4 +1,4 @@
-package com.finadvisor.statictest.dto;
+package com.finadvisor.statictest.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

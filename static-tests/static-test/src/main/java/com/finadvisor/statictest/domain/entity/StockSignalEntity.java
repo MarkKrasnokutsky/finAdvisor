@@ -1,6 +1,5 @@
-package com.finadvisor.statictest.model;
+package com.finadvisor.statictest.domain.entity;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name="stock_signal")
-public class StockSignal {
+public class StockSignalEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -28,6 +27,6 @@ public class StockSignal {
     @Column(name = "open")
     private double open;
 //    @ManyToOne
-//    @JoinColumn(name = "stock_id", nullable = false)
+//    @JoinColumn(referencedColumnName = "stock_id", nullable = false)
 //    private Instrument stock;
 }

@@ -1,6 +1,6 @@
 package com.finadvisor.statictest.controller;
 
-import com.finadvisor.statictest.model.StockSignal;
+import com.finadvisor.statictest.domain.entity.StockSignalEntity;
 import com.finadvisor.statictest.repository.SignalRepository;
 import com.finadvisor.statictest.service.ServiceSignal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +22,7 @@ public class SignalController {
     private SignalRepository signalRepository;
     @PutMapping("/updateAll")
     @Operation(summary = "Обновляет все возможные сигналы по всем инструментам")
-    List<StockSignal> getSignals() {
+    List<StockSignalEntity> getSignals() {
         serviceSignal.updateAllSignals();
         return this.signalRepository.findAll();
     }
