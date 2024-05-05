@@ -2,7 +2,7 @@ package com.finadvisor.statictest.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
-import com.finadvisor.statictest.model.Instrument;
+import com.finadvisor.statictest.domain.entity.InstrumentEntity;
 import com.finadvisor.statictest.repository.StockRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,19 +20,19 @@ public class ServiceStock {
 //        this.stockRepository.deleteAllAndResetIds();
 //        this.stockRepository.resetAutoIncrement();
 //    }
-    public List<Instrument> fetchStocks() {
+    public List<InstrumentEntity> fetchStocks() {
         String apiUrl = "https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities.xml";
         RestTemplate restTemplate = new RestTemplate();
         String xmlResponse = restTemplate.getForObject(apiUrl, String.class);
         // Парсинг и сохранение всех элементов <row> в базу данных
-        List<Instrument> stocks = parseXmlResponse(xmlResponse);
+        List<InstrumentEntity> stocks = parseXmlResponse(xmlResponse);
         return this.stockRepository.saveAll(stocks);
     }
-    private ArrayList<Instrument> parseXmlResponse(String xmlResponse) {
+    private ArrayList<InstrumentEntity> parseXmlResponse(String xmlResponse) {
         try {
             XmlMapper xmlMapper = new XmlMapper();
             JsonNode dataNodes = xmlMapper.readTree(xmlResponse).get("data");
-            ArrayList<Instrument> stocks = new ArrayList<>();
+            ArrayList<InstrumentEntity> stocks = new ArrayList<>();
             for (JsonNode dataNode : dataNodes) {
                 if (dataNode.has("id") && dataNode.get("id").asText().equals("securities")) {
                     JsonNode rowNodes = dataNode.get("rows").get("row");
@@ -40,7 +40,7 @@ public class ServiceStock {
                         String shortname = rowNode.get("SHORTNAME").asText();
                         String secid = rowNode.get("SECID").asText();
                         String boardid = rowNode.get("BOARDID").asText();
-                        Instrument stock = new Instrument();
+                        InstrumentEntity stock = new InstrumentEntity();
                         stock.setSecid(secid);
                         stock.setShortname(shortname);
                         stock.setBoardid(boardid);

@@ -2,9 +2,9 @@ package com.finadvisor.statictest.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.finadvisor.statictest.dto.Stock;
-import com.finadvisor.statictest.model.Instrument;
-import com.finadvisor.statictest.model.StockSignal;
+import com.finadvisor.statictest.domain.dto.Stock;
+import com.finadvisor.statictest.domain.entity.InstrumentEntity;
+import com.finadvisor.statictest.domain.entity.StockSignalEntity;
 import com.finadvisor.statictest.repository.SignalRepository;
 import com.finadvisor.statictest.repository.StockRepository;
 import lombok.AllArgsConstructor;
@@ -25,10 +25,10 @@ public class ServiceSignal {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void updateAllSignals() {
-        List<Instrument> allStocks = this.stockRepository.findAll();
-        for (Instrument instrument : allStocks) {
-            int last = getLastHistoryInstrument(instrument);
-            String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrument.getSecid() + ".xml?limit=" + 100 + "&start=" + last;
+        List<InstrumentEntity> allStocks = this.stockRepository.findAll();
+        for (InstrumentEntity instrumentEntity : allStocks) {
+            int last = getLastHistoryInstrument(instrumentEntity);
+            String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrumentEntity.getSecid() + ".xml?limit=" + 100 + "&start=" + last;
             RestTemplate restTemplate = new RestTemplate();
             String xmlResponse = restTemplate.getForObject(apiUrl, String.class);
             // Парсинг и сохранение всех элементов <row> в базу данных
@@ -40,7 +40,7 @@ public class ServiceSignal {
             if (stockData.isEmpty() || signalData.isEmpty()) {
                 continue;
             }
-            StockSignal lastSignal = this.signalRepository.findBySecid(instrument.getSecid());
+            StockSignalEntity lastSignal = this.signalRepository.findBySecid(instrumentEntity.getSecid());
             if (lastSignal != null && lastSignal.getDate().isBefore(signalData.get(7).getTradedate())) {
                 this.signalRepository.deleteById(lastSignal.getId());
                 saveStockSignal(signalData);
@@ -52,10 +52,10 @@ public class ServiceSignal {
         }
     }
 
-    private int getLastHistoryInstrument(Instrument instrument) {
+    private int getLastHistoryInstrument(InstrumentEntity instrumentEntity) {
         int start = 0;
         while(true) {
-            String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrument.getSecid() + ".xml?limit=" + 100 + "&start=" + start;
+            String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrumentEntity.getSecid() + ".xml?limit=" + 100 + "&start=" + start;
             RestTemplate restTemplate = new RestTemplate();
             String xmlResponse = restTemplate.getForObject(apiUrl, String.class);
             ArrayList<Stock> stockData = parseXmlResponse(xmlResponse);
@@ -70,12 +70,12 @@ public class ServiceSignal {
     }
 
     private void saveStockSignal(ArrayList<Stock> signalData) {
-        StockSignal stockSignal = new StockSignal();
-        stockSignal.setDate(signalData.get(7).getTradedate());
-        stockSignal.setShortname(signalData.get(7).getShortname());
-        stockSignal.setSecid(signalData.get(7).getSecid());
-        stockSignal.setOpen(signalData.get(7).getOpen());
-        this.signalRepository.save(stockSignal);
+        StockSignalEntity stockSignalEntity = new StockSignalEntity();
+        stockSignalEntity.setDate(signalData.get(7).getTradedate());
+        stockSignalEntity.setShortname(signalData.get(7).getShortname());
+        stockSignalEntity.setSecid(signalData.get(7).getSecid());
+        stockSignalEntity.setOpen(signalData.get(7).getOpen());
+        this.signalRepository.save(stockSignalEntity);
     }
 
     private ArrayList<Stock> parseXmlResponse(String xmlResponse) {
