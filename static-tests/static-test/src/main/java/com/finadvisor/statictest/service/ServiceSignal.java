@@ -8,6 +8,7 @@ import com.finadvisor.statictest.model.StockSignal;
 import com.finadvisor.statictest.repository.SignalRepository;
 import com.finadvisor.statictest.repository.StockRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,7 +22,9 @@ import java.util.List;
 public class ServiceSignal {
     private final StockRepository stockRepository;
     private final SignalRepository signalRepository;
-    public List<StockSignal> fetchAllStockEvents() {
+
+    @Scheduled(cron = "0 0 0 * * *")
+    public void updateAllSignals() {
         List<Instrument> allStocks = this.stockRepository.findAll();
         for (Instrument instrument : allStocks) {
             int last = getLastHistoryInstrument(instrument);
@@ -37,9 +40,16 @@ public class ServiceSignal {
             if (stockData.isEmpty() || signalData.isEmpty()) {
                 continue;
             }
+            StockSignal lastSignal = this.signalRepository.findBySecid(instrument.getSecid());
+            if (lastSignal != null && lastSignal.getDate().isBefore(signalData.get(7).getTradedate())) {
+                this.signalRepository.deleteById(lastSignal.getId());
+                saveStockSignal(signalData);
+            }
+            if (lastSignal != null && lastSignal.getDate().isEqual(signalData.get(7).getTradedate())) {
+                continue;
+            }
             saveStockSignal(signalData);
         }
-        return this.signalRepository.findAll();
     }
 
     private int getLastHistoryInstrument(Instrument instrument) {
