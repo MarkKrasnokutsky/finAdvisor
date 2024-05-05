@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SignalRepository extends JpaRepository<StockSignal, Long> {
+    StockSignal findBySecid(String secid);
 }
