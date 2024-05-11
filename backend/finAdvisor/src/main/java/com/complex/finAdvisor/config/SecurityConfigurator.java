@@ -67,6 +67,7 @@ public class SecurityConfigurator {
                 )
                 // TODO настроить права для эндПоинтов
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/signals/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/secured/user").fullyAuthenticated()
                         .anyRequest().permitAll()
