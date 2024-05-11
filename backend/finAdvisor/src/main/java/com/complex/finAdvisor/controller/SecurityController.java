@@ -3,7 +3,7 @@ package com.complex.finAdvisor.controller;
 import com.complex.finAdvisor.config.JwtCore;
 import com.complex.finAdvisor.dto.SigninRequest;
 import com.complex.finAdvisor.dto.SignupRequest;
-import com.complex.finAdvisor.entity.User;
+import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -56,11 +56,11 @@ public class SecurityController {
         if (signupRequest.getPassword() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password cannot be null");
         }
-        User user = new User();
-        user.setUsername(signupRequest.getUsername());
-        user.setEmail(signupRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
-        userRepository.save(user);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(signupRequest.getUsername());
+        userEntity.setEmail(signupRequest.getEmail());
+        userEntity.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        userRepository.save(userEntity);
         return ResponseEntity.ok("Added user successfully");
     }
 

@@ -1,6 +1,7 @@
 package com.complex.finAdvisor.config;
 
-import com.complex.finAdvisor.entity.User;
+import com.complex.finAdvisor.entity.TariffEntity;
+import com.complex.finAdvisor.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,14 +17,16 @@ public class UserDetailsImpl implements UserDetails {
     private String email;
     private String password;
     private String tgNickname;
+    private TariffEntity tariff;
 
-    public static UserDetailsImpl build(User user) {
+    public static UserDetailsImpl build(UserEntity userEntity) {
         return new UserDetailsImpl(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getPassword(),
-                user.getTgNickname()
+                userEntity.getId(),
+                userEntity.getUsername(),
+                userEntity.getEmail(),
+                userEntity.getPassword(),
+                userEntity.getTgNickname(),
+                userEntity.getTariff()
         );
     }
 

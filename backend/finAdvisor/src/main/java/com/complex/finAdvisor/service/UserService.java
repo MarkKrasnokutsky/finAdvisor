@@ -1,6 +1,6 @@
 package com.complex.finAdvisor.service;
 
-import com.complex.finAdvisor.entity.User;
+import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.UserRepository;
 import com.complex.finAdvisor.config.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,10 @@ public class UserService implements UserDetailsService {
     }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
+        UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
                 String.format("User %s not found", username)
         ));
 
-        return UserDetailsImpl.build(user);
+        return UserDetailsImpl.build(userEntity);
     }
 }
