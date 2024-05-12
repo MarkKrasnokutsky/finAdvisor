@@ -23,7 +23,7 @@ public class SignalService {
     private final StockRepository stockRepository;
     private final SignalRepository signalRepository;
 
-    @Scheduled(cron = "0 33 1 * * ?", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 0 0 * * ?", zone = "Europe/Moscow")
     public void updateAllSignals() {
         List<InstrumentEntity> allStocks = this.stockRepository.findAll();
         for (InstrumentEntity instrumentEntity : allStocks) {

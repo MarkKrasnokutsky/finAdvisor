@@ -6,6 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "user")
 @NoArgsConstructor
@@ -33,4 +37,13 @@ public class UserEntity {
     @JoinColumn(name = "tariff_id")
     private TariffEntity tariff;
 
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private RoleEntity role;
+
+    @Column(name = "tariff_expiration")
+    private LocalDateTime tariffExpiration;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 }

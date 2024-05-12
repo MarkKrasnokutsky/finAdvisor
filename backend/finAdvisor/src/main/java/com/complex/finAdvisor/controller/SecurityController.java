@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 @RestController
 @RequestMapping("/auth")
 public class SecurityController {
@@ -60,6 +63,8 @@ public class SecurityController {
         userEntity.setUsername(signupRequest.getUsername());
         userEntity.setEmail(signupRequest.getEmail());
         userEntity.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
+        ZonedDateTime moscowTime = ZonedDateTime.now(ZoneId.of("Europe/Moscow"));
+        userEntity.setCreatedAt(moscowTime.toLocalDateTime());
         userRepository.save(userEntity);
         return ResponseEntity.ok("Added user successfully");
     }
