@@ -2,12 +2,12 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
-  prefix: "tailwind.config.js",
+  prefix: "",
   theme: {
     container: {
       center: true,
@@ -23,6 +23,9 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        backgroundMain: "#1E1E1E",
+        accentMain: "#0095F0",
+        accentMainHover: "#0587d7",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -66,12 +69,27 @@ module.exports = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        blob: {
+          "0%, 100%": {
+            transform: "translate(0px, 0px) scale(1)",
+          },
+          "25%": {
+            transform: "translate(70px, -70px) scale(1.1)", // + r, + d
+          },
+          "50%": {
+            transform: "translate(0px, 70px) scale(0.9)",
+          },
+          "75%": {
+            transform: "translate(-70px, 70px) scale(0.9)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        blob: "blob 7s  infinite",
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
