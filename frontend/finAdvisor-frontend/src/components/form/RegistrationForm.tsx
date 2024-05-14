@@ -11,9 +11,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
-// import { useRegister } from "@/api/hooks/useAuth";
-// import { useState } from "react";
-// import { InputDataError, InputDataErrorState } from "@/types";
+import { ErrorsState, ResponseErrors } from "@/types/auth";
+import { useState } from "react";
+import { useRegistration } from "@/api/hooks/useAuth";
 
 const FormSchema = z
   .object({
@@ -22,26 +22,10 @@ const FormSchema = z
         "Имя пользователя должно состоять только из латинских букв, цифр и знака подчеркивания.",
     }),
 
-    email: z
-      .string()
-
-      .email({
-        message: "Пожалуйста, введите корректный адрес электронной почты.",
-      }),
+    email: z.string().email({
+      message: "Пожалуйста, введите корректный адрес электронной почты.",
+    }),
     password: z
-      .string()
-      .min(1, {
-        message: "Нужно ввести пароль.",
-      })
-      .min(8, { message: "Пароль должен состоять минимум из 8 символов." })
-      .max(40, {
-        message: "Пароль должен состоять максимум из 40 символов.",
-      })
-      .regex(/^[a-zA-Z0-9_]{4,40}$/, {
-        message:
-          "Пароль должен состоять только из латинских букв, цифр и знака подчеркивания.",
-      }),
-    confirmPassword: z
       .string()
       .min(1, {
         message: "Нужно подтвердить пароль.",
@@ -50,6 +34,10 @@ const FormSchema = z
       .max(40, {
         message: "Пароль должен состоять максимум из 40 символов.",
       }),
+
+    confirmPassword: z.string().min(1, {
+      message: "Нужно подтвердить пароль.",
+    }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
@@ -57,11 +45,12 @@ const FormSchema = z
   });
 
 const RegistrationForm = () => {
-  //   const [errorBackend, setErrorBackend] = useState<InputDataErrorState>({
-  //     status: 0,
-  //     message: "",
-  //   });
-  //   const registerMutation = useRegister();
+  const [errorBackend, setErrorBackend] = useState<ErrorsState>({
+    status: 0,
+    data: "",
+  });
+
+  const registerMutation = useRegistration();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -74,15 +63,15 @@ const RegistrationForm = () => {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     console.log(data);
-    // try {
-    //   await registerMutation.mutateAsync(data);
-    // } catch (error: unknown) {
-    //   const customError = error as InputDataError;
-    //   setErrorBackend({
-    //     status: customError.response?.status,
-    //     message: customError.response?.data?.message,
-    //   });
-    // }
+    try {
+      await registerMutation.mutateAsync(data);
+    } catch (error: unknown) {
+      const customError = error as ResponseErrors;
+      setErrorBackend({
+        status: customError.response?.status,
+        data: customError.response?.data,
+      });
+    }
   };
   return (
     <Form {...form}>
@@ -101,7 +90,7 @@ const RegistrationForm = () => {
                 </FormControl>
 
                 <FormMessage>
-                  {/* {errorBackend.status === 409 && errorBackend.message} */}
+                  {errorBackend.status === 400 && errorBackend.data}
                 </FormMessage>
               </FormItem>
             )}
@@ -116,7 +105,7 @@ const RegistrationForm = () => {
                 </FormControl>
 
                 <FormMessage>
-                  {/* {errorBackend.status === 409 && errorBackend.message} */}
+                  {errorBackend.status === 400 && errorBackend.data}
                 </FormMessage>
               </FormItem>
             )}
@@ -134,9 +123,7 @@ const RegistrationForm = () => {
                   />
                 </FormControl>
 
-                <FormMessage>
-                  {/* {errorBackend.status === 409 && errorBackend.message} */}
-                </FormMessage>
+                <FormMessage></FormMessage>
               </FormItem>
             )}
           />
@@ -149,13 +136,10 @@ const RegistrationForm = () => {
                   <Input
                     isPassword={true}
                     placeholder="Подтвердите пароль"
-                    // isPassword={true}
                     {...field}
                   />
                 </FormControl>
-                <FormMessage>
-                  {/* {errorBackend.status === 401 && errorBackend.message} */}
-                </FormMessage>
+                <FormMessage></FormMessage>
               </FormItem>
             )}
           />
