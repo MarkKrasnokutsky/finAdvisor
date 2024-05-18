@@ -5,6 +5,9 @@ import com.complex.finAdvisor.dto.SigninRequest;
 import com.complex.finAdvisor.dto.SignupRequest;
 import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @RestController
+@Tag(name = "Аутентификация", description = "Контроллер для работы с регистрацией/авторизацией")
 @RequestMapping("/auth")
 public class SecurityController {
     private UserRepository userRepository;
@@ -49,7 +53,8 @@ public class SecurityController {
     }
 
     @PostMapping("/signup")
-    ResponseEntity<?> signup(@RequestBody SignupRequest signupRequest) {
+    @Operation(summary = "Регистрация пользователя")
+    ResponseEntity<?> signup(@RequestBody @Parameter(description = "Тело запроса на регистрацию") SignupRequest signupRequest) {
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different name");
         }
@@ -70,7 +75,8 @@ public class SecurityController {
     }
 
     @PostMapping("/signin")
-    ResponseEntity<?> signin(@RequestBody SigninRequest signinRequest) {
+    @Operation(summary = "Авторизация пользователя")
+    ResponseEntity<?> signin(@RequestBody @Parameter(description = "Тело запроса на авторизацию") SigninRequest signinRequest) {
         Authentication authentication = null;
         try {
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getUsername(), signinRequest.getPassword()));

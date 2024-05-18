@@ -5,6 +5,9 @@ import com.complex.finAdvisor.entity.TariffEntity;
 import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.TariffRepository;
 import com.complex.finAdvisor.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +18,22 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@Tag(name = "Тарифы", description = "Контроллер для работы с тарифами")
 @AllArgsConstructor
 @RequestMapping("/tariff")
 public class TariffController {
     private final TariffRepository tariffRepository;
     private final UserRepository userRepository;
     @GetMapping("/getAll")
+    @Operation(summary = "Возвращает все сущестующие тарифы")
     public List<TariffEntity> getAllTariffs() {
         return tariffRepository.findAll();
     }
 
     @PutMapping("/updateByUser")
-    public ResponseEntity<?> updateByUser(@RequestBody TariffRequest tariffRequest, Principal principal) {
+    @Operation(summary = "Обновляет тариф авторизированного пользователя. Указание тарифа в теле запроса")
+    public ResponseEntity<?> updateByUser(@RequestBody @Parameter(description = "Тело запроса для обновления тарифа. Описание тарифа") TariffRequest tariffRequest,
+                                          @Parameter(description = "Пользователь, прошедший успешно аутентификацию") Principal principal) {
         try {
             Optional<UserEntity> currentUser = userRepository.findByUsername(principal.getName());
             currentUser.ifPresent(userEntity -> {
