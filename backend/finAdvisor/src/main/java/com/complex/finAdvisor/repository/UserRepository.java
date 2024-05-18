@@ -13,6 +13,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByUsername(String login);
     Boolean existsByUsername(String login);
     Boolean existsByEmail(String email);
+
+    UserEntity getUserById(Long id);
     @Query("SELECT u.tariff FROM UserEntity u WHERE u.id = ?1")
     TariffEntity findTariffByUserId(Long userId);
 }
