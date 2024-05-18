@@ -12,9 +12,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
-// import { useLogin } from "@/api/hooks/useAuth";
-// import { useState } from "react";
-// import { InputDataError, InputDataErrorState } from "@/types";
+import { useLogin } from "@/api/hooks/useAuth";
+import { useState } from "react";
+import { ErrorsState, ResponseErrors } from "@/types/auth";
 
 const FormSchema = z.object({
   username: z
@@ -41,11 +41,11 @@ const FormSchema = z.object({
 });
 
 const LoginForm = () => {
-  //   const [errorBackend, setErrorBackend] = useState<InputDataErrorState>({
-  //     status: 0,
-  //     message: "",
-  //   });
-  //   const loginMutation = useLogin();
+  const [errorBackend, setErrorBackend] = useState<ErrorsState>({
+    data: "",
+    status: 0,
+  });
+  const loginMutation = useLogin();
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -57,15 +57,16 @@ const LoginForm = () => {
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     console.log(data);
-    // try {
-    //   await loginMutation.mutateAsync(data);
-    // } catch (error: unknown) {
-    //   const customError = error as InputDataError;
-    //   setErrorBackend({
-    //     status: customError.response?.status,
-    //     message: customError.response?.data?.message,
-    //   });
-    // }
+    try {
+      await loginMutation.mutateAsync(data);
+    } catch (error: unknown) {
+      console.log(error);
+      const customError = error as ResponseErrors;
+      setErrorBackend({
+        data: customError.response?.data,
+        status: customError.response?.status,
+      });
+    }
   };
 
   return (
@@ -85,7 +86,7 @@ const LoginForm = () => {
                 </FormControl>
 
                 <FormMessage>
-                  {/* {errorBackend.status === 409 && errorBackend.message} */}
+                  {errorBackend.status === 401 && errorBackend.data}
                 </FormMessage>
               </FormItem>
             )}
@@ -99,13 +100,10 @@ const LoginForm = () => {
                   <Input
                     isPassword={true}
                     placeholder="Введите ваш пароль"
-                    // isPassword={true}
                     {...field}
                   />
                 </FormControl>
-                <FormMessage>
-                  {/* {errorBackend.status === 401 && errorBackend.message} */}
-                </FormMessage>
+                <FormMessage></FormMessage>
 
                 <Link to={"/forgot-password"}>
                   <FormDescription>Восстановите пароль</FormDescription>

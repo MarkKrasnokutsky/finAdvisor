@@ -4,18 +4,6 @@ const AuthLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <div className="h-screen w-screen bg-backgroundMain  relative">
       <div className="fixed h-screen -left-64 blur-[70px] z-10 animate-blob">
-        {/* <svg
-          viewBox="0 0 200 200"
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-screen "
-        >
-          <path
-            fill="#0095F0"
-            d="M40.4,-72.7C48.5,-65.2,48.7,-46.7,52.8,-32.8C56.9,-18.8,64.9,-9.4,70.5,3.3C76.1,15.9,79.5,31.9,75.5,46.1C71.6,60.3,60.4,72.7,46.6,79.5C32.8,86.2,16.4,87.3,0.6,86.2C-15.1,85.1,-30.3,81.9,-40.9,73.3C-51.5,64.7,-57.6,50.7,-61.2,37.6C-64.8,24.5,-65.9,12.3,-67.3,-0.8C-68.7,-13.9,-70.4,-27.8,-66.9,-41.1C-63.5,-54.4,-54.8,-67.2,-42.8,-72.5C-30.8,-77.8,-15.4,-75.6,0.4,-76.2C16.1,-76.8,32.2,-80.2,40.4,-72.7Z"
-            transform="translate(100 100)"
-          />
-          
-        </svg> */}
         <svg
           id="sw-js-blob-svg"
           viewBox="0 0 100 100"
@@ -50,18 +38,6 @@ const AuthLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
         </svg>
       </div>
       <div className="fixed right-24 top-96 blur-[70px] z-10 animate-blob animation-delay-2000">
-        {/* <svg
-          viewBox="0 0 200 200"
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-screen "
-        >
-          <path
-            fill="#0095F0"
-            d="M40.4,-72.7C48.5,-65.2,48.7,-46.7,52.8,-32.8C56.9,-18.8,64.9,-9.4,70.5,3.3C76.1,15.9,79.5,31.9,75.5,46.1C71.6,60.3,60.4,72.7,46.6,79.5C32.8,86.2,16.4,87.3,0.6,86.2C-15.1,85.1,-30.3,81.9,-40.9,73.3C-51.5,64.7,-57.6,50.7,-61.2,37.6C-64.8,24.5,-65.9,12.3,-67.3,-0.8C-68.7,-13.9,-70.4,-27.8,-66.9,-41.1C-63.5,-54.4,-54.8,-67.2,-42.8,-72.5C-30.8,-77.8,-15.4,-75.6,0.4,-76.2C16.1,-76.8,32.2,-80.2,40.4,-72.7Z"
-            transform="translate(100 100)"
-          />
-          
-        </svg> */}
         <svg
           id="sw-js-blob-svg"
           viewBox="0 0 100 100"
