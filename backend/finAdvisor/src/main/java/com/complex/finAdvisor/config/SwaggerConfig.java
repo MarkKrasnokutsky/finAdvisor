@@ -17,11 +17,12 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .servers(
                         List.of(
-                                new Server().url("http://localhost:8080")
+                                new Server().url("http://localhost:8080"),
+                                new Server().url("https://localhost:8090")
                         )
                 )
                 .info(
-                        new Info().title("Test API for Signals")
+                        new Info().title("Test API for FinAdvisor")
                 );
     }
     @Bean
