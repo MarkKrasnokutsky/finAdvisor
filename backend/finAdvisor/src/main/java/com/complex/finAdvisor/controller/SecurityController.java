@@ -56,13 +56,13 @@ public class SecurityController {
     @Operation(summary = "Регистрация пользователя")
     ResponseEntity<?> signup(@RequestBody @Parameter(description = "Тело запроса на регистрацию") SignupRequest signupRequest) {
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different name");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Имя занято");
         }
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Choose different email");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Почтовый ящик занят");
         }
         if (signupRequest.getPassword() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password cannot be null");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Пароль не должен быть пустой");
         }
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(signupRequest.getUsername());
@@ -82,7 +82,7 @@ public class SecurityController {
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getUsername(), signinRequest.getPassword()));
         }
         catch (BadCredentialsException e) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Пользователь не найден");
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtCore.generateToken(authentication);
