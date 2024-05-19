@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class StockDto {
+public class SignalDto {
     @Getter
     @Setter
     private String secid;
