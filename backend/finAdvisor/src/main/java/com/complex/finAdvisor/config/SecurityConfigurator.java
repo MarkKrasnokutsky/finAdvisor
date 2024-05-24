@@ -20,6 +20,8 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
+import java.util.Arrays;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfigurator {
@@ -52,13 +54,20 @@ public class SecurityConfigurator {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // TODO Настроить корс-политику
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer ->
-                        httpSecurityCorsConfigurer.configurationSource(request ->
-                                new CorsConfiguration().applyPermitDefaultValues())
+                        httpSecurityCorsConfigurer.configurationSource(request -> {
+                            CorsConfiguration configuration = new CorsConfiguration();
+                            // TODO добавить адрес хоста
+                            configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); // Разрешить только localhost:8080
+                            configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE")); // Разрешить все типы запросов
+                            configuration.setAllowCredentials(true);
+                            configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); // Разрешить только определенные заголовки
+                            return configuration;
+                        })
                 )
+
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 )
