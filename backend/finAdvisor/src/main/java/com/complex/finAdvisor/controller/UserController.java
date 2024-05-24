@@ -4,6 +4,7 @@ import com.complex.finAdvisor.dto.TelegramRequest;
 import com.complex.finAdvisor.entity.TariffEntity;
 import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.UserRepository;
+import com.complex.finAdvisor.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @RequestMapping("/user")
 public class UserController {
     private final UserRepository userRepository;
+    private final UserService userService;
     @GetMapping("/get/{id}")
     @Operation(summary = "Возвращает пользователя по id")
     public UserEntity getUserById(@PathVariable Long id) {
@@ -40,23 +42,12 @@ public class UserController {
     @PostMapping("/updateTelegram")
     @Operation(summary = "Обновляет телеграм-никнейм полььзователя в базе данных")
     public ResponseEntity<?> updateTelegram(@RequestBody TelegramRequest telegramRequest, Principal principal) {
-        Optional<UserEntity> currentUser = userRepository.findByUsername(principal.getName());
-        currentUser.ifPresent(userEntity -> {
-            userEntity.setTgNickname(telegramRequest.getNickname());
-            userRepository.save(userEntity);
-        });
+        userService.setTgNickname(principal.getName(), telegramRequest.getNickname());
         return ResponseEntity.ok("Updated telegram nickname to " + telegramRequest.getNickname() + "for user - " + principal.getName());
     }
     @GetMapping("/getTelegram")
     @Operation(summary = "Возвращает телеграм ник текущего авторизированного пользователя")
-    public String updateTelegram(Principal principal) {
-        Optional<UserEntity> currentUser = userRepository.findByUsername(principal.getName());
-        var ref = new Object() {
-            String telegramNickname;
-        };
-        currentUser.ifPresent(userEntity -> {
-            ref.telegramNickname = userEntity.getTgNickname();
-        });
-        return ref.telegramNickname;
+    public String  getTelegram(Principal principal) {
+        return userService.getTgNickname(principal.getName());
     }
 }
