@@ -8,6 +8,7 @@ import com.complex.finAdvisor.repository.UserRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -54,7 +55,7 @@ public class SecurityController {
 
     @PostMapping("/signup")
     @Operation(summary = "Регистрация пользователя")
-    ResponseEntity<?> signup(@RequestBody @Parameter(description = "Тело запроса на регистрацию") SignupRequest signupRequest) {
+    ResponseEntity<?> signup(@Valid @RequestBody @Parameter(description = "Тело запроса на регистрацию") SignupRequest signupRequest) {
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Имя занято");
         }
@@ -76,7 +77,7 @@ public class SecurityController {
 
     @PostMapping("/signin")
     @Operation(summary = "Авторизация пользователя")
-    ResponseEntity<?> signin(@RequestBody @Parameter(description = "Тело запроса на авторизацию") SigninRequest signinRequest) {
+    ResponseEntity<?> signin(@Valid @RequestBody @Parameter(description = "Тело запроса на авторизацию") SigninRequest signinRequest) {
         Authentication authentication = null;
         try {
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signinRequest.getUsername(), signinRequest.getPassword()));
