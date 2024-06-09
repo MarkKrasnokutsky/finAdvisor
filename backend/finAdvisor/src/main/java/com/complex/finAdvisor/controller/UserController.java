@@ -7,14 +7,13 @@ import com.complex.finAdvisor.repository.UserRepository;
 import com.complex.finAdvisor.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Tag(name = "Пользователи", description = "Контроллер для работы с пользователями")
@@ -41,9 +40,9 @@ public class UserController {
 
     @PostMapping("/updateTelegram")
     @Operation(summary = "Обновляет телеграм-никнейм полььзователя в базе данных")
-    public ResponseEntity<?> updateTelegram(@RequestBody TelegramRequest telegramRequest, Principal principal) {
+    public ResponseEntity<?> updateTelegram(@Valid @RequestBody TelegramRequest telegramRequest, Principal principal) {
         userService.setTgNickname(principal.getName(), telegramRequest.getNickname());
-        return ResponseEntity.ok("Updated telegram nickname to " + telegramRequest.getNickname() + "for user - " + principal.getName());
+        return ResponseEntity.ok("Updated telegram nickname to " + telegramRequest.getNickname() + " for user - " + principal.getName());
     }
     @GetMapping("/getTelegram")
     @Operation(summary = "Возвращает телеграм ник текущего авторизированного пользователя")
