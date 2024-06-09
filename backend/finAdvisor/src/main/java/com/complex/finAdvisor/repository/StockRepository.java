@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StockRepository extends JpaRepository<InstrumentEntity, Long> {
+    InstrumentEntity findBySecid(String secid);
 }
 

@@ -6,6 +6,7 @@ import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.TariffRepository;
 import com.complex.finAdvisor.repository.UserRepository;
 import com.complex.finAdvisor.service.TariffService;
+import com.complex.finAdvisor.util.TariffParser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,6 +26,7 @@ import java.util.Optional;
 public class TariffController {
     private final TariffRepository tariffRepository;
     private final TariffService tariffService;
+    private final TariffParser tariffParser;
     @GetMapping("/getAll")
     @Operation(summary = "Возвращает все сущестующие тарифы")
     public List<TariffEntity> getAllTariffs() {
@@ -42,5 +44,9 @@ public class TariffController {
         catch (Exception e) {
             return ResponseEntity.badRequest().body("Error");
         }
+    }
+    @GetMapping("/getTariffs")
+    public void getTariffs() {
+        tariffParser.parseJson("src/main/resources/tariffs_instruments.json");
     }
 }
