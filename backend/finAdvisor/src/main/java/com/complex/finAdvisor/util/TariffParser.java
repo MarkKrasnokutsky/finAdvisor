@@ -1,6 +1,10 @@
 package com.complex.finAdvisor.util;
 
+import com.complex.finAdvisor.entity.InstrumentTariffEntity;
+import com.complex.finAdvisor.entity.TariffEntity;
 import com.complex.finAdvisor.repository.StockRepository;
+import com.complex.finAdvisor.repository.StockTariffRepository;
+import com.complex.finAdvisor.repository.TariffRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -15,8 +19,9 @@ import java.util.Map;
 @Service
 @AllArgsConstructor
 public class TariffParser {
-//    public final TariffRepository tariffRepository;
     public final StockRepository stockRepository;
+    public final StockTariffRepository stockTariffRepository;
+    private final TariffRepository tariffRepository;
 
     public void parseJson(String url) {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -29,19 +34,23 @@ public class TariffParser {
                 Map.Entry<String, JsonNode> field = fields.next();
                 String fieldName = field.getKey();
                 System.out.println("-----------" + fieldName + "-----------");
+                TariffEntity currentTariff = new TariffEntity();
+                currentTariff.setName(fieldName);
+                tariffRepository.save(currentTariff);
                 JsonNode fieldValue = field.getValue();
 
                 List<String> values = new ArrayList<>();
                 if (fieldValue.isArray()) {
                     for (JsonNode node : fieldValue) {
                         values.add(node.asText());
+                        InstrumentTariffEntity relationship = new InstrumentTariffEntity();
+                        relationship.setTariff(currentTariff);
+                        relationship.setInstrument(stockRepository.findBySecid(node.asText()));
+                        stockTariffRepository.save(relationship);
                         System.out.println(node.asText());
                         System.out.println("Find it: " + stockRepository.findBySecid(node.asText()).getShortname());
                     }
                 }
-
-                // Теперь у вас есть список значений для этого поля
-                // Вы можете работать с ним как вам угодно
             }
 
         } catch (Exception e) {

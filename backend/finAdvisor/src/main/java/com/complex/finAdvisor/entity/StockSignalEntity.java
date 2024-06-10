@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Setter
 @Getter
@@ -37,4 +38,12 @@ public class StockSignalEntity {
 //    @ManyToOne
 //    @JoinColumn(referencedColumnName = "stock_id", nullable = false)
 //    private Instrument stock;
+    @Override
+    public String toString() {
+        return "Id:" + id;
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, date, secid, shortname, open);
+    }
 }

@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -25,7 +26,7 @@ public class TariffEntity {
     @Schema(description = "Id тарифа", example = "1")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true, nullable = false)
     @Schema(description = "Название тарифа", example = "Pro")
     private String name;
 
@@ -33,7 +34,20 @@ public class TariffEntity {
     @Schema(description = "Стоимость тарифа за месяц", example = "5999")
     private Double cost;
 
-    @OneToMany(mappedBy = "tariff", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "tariff", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Schema(description = "Список пользователей тарифа", example = "[2,3,5]")
     private Set<UserEntity> users = new HashSet<>();
+
+    @OneToMany(mappedBy = "tariff", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @Schema(description = "Список отношений инструмент-тариф", example = "[2,3,5]")
+    private Set<InstrumentTariffEntity> relationship = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "Id:" + id;
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, cost);
+    }
 }
