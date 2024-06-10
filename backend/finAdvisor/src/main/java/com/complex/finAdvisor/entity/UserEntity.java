@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -45,10 +46,6 @@ public class UserEntity {
     @JoinColumn(name = "tariff_id")
     private TariffEntity tariff;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private RoleEntity role;
-
     @Column(name = "tariff_expiration")
     @Schema(description = "Дата истечения текущего тарифа пользователя", example = "2024-06-12 19:14:52.000000")
     private LocalDateTime tariffExpiration;
@@ -56,4 +53,13 @@ public class UserEntity {
     @Column(name = "created_at", nullable = false)
     @Schema(description = "Дата регистрации пользователя", example = "2024-06-12 19:14:52.000000")
     private LocalDateTime createdAt;
+
+    @Override
+    public String toString() {
+        return "Id:" + id;
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, email, tgNickname, password);
+    }
 }

@@ -10,6 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -36,6 +40,19 @@ public class InstrumentEntity {
     @Schema(description = "Название инструмента", example = "Сбербанк ао")
     private String shortname;
 
-//    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "instrument", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @Schema(description = "Список отношений инструмент-тариф", example = "[2,3,5]")
+    private Set<InstrumentTariffEntity> relationship = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return "Id:" + id;
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, secid, boardid, shortname);
+    }
+
+    //    @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private Set<StockSignal> stockSignals;
 }

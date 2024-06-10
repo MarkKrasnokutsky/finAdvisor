@@ -78,7 +78,7 @@ public class SecurityConfigurator {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/signals/**").fullyAuthenticated()
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/tariff/**").fullyAuthenticated()
+                        //.requestMatchers("/tariff/**").fullyAuthenticated()
                         .requestMatchers("/user/**").fullyAuthenticated()
                         .requestMatchers("/secured/user").fullyAuthenticated()
                         .anyRequest().permitAll()

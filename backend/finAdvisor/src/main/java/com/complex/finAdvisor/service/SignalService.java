@@ -2,13 +2,19 @@ package com.complex.finAdvisor.service;
 
 import com.complex.finAdvisor.dto.SignalDto;
 import com.complex.finAdvisor.entity.InstrumentEntity;
+import com.complex.finAdvisor.entity.InstrumentTariffEntity;
 import com.complex.finAdvisor.entity.StockSignalEntity;
+import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.SignalRepository;
 import com.complex.finAdvisor.repository.StockRepository;
+import com.complex.finAdvisor.repository.StockTariffRepository;
+import com.complex.finAdvisor.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,17 +23,42 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SignalService {
     private final StockRepository stockRepository;
     private final SignalRepository signalRepository;
-    private final EntityManager entityManager;
+    private final UserRepository userRepository;
+    private final StockTariffRepository stockTariffRepository;
+
+    public List<StockSignalEntity> getSignalsByUser(String username) {
+        try {
+            List<StockSignalEntity> stockSignalEntities = new ArrayList<>();
+            Optional<UserEntity> currentUser = userRepository.findByUsername(username);
+
+            currentUser.ifPresent(userEntity -> {
+                Long currentTariff = userEntity.getTariff().getId();
+                List<InstrumentTariffEntity> listRelationship = stockTariffRepository.findByTariffId(currentTariff);
+
+                for (InstrumentTariffEntity relationship : listRelationship) {
+                    StockSignalEntity stockSignalEntity = signalRepository.findBySecid(relationship.getInstrument().getSecid());
+                    if (stockSignalEntity == null) {
+                        continue;
+                    }
+                    stockSignalEntities.add(stockSignalEntity);
+                }
+            });
+            return stockSignalEntities;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     @Scheduled(cron = "0 0 0 * * ?", zone = "Europe/Moscow")
     public void updateAllSignals() {
-        List<InstrumentEntity> allStocks = this.stockRepository.findAll();
+        List<InstrumentEntity> allStocks = stockRepository.findAll();
         for (InstrumentEntity instrumentEntity : allStocks) {
             int last = getLastHistoryInstrument(instrumentEntity);
             String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrumentEntity.getSecid() + ".xml?limit=" + 100 + "&start=" + last;

@@ -1,6 +1,5 @@
 package com.complex.finAdvisor.config;
 
-import com.complex.finAdvisor.entity.RoleEntity;
 import com.complex.finAdvisor.entity.TariffEntity;
 import com.complex.finAdvisor.entity.UserEntity;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,6 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
     private String tgNickname;
     private TariffEntity tariff;
-    private RoleEntity role;
 
     public static UserDetailsImpl build(UserEntity userEntity) {
         return new UserDetailsImpl(
@@ -28,8 +26,7 @@ public class UserDetailsImpl implements UserDetails {
                 userEntity.getEmail(),
                 userEntity.getPassword(),
                 userEntity.getTgNickname(),
-                userEntity.getTariff(),
-                userEntity.getRole()
+                userEntity.getTariff()
         );
     }
 
