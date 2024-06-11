@@ -42,6 +42,8 @@ public class TariffController {
         }
     }
     @GetMapping("/getTariffs")
+    @Operation(summary = "Запускает парсинг тарифов из json файла, создавая в БД схемы тариф " +
+            "и отношение тариф-инструмент")
     public void getTariffs() {
         tariffParser.parseJson("src/main/resources/tariffs_instruments.json");
     }

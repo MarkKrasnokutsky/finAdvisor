@@ -43,8 +43,7 @@ public class UserController {
     @PostMapping("/updateTelegram")
     @Operation(summary = "Обновляет телеграм-никнейм полььзователя в базе данных")
     public ResponseEntity<?> updateTelegram(@Valid @RequestBody TelegramRequest telegramRequest, Principal principal) {
-        userService.setTgNickname(principal.getName(), telegramRequest.getNickname());
-        return ResponseEntity.ok("Updated telegram nickname to " + telegramRequest.getNickname() + " for user - " + principal.getName());
+        return userService.setTgNickname(principal.getName(), telegramRequest.getNickname());
     }
     @GetMapping("/getTelegram")
     @Operation(summary = "Возвращает телеграм ник текущего авторизированного пользователя")
