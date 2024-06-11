@@ -8,6 +8,5 @@ import lombok.Data;
 @Tag(name = "Тело запроса тарифа", description = "Описание сущности тарифа в теле запроса")
 public class TariffRequest {
     private String name;
-    private String saleDate;
     private int duration;
 }

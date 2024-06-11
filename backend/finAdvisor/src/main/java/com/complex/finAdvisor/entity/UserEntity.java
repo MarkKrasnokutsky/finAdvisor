@@ -44,12 +44,20 @@ public class UserEntity {
     @JoinColumn(name = "tariff_id")
     private TariffEntity tariff;
 
+    @Column(name = "tariff_duration")
+    @Schema(description = "Длительность текущего тарифа пользователя (в сутках)", example = "30")
+    private Integer tariffDuration;
+
+    @Column(name = "tariff_inception")
+    @Schema(description = "Дата начала текущего тарифного плана пользователя", example = "2007-12-03T10:15:30")
+    private LocalDateTime tariffInception;
+
     @Column(name = "tariff_expiration")
-    @Schema(description = "Дата истечения текущего тарифа пользователя", example = "2024-06-12 19:14:52.000000")
+    @Schema(description = "Дата истечения текущего тарифа пользователя", example = "2007-12-03T10:15:30")
     private LocalDateTime tariffExpiration;
 
     @Column(name = "created_at", nullable = false)
-    @Schema(description = "Дата регистрации пользователя", example = "2024-06-12 19:14:52.000000")
+    @Schema(description = "Дата регистрации пользователя", example = "2007-12-03T10:15:30")
     private LocalDateTime createdAt;
 
     @Override
