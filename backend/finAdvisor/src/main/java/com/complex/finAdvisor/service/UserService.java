@@ -34,14 +34,4 @@ public class UserService implements UserDetailsService {
             userRepository.save(userEntity);
         });
     }
-    public String getTgNickname(String username) {
-        Optional<UserEntity> currentUser = userRepository.findByUsername(username);
-        var ref = new Object() {
-            String telegramNickname;
-        };
-        currentUser.ifPresent(userEntity -> {
-            ref.telegramNickname = userEntity.getTgNickname();
-        });
-        return ref.telegramNickname;
-    }
 }
