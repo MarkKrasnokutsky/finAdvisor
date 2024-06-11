@@ -26,6 +26,9 @@ public class TariffService {
         for (UserEntity user : users) {
             if (user.getTariff() != null && isTariffExpired(user.getTariffExpiration())) {
                 user.setTariff(null);
+                user.setTariffDuration(null);
+                user.setTariffInception(null);
+                user.setTariffExpiration(null);
                 userRepository.save(user);
             }
         }
@@ -39,7 +42,7 @@ public class TariffService {
             userEntity.setTariffDuration(tariffRequest.getDuration());
             ZonedDateTime moscowTime = ZonedDateTime.now(ZoneId.of("Europe/Moscow"));
             userEntity.setTariffInception(moscowTime.toLocalDateTime());
-            userEntity.setTariffExpiration(LocalDateTime.parse(tariffRequest.getSaleDate()).plusDays(tariffRequest.getDuration()));
+            userEntity.setTariffExpiration(moscowTime.toLocalDateTime().plusDays(tariffRequest.getDuration()));
             userRepository.save(userEntity);
         });
     }
