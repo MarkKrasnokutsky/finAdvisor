@@ -36,6 +36,9 @@ public class TariffService {
         currentUser.ifPresent(userEntity -> {
             Optional<TariffEntity> currentTariff = tariffRepository.findByName(tariffRequest.getName());
             currentTariff.ifPresent(userEntity::setTariff);
+            userEntity.setTariffDuration(tariffRequest.getDuration());
+            ZonedDateTime moscowTime = ZonedDateTime.now(ZoneId.of("Europe/Moscow"));
+            userEntity.setTariffInception(moscowTime.toLocalDateTime());
             userEntity.setTariffExpiration(LocalDateTime.parse(tariffRequest.getSaleDate()).plusDays(tariffRequest.getDuration()));
             userRepository.save(userEntity);
         });

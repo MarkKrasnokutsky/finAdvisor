@@ -35,7 +35,7 @@ public class TariffController {
                                           @Parameter(description = "Пользователь, прошедший успешно аутентификацию") Principal principal) {
         try {
             tariffService.updateTariffAuthUser(principal.getName(), tariffRequest);
-            return ResponseEntity.ok("Updated tariff to " + tariffRequest.getName() + "for user - " + principal.getName());
+            return ResponseEntity.ok("Updated tariff to " + tariffRequest.getName() + " for user - " + principal.getName());
         }
         catch (Exception e) {
             return ResponseEntity.badRequest().body("Error");
