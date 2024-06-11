@@ -1,11 +1,7 @@
 package com.complex.finAdvisor.controller;
 
-import com.complex.finAdvisor.entity.InstrumentTariffEntity;
 import com.complex.finAdvisor.entity.StockSignalEntity;
-import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.SignalRepository;
-import com.complex.finAdvisor.repository.StockTariffRepository;
-import com.complex.finAdvisor.repository.UserRepository;
 import com.complex.finAdvisor.service.SignalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,9 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Tag(name = "Сигналы", description = "Контроллер для работы с сигналами")

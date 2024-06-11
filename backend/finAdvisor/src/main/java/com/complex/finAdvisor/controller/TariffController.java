@@ -2,9 +2,7 @@ package com.complex.finAdvisor.controller;
 
 import com.complex.finAdvisor.dto.TariffRequest;
 import com.complex.finAdvisor.entity.TariffEntity;
-import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.TariffRepository;
-import com.complex.finAdvisor.repository.UserRepository;
 import com.complex.finAdvisor.service.TariffService;
 import com.complex.finAdvisor.util.TariffParser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,9 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Tag(name = "Тарифы", description = "Контроллер для работы с тарифами")

@@ -1,5 +1,6 @@
 package com.complex.finAdvisor.controller;
 
+import com.complex.finAdvisor.config.UserDetailsImpl;
 import com.complex.finAdvisor.dto.TelegramRequest;
 import com.complex.finAdvisor.entity.TariffEntity;
 import com.complex.finAdvisor.entity.UserEntity;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -47,6 +49,7 @@ public class UserController {
     @GetMapping("/getTelegram")
     @Operation(summary = "Возвращает телеграм ник текущего авторизированного пользователя")
     public String  getTelegram(Principal principal) {
-        return userService.getTgNickname(principal.getName());
+        UserDetailsImpl userDetails = (UserDetailsImpl) ((Authentication) principal).getPrincipal();
+        return userDetails.getTgNickname();
     }
 }
