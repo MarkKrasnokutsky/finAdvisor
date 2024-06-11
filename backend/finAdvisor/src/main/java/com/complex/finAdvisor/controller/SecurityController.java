@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
 @RestController
 @Tag(name = "Аутентификация", description = "Контроллер для работы с регистрацией/авторизацией")
 @RequestMapping("/auth")
@@ -27,8 +24,7 @@ public class SecurityController {
     @PostMapping("/signup")
     @Operation(summary = "Регистрация пользователя")
     ResponseEntity<?> signup(@Valid @RequestBody @Parameter(description = "Тело запроса на регистрацию") SignupRequest signupRequest) {
-        securityService.register(signupRequest);
-        return ResponseEntity.ok("Added user successfully");
+        return securityService.register(signupRequest);
     }
 
     @PostMapping("/signin")

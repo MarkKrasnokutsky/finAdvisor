@@ -20,7 +20,7 @@ public class InstrumentController {
     private StockRepository stockRepository;
     @PutMapping("/fetch")
     @Operation(summary = "Обновляет все возможные инструменты с API МосБиржи")
-    ResponseEntity newStocks() {
+    ResponseEntity<?> newStocks() {
         try {
             return ResponseEntity.ok(stockService.fetchStocks());
         }
@@ -30,7 +30,7 @@ public class InstrumentController {
     }
     @GetMapping("/getAll")
     @Operation(summary = "Возвращает все инструменты с БД")
-    ResponseEntity getStocks() {
+    ResponseEntity<?> getStocks() {
         try {
             return ResponseEntity.ok(stockRepository.findAll());
         }

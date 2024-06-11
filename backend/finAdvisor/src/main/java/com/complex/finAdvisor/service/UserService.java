@@ -4,6 +4,7 @@ import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.UserRepository;
 import com.complex.finAdvisor.config.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,11 +28,17 @@ public class UserService implements UserDetailsService {
 
         return UserDetailsImpl.build(userEntity);
     }
-    public void setTgNickname(String username, String tgNickname) {
-        Optional<UserEntity> currentUser = userRepository.findByUsername(username);
-        currentUser.ifPresent(userEntity -> {
-            userEntity.setTgNickname(tgNickname);
-            userRepository.save(userEntity);
-        });
+    public ResponseEntity<?> setTgNickname(String username, String tgNickname) {
+        try {
+            Optional<UserEntity> currentUser = userRepository.findByUsername(username);
+            currentUser.ifPresent(userEntity -> {
+                userEntity.setTgNickname(tgNickname);
+                userRepository.save(userEntity);
+            });
+            return ResponseEntity.ok("Updated telegram nickname to " + tgNickname + " for user - " + username);
+        }
+        catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error");
+        }
     }
 }
