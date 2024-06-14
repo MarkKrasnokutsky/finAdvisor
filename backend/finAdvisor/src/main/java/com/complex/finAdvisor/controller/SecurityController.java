@@ -6,6 +6,7 @@ import com.complex.finAdvisor.service.SecurityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,8 @@ public class SecurityController {
 
     @PostMapping("/signin")
     @Operation(summary = "Авторизация пользователя")
-    ResponseEntity<?> signin(@Valid @RequestBody @Parameter(description = "Тело запроса на авторизацию") SigninRequest signinRequest) {
-        return securityService.login(signinRequest);
+    ResponseEntity<?> signin(@Valid @RequestBody @Parameter(description = "Тело запроса на авторизацию") SigninRequest signinRequest,
+                             HttpServletResponse response) {
+        return securityService.login(signinRequest, response);
     }
 }
