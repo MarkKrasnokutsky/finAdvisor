@@ -6,7 +6,12 @@ import com.complex.finAdvisor.dto.SignupRequest;
 import com.complex.finAdvisor.dto.TokenResponse;
 import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.UserRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +24,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.WebUtils;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -28,6 +36,9 @@ import java.time.ZonedDateTime;
 @Service
 @RequiredArgsConstructor
 public class SecurityService {
+    private final UserDetailsService userDetailsService;
+    @Value("${jwt-token.secret}")
+    private String secret;
     @Value("${jwt-token.lifetime}")
     private int tokenLifetime;
     @Value("${jwt-token.refresh-lifetime}")
@@ -102,4 +113,38 @@ public class SecurityService {
         return ResponseEntity.ok(new TokenResponse(jwt, refreshToken));
     }
 
+    public ResponseEntity<?> refresh(HttpServletRequest request, HttpServletResponse response) {
+        // Получаем куки для refresh токена
+        Cookie refreshTokenCookie = WebUtils.getCookie(request, "refreshToken");
+        if (refreshTokenCookie == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token is missing");
+        }
+
+        String refreshToken = refreshTokenCookie.getValue();
+        try {
+            // Проверяем, действителен ли refresh токен
+            Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(refreshToken);
+            String username = claims.getBody().getSubject();
+
+            // Загружаем данные пользователя
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+            // Генерируем новый access токен
+            String newToken = jwtCore.generateToken(auth);
+
+            // Создаем куки для нового access токена
+            Cookie jwtCookie = new Cookie("accessToken", newToken);
+            jwtCookie.setMaxAge(tokenLifetime); // 1 неделя
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setPath("/");
+
+            // Добавляем куки в ответ
+            response.addCookie(jwtCookie);
+
+            return ResponseEntity.ok(new TokenResponse(newToken, refreshToken));
+        } catch (JwtException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token is invalid");
+        }
+    }
 }
