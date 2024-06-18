@@ -1,12 +1,10 @@
 package com.complex.finAdvisor.config;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
@@ -17,8 +15,6 @@ public class JwtCore {
     private long lifetime;
     @Value("${jwt-token.refresh-lifetime}")
     private long refreshLifetime;
-    SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    //String secret = Encoders.BASE64.encode(key.getEncoded());
 
     public String generateToken(Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
