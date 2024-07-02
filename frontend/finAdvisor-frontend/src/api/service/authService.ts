@@ -1,12 +1,12 @@
 import { AxiosResponse } from "axios";
 
-import { InputData, ResponseData, Token } from "@/types/auth";
+import { InputData, ResponseData } from "@/types/auth";
 import instance from "../config";
 
 export const authService = {
-  login: async (loginData: InputData): Promise<AxiosResponse<Token>> => {
+  login: async (loginData: InputData): Promise<AxiosResponse<string>> => {
     console.log(instance);
-    const response = await instance.post<Token>(`/auth/signin`, {
+    const response = await instance.post<string>(`/auth/signin`, {
       username: loginData.username,
       password: loginData.password,
     });
@@ -22,7 +22,11 @@ export const authService = {
     return response;
   },
   me: async (): Promise<AxiosResponse<ResponseData>> => {
-    return await instance.get<ResponseData>(`/secured/user`);
+    const response = await instance.post<ResponseData>(`/secured/user`);
+    return response;
+  },
+  refreshToken: async (): Promise<AxiosResponse<ResponseData>> => {
+    return await instance.post<ResponseData>(`/auth/refresh_token`);
   },
 
   // logout: () => {

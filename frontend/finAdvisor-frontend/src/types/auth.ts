@@ -4,8 +4,6 @@ export type InputData = {
   email?: string;
 };
 
-export type Token = string;
-
 export type ResponseErrors = {
   response?: {
     data?: string;
