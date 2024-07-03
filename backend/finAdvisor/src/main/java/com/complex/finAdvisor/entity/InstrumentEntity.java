@@ -1,5 +1,6 @@
 package com.complex.finAdvisor.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -40,6 +41,7 @@ public class InstrumentEntity {
     @Schema(description = "Название инструмента", example = "Сбербанк ао")
     private String shortname;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "instrument", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Schema(description = "Список отношений инструмент-тариф", example = "[2,3,5]")
     private Set<InstrumentTariffEntity> relationship = new HashSet<>();

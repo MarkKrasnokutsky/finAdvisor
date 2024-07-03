@@ -1,5 +1,6 @@
 package com.complex.finAdvisor.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
@@ -40,6 +41,7 @@ public class UserEntity {
     @Schema(description = "Зашифрованный пароль пользователя", example = "$2a$10$jv9WYa18CNPTk/ZvNEDybOdp9Ju5P7X/2r8Qkaf4UfYrua/uYi1k6")
     private String password;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "tariff_id")
     private TariffEntity tariff;
