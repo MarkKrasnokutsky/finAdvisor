@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -121,30 +122,50 @@ public class SignalService {
     private ArrayList<SignalDto> parseXmlResponse(String xmlResponse) {
         try {
             XmlMapper xmlMapper = new XmlMapper();
-            JsonNode rootNode = xmlMapper.readTree(xmlResponse).get("data").get("rows");
-            JsonNode node = rootNode != null ? rootNode.get("row") : null; // Check if rootNode is not null before getting "row"
-            ArrayList<SignalDto> signalDtos = new ArrayList<>();
-            if (node == null || !node.isArray()) { // Check if node is null or not an array
-                return signalDtos; // Return empty list if "row" node does not exist or is not an array
+            JsonNode rootNode = xmlMapper.readTree(xmlResponse);
+
+            // Iterate through "data" nodes and find the one with id "history"
+            Iterator<JsonNode> dataNodes = rootNode.path("data").elements();
+            JsonNode historyDataNode = null;
+            while (dataNodes.hasNext()) {
+                JsonNode dataNode = dataNodes.next();
+                if (dataNode.has("id") && dataNode.path("id").asText().equals("history")) {
+                    historyDataNode = dataNode;
+                    break;
+                }
             }
-            for (JsonNode item : node) {
-                String shortname = item.get("SHORTNAME").asText();
-                String secid = item.get("SECID").asText();
-                String tradeDateStr = item.get("TRADEDATE").asText();
-                LocalDate tradeDate = LocalDate.parse(tradeDateStr);
-                double open = item.get("OPEN").asDouble();
-                double high = item.get("HIGH").asDouble();
-                double low = item.get("LOW").asDouble();
-                double close = item.get("CLOSE").asDouble();
-                SignalDto signalDto = new SignalDto();
-                signalDto.setSecid(secid);
-                signalDto.setTradedate(tradeDate);
-                signalDto.setOpen(open);
-                signalDto.setLow(low);
-                signalDto.setHigh(high);
-                signalDto.setClose(close);
-                signalDto.setShortname(shortname);
-                signalDtos.add(signalDto);
+
+            if (historyDataNode == null) {
+                // If no "data" node with id "history" is found, return an empty list
+                return new ArrayList<>();
+            }
+
+            // Access the "rows" node from the found "data" node
+            JsonNode rowsNode = historyDataNode.path("rows");
+            JsonNode rowNodes = rowsNode.get("row"); // Assuming "row" is an array
+
+            ArrayList<SignalDto> signalDtos = new ArrayList<>();
+            if (rowNodes != null && rowNodes.isArray()) {
+                for (JsonNode item : rowNodes) {
+                    String shortname = item.get("SHORTNAME").asText();
+                    String secid = item.get("SECID").asText();
+                    String tradeDateStr = item.get("TRADEDATE").asText();
+                    LocalDate tradeDate = LocalDate.parse(tradeDateStr);
+                    double open = item.get("OPEN").asDouble();
+                    double high = item.get("HIGH").asDouble();
+                    double low = item.get("LOW").asDouble();
+                    double close = item.get("CLOSE").asDouble();
+
+                    SignalDto signalDto = new SignalDto();
+                    signalDto.setSecid(secid);
+                    signalDto.setTradedate(tradeDate);
+                    signalDto.setOpen(open);
+                    signalDto.setLow(low);
+                    signalDto.setHigh(high);
+                    signalDto.setClose(close);
+                    signalDto.setShortname(shortname);
+                    signalDtos.add(signalDto);
+                }
             }
             return signalDtos;
         } catch (IOException e) {
