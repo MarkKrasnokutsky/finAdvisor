@@ -1,14 +1,23 @@
-import React from "react";
+import { useWindowWidth } from "@react-hook/window-size";
+import clsx from "clsx";
 
 const AuthLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const onlyWidth = useWindowWidth();
   return (
-    <div className="h-screen w-screen bg-backgroundMain  relative">
-      <div className="fixed h-screen -left-64 blur-[70px] z-10 animate-blob">
+    <div className="h-screen w-screen bg-background-dark  relative">
+      <div className="fixed h-screen top-20 -left-64 blur-[70px] z-10 animate-blob">
         <svg
           id="sw-js-blob-svg"
           viewBox="0 0 100 100"
           xmlns="http://www.w3.org/2000/svg"
-          className="h-screen "
+          className={clsx({
+            "h-[70vh]": onlyWidth > 1600,
+            "h-[60vh]": onlyWidth < 1600 && onlyWidth > 1400,
+            "h-[55vh]": onlyWidth < 1400 && onlyWidth > 1150,
+            "h-[50vh]": onlyWidth < 1150 && onlyWidth > 960,
+            "h-[40vh]": onlyWidth < 960 && onlyWidth > 800,
+            "h-0": onlyWidth < 800,
+          })}
         >
           {" "}
           <defs>
@@ -17,12 +26,12 @@ const AuthLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
               {" "}
               <stop
                 id="stop1"
-                stop-color="rgba(45, 189, 222, 1)"
+                stopColor="rgba(45, 189, 222, 1)"
                 offset="0%"
               ></stop>{" "}
               <stop
                 id="stop2"
-                stop-color="rgba(99, 19, 177, 1)"
+                stopColor="rgba(99, 19, 177, 1)"
                 offset="100%"
               ></stop>{" "}
             </linearGradient>{" "}
@@ -33,16 +42,20 @@ const AuthLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
             width="100%"
             height="100%"
             transform="translate(50 50)"
-            stroke-width="0"
+            strokeWidth="0"
           ></path>{" "}
         </svg>
       </div>
-      <div className="fixed right-24 top-96 blur-[70px] z-10 animate-blob animation-delay-2000">
+      <div
+        className={`${
+          onlyWidth > 800 ? "fixed" : "hidden"
+        }  right-24 top-96 blur-[70px] z-10 animate-blob animation-delay-2000`}
+      >
         <svg
           id="sw-js-blob-svg"
           viewBox="0 0 100 100"
           xmlns="http://www.w3.org/2000/svg"
-          className="h-96 "
+          className="h-96"
         >
           {" "}
           <defs>
@@ -57,7 +70,7 @@ const AuthLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
             width="100%"
             height="100%"
             transform="translate(50 50)"
-            stroke-width="0"
+            strokeWidth="0"
           ></path>{" "}
         </svg>
       </div>

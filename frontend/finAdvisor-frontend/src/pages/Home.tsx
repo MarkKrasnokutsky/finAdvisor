@@ -1,12 +1,4 @@
-import { useMe } from "@/api/hooks/useAuth";
-
-const Home = () => {
-  const { isLoading } = useMe();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
+const Home: React.FC = () => {
   return <div>Home</div>;
 };
 

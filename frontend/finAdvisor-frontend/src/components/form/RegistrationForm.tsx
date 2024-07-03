@@ -1,19 +1,22 @@
+import { useState } from "react";
+
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "react-router-dom";
+
+import { ErrorsState, ResponseErrors } from "@/types/auth";
+import { useRegistration } from "@/api/hooks/useAuth";
+
 import {
+  Button,
+  Input,
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from "../ui/form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
-import { ErrorsState, ResponseErrors } from "@/types/auth";
-import { useState } from "react";
-import { useRegistration } from "@/api/hooks/useAuth";
+} from "@/components";
 
 const FormSchema = z
   .object({
@@ -48,7 +51,7 @@ const FormSchema = z
     message: "Пароли не совпадают.",
   });
 
-const RegistrationForm = () => {
+export const RegistrationForm = () => {
   const [errorBackend, setErrorBackend] = useState<ErrorsState>({
     status: 0,
     data: "",
@@ -148,7 +151,7 @@ const RegistrationForm = () => {
             )}
           />
           <Button
-            className="w-full h-14 bg-accentMain text-lg rounded-xl hover:bg-accentMainHover"
+            className="w-full h-14 bg-accent text-lg rounded-xl hover:bg-accent-hover"
             type="submit"
           >
             Создать
@@ -157,8 +160,8 @@ const RegistrationForm = () => {
         <p className="text-center text-white mt-2 max-550:text-sm">
           Есть аккаунт?{" "}
           <Link
-            to="/login"
-            className="text-accentMain transition-all hover:text-accentMainHover hover:underline"
+            to="/dashboard/login"
+            className="text-accent transition-all hover:text-accent-hover hover:underline"
           >
             Войдите
           </Link>
@@ -167,5 +170,3 @@ const RegistrationForm = () => {
     </Form>
   );
 };
-
-export default RegistrationForm;

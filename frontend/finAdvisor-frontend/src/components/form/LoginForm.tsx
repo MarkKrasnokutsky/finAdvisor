@@ -1,20 +1,23 @@
+import { useState } from "react";
+
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link } from "react-router-dom";
+
+import { useLogin } from "@/api/hooks/useAuth";
+import { ErrorsState, ResponseErrors } from "@/types/auth";
+
 import {
+  Button,
+  Input,
   Form,
   FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormMessage,
-} from "../ui/form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
-import { useLogin } from "@/api/hooks/useAuth";
-import { useState } from "react";
-import { ErrorsState, ResponseErrors } from "@/types/auth";
+} from "@/components";
 
 const FormSchema = z.object({
   username: z
@@ -28,7 +31,7 @@ const FormSchema = z.object({
     .max(40, {
       message: "Имя пользователя должно состоять максимум из 40 символов.",
     })
-    .regex(/^[a-zA-Z0-9_]$/, { message: "Некорректно введены данные" }),
+    .regex(/^[a-zA-Z0-9_]{4,40}$/, { message: "Некорректно введены данные" }),
 
   password: z
     .string()
@@ -45,7 +48,7 @@ const FormSchema = z.object({
     }),
 });
 
-const LoginForm = () => {
+export const LoginForm = () => {
   const [errorBackend, setErrorBackend] = useState<ErrorsState>({
     data: "",
     status: 0,
@@ -117,7 +120,7 @@ const LoginForm = () => {
             )}
           />
           <Button
-            className="w-full h-14 bg-accentMain text-lg rounded-xl hover:bg-accentMainHover"
+            className="w-full h-14 bg-accent text-lg rounded-xl hover:bg-accent-hover"
             type="submit"
           >
             Войти
@@ -126,8 +129,8 @@ const LoginForm = () => {
         <p className="text-center text-white mt-2 max-550:text-sm">
           Нету аккаунта?{" "}
           <Link
-            to="/register"
-            className="text-accentMain transition-all hover:text-accentMainHover hover:underline"
+            to="/dashboard/register"
+            className="text-accent transition-all hover:text-accent-hover hover:underline"
           >
             Зарегистрируйтесь
           </Link>
@@ -136,5 +139,3 @@ const LoginForm = () => {
     </Form>
   );
 };
-
-export default LoginForm;
