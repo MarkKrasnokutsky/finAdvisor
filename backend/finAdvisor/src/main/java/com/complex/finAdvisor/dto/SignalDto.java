@@ -35,7 +35,7 @@ public class SignalDto {
     private double close;
     @Getter
     @Setter
-    @Schema(description = "короткое название инструмента", example = "ABIO")
+    @Schema(description = "короткое название инструмента", example = "АЛРОСА ао")
     private String shortname;
     @Getter
     @Setter

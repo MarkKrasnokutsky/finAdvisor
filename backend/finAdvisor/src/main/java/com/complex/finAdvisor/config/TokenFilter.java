@@ -31,84 +31,75 @@ public class TokenFilter extends OncePerRequestFilter {
     private int refreshTokenLifetime;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String jwt = null;
         String login = null;
         UserDetails userDetails = null;
         UsernamePasswordAuthenticationToken auth = null;
+
         try {
             String headerAuth = request.getHeader("Authorization");
             if (headerAuth != null && headerAuth.startsWith("Bearer ")) {
                 jwt = headerAuth.substring(7);
-                handleToken(jwt, request, response);
             }
-            else {
-                Cookie accessTokenCookie = WebUtils.getCookie(request, "accessToken");
-                if (accessTokenCookie != null) {
-                    jwt = accessTokenCookie.getValue();
-                    handleToken(jwt, request, response);
-                }
-            }
+
             if (jwt != null) {
                 try {
                     login = jwtCore.getLoginFromJwt(jwt);
-                }
-                catch (ExpiredJwtException e) {
+                } catch (ExpiredJwtException e) {
                     Cookie[] cookies = request.getCookies();
-                    if(cookies != null){
-                        for(Cookie cookie : cookies){
-                            if(cookie.getName().equals("refreshToken")){
+                    if (cookies != null) {
+                        for (Cookie cookie : cookies) {
+                            if (cookie.getName().equals("refreshToken")) {
                                 String refreshToken = cookie.getValue();
                                 try {
                                     Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(refreshToken);
                                     userDetails = userDetailsService.loadUserByUsername(login);
                                     auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                                     String newToken = jwtCore.generateToken(auth);
-                                    response.setHeader("Authorization", "Bearer " + newToken);
-
-                                    // Получаем куки для access токена и обновляем его значение
+                                    // Обновление куки для access токена
                                     Cookie accessTokenCookie = WebUtils.getCookie(request, "accessToken");
                                     if (accessTokenCookie != null) {
                                         accessTokenCookie.setValue(newToken);
                                         accessTokenCookie.setMaxAge(tokenLifetime); // 1 неделя
-                                        response.addCookie(accessTokenCookie); // Обновляем куки в ответе
+                                        response.addCookie(accessTokenCookie);
                                     }
 
-                                    // Получаем куки для refresh токена и обновляем его значение
+                                    // Обновление куки для refresh токена
                                     Cookie refreshTokenCookie = WebUtils.getCookie(request, "refreshToken");
                                     if (refreshTokenCookie != null) {
                                         refreshTokenCookie.setValue(refreshToken);
                                         refreshTokenCookie.setMaxAge(refreshTokenLifetime); // 30 дней
-                                        response.addCookie(refreshTokenCookie); // Обновляем куки в ответе
+                                        response.addCookie(refreshTokenCookie);
                                     }
+
+                                    response.setHeader("Authorization", "Bearer " + newToken);
+                                    break;
                                 } catch (JwtException ex) {
-                                    System.out.println("Refresh token is invalid");
-                                    // Создаем ответ с кодом ошибки и сообщением об ошибке
+                                    // Обновляем refresh token, если он невалиден
                                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                                     response.getWriter().write("{\"message\": \"Refresh token is invalid\"}");
                                     return;
                                 }
-                                break;
                             }
                         }
                     }
                 }
+
                 if (login != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     userDetails = userDetailsService.loadUserByUsername(login);
                     auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             }
-            else {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("{\"message\": \"Access token is expired and refresh token is not found\"}");
-            }
+        } catch (Exception e) {
+            // TODO: Обработка ошибок
         }
-        catch (Exception e) {
-            // TODO
-        }
+
         filterChain.doFilter(request, response);
     }
+
     private void handleToken(String jwt, HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             String login = jwtCore.getLoginFromJwt(jwt);
@@ -135,8 +126,7 @@ public class TokenFilter extends OncePerRequestFilter {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         response.getWriter().write("{\"message\": \"Refresh token is invalid\"}");
                     }
-                }
-                else {
+                } else {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.getWriter().write("{\"message\": \"Access token is expired and refresh token is not found\"}");
                 }

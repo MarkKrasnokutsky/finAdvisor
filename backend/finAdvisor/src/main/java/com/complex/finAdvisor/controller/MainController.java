@@ -33,11 +33,14 @@ public class MainController {
             if (currentUser.isPresent()) {
                 UserEntity userEntity = currentUser.get();
                 TariffEntity currentTariff = userRepository.findTariffByUserId(userEntity.getId());
-                String currentEmail = userEntity.getEmail();
                 UserResponse userResponse = new UserResponse();
-                userResponse.setEmail(currentEmail);
+                userResponse.setEmail(userEntity.getEmail());
                 userResponse.setUsername(principal.getName());
                 userResponse.setTariff(currentTariff);
+                userResponse.setTariffDuration(userEntity.getTariffDuration());
+                userResponse.setTariffInception(userEntity.getTariffInception());
+                userResponse.setTariffExpiration(userEntity.getTariffExpiration());
+                userResponse.setTgNickname(userEntity.getTgNickname());
                 return ResponseEntity.ok(userResponse);
             } else {
                 return ResponseEntity.notFound().build();

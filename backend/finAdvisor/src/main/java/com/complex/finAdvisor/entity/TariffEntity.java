@@ -1,5 +1,7 @@
 package com.complex.finAdvisor.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
@@ -20,7 +22,6 @@ import java.util.Set;
 @Tag(name = "Сущность тарифа", description = "Структура данных из базы о тарифе")
 @Table(name = "tariff")
 public class TariffEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "Id тарифа", example = "1")
@@ -34,10 +35,13 @@ public class TariffEntity {
     @Schema(description = "Стоимость тарифа за месяц", example = "5999")
     private Double cost;
 
-    @OneToMany(mappedBy = "tariff", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    @JsonIgnore
+    @OneToMany(mappedBy = "tariff", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @Schema(description = "Список пользователей тарифа", example = "[2,3,5]")
     private Set<UserEntity> users = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "tariff", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Schema(description = "Список отношений инструмент-тариф", example = "[2,3,5]")
     private Set<InstrumentTariffEntity> relationship = new HashSet<>();
