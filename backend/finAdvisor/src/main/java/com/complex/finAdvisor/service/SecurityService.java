@@ -97,13 +97,13 @@ public class SecurityService {
         // Создаем куки для access токена
         Cookie jwtCookie = new Cookie("accessToken", jwt);
         jwtCookie.setMaxAge(tokenLifetime); // 1 неделя
-        jwtCookie.setHttpOnly(true);
+        jwtCookie.setHttpOnly(false);
         jwtCookie.setPath("/");
 
         // Создаем куки для refresh токена
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setMaxAge(refreshTokenLifetime); // 30 дней
-        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setHttpOnly(false);
         refreshTokenCookie.setPath("/");
 
         // Добавляем куки в ответ
@@ -136,13 +136,13 @@ public class SecurityService {
             // Создаем куки для нового access токена
             Cookie jwtCookie = new Cookie("accessToken", newToken);
             jwtCookie.setMaxAge(tokenLifetime); // 1 неделя
-            jwtCookie.setHttpOnly(true);
+            jwtCookie.setHttpOnly(false);
             jwtCookie.setPath("/");
 
             // Добавляем куки в ответ
             response.addCookie(jwtCookie);
 
-            return ResponseEntity.ok(new TokenResponse(newToken, refreshToken));
+            return ResponseEntity.ok("Access token was updated successfully");
         } catch (JwtException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token is invalid");
         }
