@@ -5,7 +5,6 @@ import instance from "../config";
 
 export const authService = {
   login: async (loginData: InputData): Promise<AxiosResponse<string>> => {
-    console.log(instance);
     const response = await instance.post<string>(`/auth/signin`, {
       username: loginData.username,
       password: loginData.password,

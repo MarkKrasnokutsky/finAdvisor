@@ -6,6 +6,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getDataLocalStorage(key: string) {
+export function getDataCookies(key: string) {
   return Cookies.get(key);
 }
+// export function getDataLocalStorage(key: string) {
+//   return localStorage.getItem(key);
+// }

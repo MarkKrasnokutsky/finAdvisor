@@ -69,7 +69,6 @@ export const RegistrationForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
     try {
       await registerMutation.mutateAsync(data);
     } catch (error: unknown) {

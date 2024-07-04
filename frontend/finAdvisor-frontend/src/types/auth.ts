@@ -1,3 +1,5 @@
+import { Tariff } from "./tariff";
+
 export type InputData = {
   username: string;
   password: string;
@@ -16,13 +18,10 @@ export type ErrorsState = {
   status?: number;
 };
 
-export type Tariff = {
-  id: number;
-  name: string;
-  cost?: number;
-};
 export interface ResponseData {
   username: string;
   tariff: Tariff;
   email: string;
+  tariffInception: string;
+  tariffExpiration: string;
 }

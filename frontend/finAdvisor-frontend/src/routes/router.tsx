@@ -6,6 +6,9 @@ import Registration from "@/pages/auth/Registration";
 import Login from "@/pages/auth/Login";
 import AuthLayout from "@/layouts/AuthLayout";
 import { PrivateRoute, PublicRoute } from "@/components";
+import { DashboardLayout } from "@/layouts/DashboardLayout";
+import Signals from "@/pages/Signals";
+import { AuthProvider } from "@/context/AuthContext";
 
 const router = createBrowserRouter([
   {
@@ -16,12 +19,55 @@ const router = createBrowserRouter([
       {
         path: "",
         element: (
+          <AuthProvider>
+            <PrivateRoute>
+              <DashboardLayout>
+                <Home />
+              </DashboardLayout>
+            </PrivateRoute>
+          </AuthProvider>
+        ),
+      },
+      {
+        path: "signals",
+        element: (
           <PrivateRoute>
-            <Home />
+            <DashboardLayout>
+              <Signals />
+            </DashboardLayout>
           </PrivateRoute>
         ),
       },
-
+      {
+        path: "tools",
+        element: (
+          <PrivateRoute>
+            <DashboardLayout>
+              <Home />
+            </DashboardLayout>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "tariffs",
+        element: (
+          <PrivateRoute>
+            <DashboardLayout>
+              <Home />
+            </DashboardLayout>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "help",
+        element: (
+          <PrivateRoute>
+            <DashboardLayout>
+              <Home />
+            </DashboardLayout>
+          </PrivateRoute>
+        ),
+      },
       {
         path: "login",
         element: (
