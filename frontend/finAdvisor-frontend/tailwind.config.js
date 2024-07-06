@@ -17,6 +17,13 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: { body: ["Montserrat"] },
+      boxShadow: {
+        custom: "0 4px 25px 0 rgba(197, 192, 192, 0.6)",
+        customDark: "0 4px 25px 0 rgba(6, 7, 9, 0.6);",
+      },
+      scrollbar: ["dark"],
+
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -25,19 +32,48 @@ module.exports = {
           DEFAULT: "#D0D0D0",
           dark: "#0B0D0F",
         },
-        sidebarBg: {
+        secondaryBg: {
           DEFAULT: "#D9D9D9",
           dark: "#111314",
         },
         foreground: "hsl(var(--foreground))",
-        // backgroundMain: "#0B0D0F",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "#0B0D0F",
+          dark: "#E9E9E9",
+        },
+        logo: {
+          DEFAULT: "#ECECEC",
+        },
+        profile: {
+          dark: "#B3B3B3",
+        },
+        nav: {
+          DEFAULT: "#4D4D4D",
+          dark: "#8C8C8C",
+          hover: "#0B0D0F",
+          hoverDark: "#E9E9E9",
+          focus: "#A9A9A9",
+          focusDark: "#E9E9E9",
+        },
+        telegram: {
+          DEFAULT: "#0D72D0",
+          dark: "#0B62B3",
+        },
+        notification: {
+          DEFAULT: "#767676",
+          dark: "#8C8C8C",
+          activeDark: "#820101",
+          active: "#BD3D2B",
+        },
+        arrow: {
+          green: "#3AAA13",
+          red: "#BD3D2B",
+          greenDark: "#1D6E00",
+          redDark: "#6E0D00",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "#8C8C8C",
+          dark: "#353535",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",

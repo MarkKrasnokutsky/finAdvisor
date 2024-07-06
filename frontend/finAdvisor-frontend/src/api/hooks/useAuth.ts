@@ -1,9 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../service/authService";
-import { AxiosResponse } from "axios";
-import { ResponseData } from "@/types/auth";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import { AuthContext, AuthContextType } from "@/context/AuthContext";
 
 export const useLogin = () => {
   const navigate = useNavigate();
@@ -25,8 +24,7 @@ export const useRegistration = () => {
 
   const registerMutation = useMutation({
     mutationFn: authService.register,
-    onSuccess: (res: AxiosResponse<string>) => {
-      console.log(res.data);
+    onSuccess: () => {
       navigate("/dashboard/login");
     },
     onError: (error: Error) => {
@@ -40,12 +38,11 @@ export const useRegistration = () => {
 export const useMe = () => {
   const meMutation = useMutation({
     mutationFn: authService.me,
-    onSuccess: (res: AxiosResponse<ResponseData>) => {
-      console.log("useMe", res.data);
+    onSuccess: () => {
+      console.log("Данные получены");
     },
     onError: (error: Error) => {
       console.log(error);
-      console.log("useMe Error", error);
     },
   });
 
@@ -54,8 +51,8 @@ export const useMe = () => {
 export const useRefreshToken = () => {
   const refreshTokenMutation = useMutation({
     mutationFn: authService.refreshToken,
-    onSuccess: (res: AxiosResponse<ResponseData>) => {
-      console.log("RefreshToken", res.data);
+    onSuccess: () => {
+      console.log("Данные получены");
     },
     onError: (error: Error) => {
       console.log(error);
@@ -69,15 +66,19 @@ export const useAuth = (isProtectedRoute: boolean) => {
   const navigate = useNavigate();
   const meMutation = useMe();
   const refreshTokenMutation = useRefreshToken();
+  const { setAuthData } = useAuthContext();
 
   useEffect(() => {
     const isAuth = async () => {
       try {
-        await meMutation.mutateAsync();
+        const result = await meMutation.mutateAsync();
         !isProtectedRoute && navigate("/dashboard");
+        setAuthData(result.data);
       } catch (error) {
         try {
           await refreshTokenMutation.mutateAsync();
+          const result = await meMutation.mutateAsync();
+          setAuthData(result.data);
           !isProtectedRoute && navigate("/dashboard");
         } catch (error) {
           navigate("/dashboard/login");
@@ -88,6 +89,15 @@ export const useAuth = (isProtectedRoute: boolean) => {
     isAuth();
   }, []);
 };
+
+export const useAuthContext = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuthContext must be used within an AuthProvider");
+  }
+  return context;
+};
+
 // export const useMe = () => {
 //   const meQuery = useQuery({
 //     queryKey: ["me"],

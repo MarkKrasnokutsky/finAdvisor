@@ -64,11 +64,9 @@ export const LoginForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
-    console.log(data);
     try {
       await loginMutation.mutateAsync(data);
     } catch (error: unknown) {
-      console.log(error);
       const customError = error as ResponseErrors;
       setErrorBackend({
         data: customError.response?.data,
