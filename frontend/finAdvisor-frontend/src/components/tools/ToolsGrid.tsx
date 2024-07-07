@@ -20,7 +20,6 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({ tools }) => {
   };
 
   const toolsPreview = tools.slice(0, countTools());
-  console.log("toolsPreview: ", toolsPreview);
   return (
     <div
       className={clsx("flex flex-col gap-y-10", {
@@ -39,7 +38,7 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({ tools }) => {
         <Link
           to="tools"
           className={clsx(
-            "flex flex-col items-center p-4 border max-w-32 w-full border-secondary rounded-[20px] dark:border-profile-dark",
+            "flex flex-col items-center border  w-full border-secondary rounded-[20px] dark:border-profile-dark",
             {
               "max-w-28 text-xs p-4": onlyWidth > 1900,
               "max-w-24 text-xs p-4": onlyWidth < 1900 && onlyWidth > 1720,
