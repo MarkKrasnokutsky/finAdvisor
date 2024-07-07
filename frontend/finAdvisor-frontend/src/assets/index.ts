@@ -9,6 +9,7 @@ export * from "./icons/nav/Signal";
 export * from "./icons/nav/Tariff";
 export * from "./icons/nav/Tool";
 export * from "./icons/nav/Burger";
+export * from "./icons/nav/Close";
 
 // job
 export * from "./icons/Moon";

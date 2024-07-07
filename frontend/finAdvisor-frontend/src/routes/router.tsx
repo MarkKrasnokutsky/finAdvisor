@@ -31,11 +31,13 @@ const router = createBrowserRouter([
       {
         path: "signals",
         element: (
-          <PrivateRoute>
-            <DashboardLayout>
-              <Signals />
-            </DashboardLayout>
-          </PrivateRoute>
+          <AuthProvider>
+            <PrivateRoute>
+              <DashboardLayout>
+                <Signals />
+              </DashboardLayout>
+            </PrivateRoute>
+          </AuthProvider>
         ),
       },
       {

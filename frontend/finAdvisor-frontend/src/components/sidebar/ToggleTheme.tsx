@@ -10,6 +10,7 @@ export const ToggleTheme: React.FC = () => {
     <div
       className={clsx("flex items-center gap-x-4 font-medium text-xs ", {
         "px-14": onlyWidth > 1720,
+        "px-4": onlyWidth < 1000,
       })}
     >
       <p className="text-primary dark:text-secondary">Светлая</p>

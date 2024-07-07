@@ -59,8 +59,8 @@ const Home: React.FC = () => {
           <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
         )}
       </CardLayout>
-      {/* <div className="col-span-8 row-span-2 bg-slate-400"></div>
-      <div className="col-span-4 row-span-2 bg-slate-400"></div>
+      {/* <div className="col-span-10 row-span-2 bg-slate-400"></div>
+      <div className="col-span-2 row-span-2 bg-slate-400"></div>
       <div className="col-span-5 row-span-2 bg-slate-400"></div>
       <div className="col-span-7 row-span-2 bg-slate-400"></div> */}
     </div>

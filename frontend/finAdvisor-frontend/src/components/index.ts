@@ -22,6 +22,7 @@ export * from "./sidebar/Sidebar";
 export * from "./sidebar/Nav";
 export * from "./sidebar/ToggleTheme";
 export * from "./sidebar/MobileSidebar";
+export * from "./sidebar/ActiveMenu";
 
 // form
 export * from "./form/LoginForm";

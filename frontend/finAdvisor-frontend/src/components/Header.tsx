@@ -20,7 +20,7 @@ export const Header: React.FC = () => {
           <NotificationIcon />
         </div>
         {onlyWidth < 1000 && (
-          <div className="flex relative items-center justify-center rounded-full size-16 bg-secondaryBg text-notification transition-all hover:text-primary dark:bg-secondaryBg-dark dark:notification-dark dark:hover:text-primary-dark ">
+          <div className="flex items-center justify-center rounded-full size-16 bg-secondaryBg text-notification transition-all hover:text-primary dark:bg-secondaryBg-dark dark:notification-dark dark:hover:text-primary-dark ">
             <MobileSidebar />
           </div>
         )}
