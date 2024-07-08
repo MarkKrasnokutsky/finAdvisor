@@ -41,6 +41,10 @@ public class TariffEntity {
     @Schema(description = "Список пользователей тарифа", example = "[2,3,5]")
     private Set<UserEntity> users = new HashSet<>();
 
+    @Column(name = "instrument_count")
+    @Schema(description = "Количество доступных инструментов", example = "100")
+    private int instrumentCount;
+
     @JsonIgnore
     @OneToMany(mappedBy = "tariff", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @Schema(description = "Список отношений инструмент-тариф", example = "[2,3,5]")

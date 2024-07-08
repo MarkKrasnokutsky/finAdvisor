@@ -51,6 +51,8 @@ public class TariffParser {
                         System.out.println("Find it: " + stockRepository.findBySecid(node.asText()).getShortname());
                     }
                 }
+                currentTariff.setInstrumentCount(values.size());
+                tariffRepository.save(currentTariff);
             }
 
         } catch (Exception e) {
