@@ -15,8 +15,12 @@ export * from "./icons/nav/Close";
 export * from "./icons/Moon";
 export * from "./icons/Sun";
 export * from "./icons/NotificationIcon";
+export * from "./icons/CalendarIcon";
+export * from "./icons/Search";
+export * from "./icons/DeleteItems";
 
 // arrow
 export * from "./icons/arrow/ArrowRightUp";
 export * from "./icons/arrow/ArrowRed";
 export * from "./icons/arrow/ArrowGreen";
+export * from "./icons/arrow/ArrowUpDown";

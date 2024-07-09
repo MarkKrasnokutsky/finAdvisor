@@ -6,17 +6,23 @@ import clsx from "clsx";
 
 type SignalItemProps = {
   signal: Signal;
+  isPages?: boolean;
 };
 
-export const SignalItem: React.FC<SignalItemProps> = ({ signal }) => {
+export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
   const onlyWidth = useWindowWidth();
   return (
     <div
-      className={clsx("grid grid-cols-4 items-center py-4", {
-        "gap-x-6": onlyWidth > 1650,
-        "gap-x-2": onlyWidth < 1650,
-        "w-[500px]": onlyWidth < 620,
-      })}
+      className={clsx(
+        `grid grid-cols-${
+          isPages ? 5 : 4
+        } grid-flow-col items-center py-4 pr-10`,
+        {
+          "gap-x-6": onlyWidth > 1650,
+          "gap-x-2": onlyWidth < 1650,
+          "w-[700px]": onlyWidth < 620,
+        }
+      )}
     >
       <div
         className={clsx("flex items-center p-1 w-44", {
@@ -59,7 +65,18 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal }) => {
       >
         {signal.date}
       </div>
-      <div className="flex items-center justify-center gap-x-1 text-arrow-green stroke-arrow-green dark:text-arrow-greenDark dark:stroke-arrow-greenDark col-span-1">
+      {isPages && (
+        <div
+          className={clsx("font-medium", {
+            "text-lg text-center": onlyWidth > 1650,
+            "text-base text-right": onlyWidth < 1650 && onlyWidth > 1270,
+            "text-sm text-right": onlyWidth < 1270,
+          })}
+        >
+          {3820}
+        </div>
+      )}
+      <div className="flex items-center justify-left pl-[50%] gap-x-1 text-arrow-green stroke-arrow-green dark:text-arrow-greenDark dark:stroke-arrow-greenDark col-span-1">
         <ArrowGreen />
         <span
           className={clsx("font-medium", {

@@ -3,8 +3,8 @@ import { ReactNode } from "react";
 type CardLayoutProps = {
   children: ReactNode;
   className?: string;
-  columns: number;
-  rows: number;
+  columns?: number;
+  rows?: number;
   rowStart?: number;
   rowEnd?: number;
 };

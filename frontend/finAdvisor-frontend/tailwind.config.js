@@ -21,6 +21,7 @@ module.exports = {
       boxShadow: {
         custom: "0 4px 25px 0 rgba(197, 192, 192, 0.6)",
         customDark: "0 4px 25px 0 rgba(6, 7, 9, 0.6);",
+        customDarkTools: "8px 8px 20px 0 #0e1011",
       },
       scrollbar: ["dark"],
 
@@ -36,6 +37,7 @@ module.exports = {
           DEFAULT: "#D9D9D9",
           dark: "#111314",
         },
+
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "#0B0D0F",
@@ -87,6 +89,11 @@ module.exports = {
           DEFAULT: "#0B62B3",
           hover: "#0a559b",
           // foreground: "hsl(var(--accent-foreground))",
+        },
+        search: {
+          DEFAULT: "#B7B7B7",
+          dark: "#1A1C1D",
+          text: "#4A4C52",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
