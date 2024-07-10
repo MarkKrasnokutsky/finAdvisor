@@ -3,7 +3,9 @@ package com.complex.finAdvisor.service;
 import com.complex.finAdvisor.config.JwtCore;
 import com.complex.finAdvisor.dto.SigninRequest;
 import com.complex.finAdvisor.dto.SignupRequest;
+import com.complex.finAdvisor.dto.TokenRefreshResponse;
 import com.complex.finAdvisor.dto.TokenResponse;
+import com.complex.finAdvisor.entity.TariffEntity;
 import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.UserRepository;
 import io.jsonwebtoken.Claims;
@@ -32,6 +34,7 @@ import org.springframework.web.util.WebUtils;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -125,7 +128,17 @@ public class SecurityService {
             // Проверяем, действителен ли refresh токен
             Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(refreshToken);
             String username = claims.getBody().getSubject();
-
+            Optional<UserEntity> authUser = userRepository.findByUsername(username);
+            TokenRefreshResponse userData = new TokenRefreshResponse();
+            authUser.ifPresent(userEntity -> {
+                userData.setTariff(userEntity.getTariff());
+                userData.setUsername(username);
+                userData.setEmail(userEntity.getEmail());
+                userData.setTgNickname(userEntity.getTgNickname());
+                userData.setTariffInception(userEntity.getTariffInception());
+                userData.setTariffExpiration(userEntity.getTariffExpiration());
+                userData.setTariffDuration(userEntity.getTariffDuration());
+            });
             // Загружаем данные пользователя
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -142,7 +155,7 @@ public class SecurityService {
             // Добавляем куки в ответ
             response.addCookie(jwtCookie);
 
-            return ResponseEntity.ok("Access token was updated successfully");
+            return ResponseEntity.ok(userData);
         } catch (JwtException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token is invalid");
         }
