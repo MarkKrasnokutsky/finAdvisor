@@ -1,23 +1,34 @@
-import { useQuery } from "@tanstack/react-query";
+import {
+  QueryKey,
+  useQuery,
+  UseQueryOptions,
+  UseQueryResult,
+} from "@tanstack/react-query";
 import { signalsService } from "../service/signalsService";
 import { Signal } from "@/types/signals";
+import { useState } from "react";
 
-export const useSignals = () => {
-  const signalsQuery = useQuery({
-    queryKey: ["signals"],
-    queryFn: async () => {
-      try {
-        const res = await signalsService.getSignals();
-        return res.data;
-      } catch (error) {
-        console.log(error);
+export const useSignals = (): UseQueryResult<Signal[], Error> => {
+  const [reloadAttempts, setReloadAttempts] = useState(0);
+  const maxReloadAttempts = 3;
+
+  const signalsQuery = useQuery<Signal[], Error>({
+    queryKey: ["signals"] as QueryKey,
+    queryFn: async (): Promise<Signal[]> => {
+      const res = await signalsService.getSignals();
+      return res.data;
+    },
+    onError: (error: Error) => {
+      console.error("Ошибка при получении сигналов:", error);
+      if (reloadAttempts < maxReloadAttempts) {
+        setReloadAttempts((prev) => prev + 1);
+        window.location.reload();
       }
     },
-  });
+  } as UseQueryOptions<Signal[], Error>);
 
   return signalsQuery;
 };
-
 export const useFilterSignals = (
   signals: Signal[],
   date: string,
