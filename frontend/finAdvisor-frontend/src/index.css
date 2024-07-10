@@ -118,3 +118,39 @@
   margin-bottom: 40px;
   border-radius: 20px;
 }
+
+/* width */
+.scroll-container-modal::-webkit-scrollbar {
+  width: 3px;
+  height: 5px;
+}
+
+/* Track */
+.scroll-container-modal::-webkit-scrollbar-track {
+  background: #b2b2b2;
+  margin-bottom: 15px;
+  border-radius: 20px;
+}
+
+/* Handle */
+.scroll-container-modal::-webkit-scrollbar-thumb {
+  background: #7e7e7e;
+}
+
+/* Handle on hover */
+.scroll-container-modal::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+.scroll-container-modal {
+  padding-right: 10px;
+}
+
+.dark .scroll-container-modal::-webkit-scrollbar-thumb {
+  background: #4a4c52;
+}
+
+.dark .scroll-container-modal::-webkit-scrollbar-track {
+  background: #1a1c1d;
+  margin-bottom: 15px;
+  border-radius: 20px;
+}

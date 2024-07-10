@@ -3,16 +3,18 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import { Search } from "@/assets";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   showPassword?: boolean;
   setShowPassword?: (show: boolean) => void;
   isPassword?: boolean;
+  isSearch?: boolean;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, isPassword, ...props }, ref) => {
+  ({ className, type, isPassword, isSearch, ...props }, ref) => {
     const [showPassword, setShowPassword] = React.useState<boolean>(false);
     return (
       <div className="relative">
@@ -25,6 +27,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
+
+        {isSearch && (
+          <div className="absolute top-1 left-1 text-search-text flex gap-1 items-center">
+            <Search />
+            <p className="text-xs font-medium">{/* Поиск */}</p>
+          </div>
+        )}
 
         {isPassword && (
           <button

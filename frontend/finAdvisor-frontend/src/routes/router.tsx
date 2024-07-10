@@ -8,7 +8,7 @@ import AuthLayout from "@/layouts/AuthLayout";
 import { PrivateRoute, PublicRoute } from "@/components";
 import { DashboardLayout } from "@/layouts/DashboardLayout";
 import Signals from "@/pages/Signals";
-import { AuthProvider } from "@/context/AuthContext";
+import { FilterToolProvider } from "@/context/FilterToolContext";
 
 const router = createBrowserRouter([
   {
@@ -19,25 +19,23 @@ const router = createBrowserRouter([
       {
         path: "",
         element: (
-          <AuthProvider>
-            <PrivateRoute>
-              <DashboardLayout>
-                <Home />
-              </DashboardLayout>
-            </PrivateRoute>
-          </AuthProvider>
+          <PrivateRoute>
+            <DashboardLayout>
+              <Home />
+            </DashboardLayout>
+          </PrivateRoute>
         ),
       },
       {
         path: "signals",
         element: (
-          <AuthProvider>
+          <FilterToolProvider>
             <PrivateRoute>
               <DashboardLayout>
                 <Signals />
               </DashboardLayout>
             </PrivateRoute>
-          </AuthProvider>
+          </FilterToolProvider>
         ),
       },
       {

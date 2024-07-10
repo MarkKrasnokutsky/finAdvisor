@@ -15,6 +15,10 @@ const Home: React.FC = () => {
   const { data: tools } = useTools();
   const { data: signals } = useSignals();
   const onlyWidth = useWindowWidth();
+
+  const sortSignals = signals?.sort((a, b) => {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
   return (
     <div
       className={clsx("gap-5 w-full h-full", {
@@ -23,17 +27,23 @@ const Home: React.FC = () => {
       })}
     >
       <CardLayout
-        columns={onlyWidth > 1920 ? 10 : 8}
+        columns={8}
+        // columns={onlyWidth > 1920 ? 10 : 8}
         rows={2}
         className="pb-0 pr-4"
       >
-        {signals ? (
-          <SignalGrid signals={signals} />
+        {sortSignals ? (
+          <SignalGrid signals={sortSignals} />
         ) : (
           <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
         )}
       </CardLayout>
-      <CardLayout columns={onlyWidth > 1920 ? 2 : 4} rows={2} className="">
+      <CardLayout
+        columns={4}
+        // columns={onlyWidth > 1920 ? 2 : 4}
+        rows={2}
+        className=""
+      >
         {authData ? (
           <Profile username={authData.username} email={authData.email} />
         ) : (
@@ -59,8 +69,9 @@ const Home: React.FC = () => {
           <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
         )}
       </CardLayout>
-      {/* <div className="col-span-10 row-span-2 bg-slate-400"></div>
-      <div className="col-span-2 row-span-2 bg-slate-400"></div>
+
+      {/* <div className={`col-span-8 row-span-2 bg-slate-400`}></div>
+      <div className={`col-span-4 row-span-2 bg-slate-400`}></div>
       <div className="col-span-5 row-span-2 bg-slate-400"></div>
       <div className="col-span-7 row-span-2 bg-slate-400"></div> */}
     </div>
