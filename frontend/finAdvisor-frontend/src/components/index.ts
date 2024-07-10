@@ -8,6 +8,7 @@ export * from "./tools/ToolsComboboxItem";
 
 // tariffs
 export * from "./tariffs/TariffItem";
+export * from "./tariffs/TariffBuyCard";
 
 // home
 export * from "./Profile";

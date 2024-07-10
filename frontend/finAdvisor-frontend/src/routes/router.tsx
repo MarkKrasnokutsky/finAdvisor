@@ -10,6 +10,7 @@ import { DashboardLayout } from "@/layouts/DashboardLayout";
 import Signals from "@/pages/Signals";
 import { FilterToolProvider } from "@/context/FilterToolContext";
 import Tools from "@/pages/Tools";
+import Tariff from "@/pages/Tariff";
 
 const router = createBrowserRouter([
   {
@@ -54,7 +55,7 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <DashboardLayout>
-              <Home />
+              <Tariff />
             </DashboardLayout>
           </PrivateRoute>
         ),
@@ -63,9 +64,7 @@ const router = createBrowserRouter([
         path: "help",
         element: (
           <PrivateRoute>
-            <DashboardLayout>
-              <Home />
-            </DashboardLayout>
+            <DashboardLayout>{/* <Home /> */}</DashboardLayout>
           </PrivateRoute>
         ),
       },
