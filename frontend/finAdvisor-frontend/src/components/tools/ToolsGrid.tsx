@@ -16,7 +16,7 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({ tools }) => {
     // if (onlyWidth <= 1320) return 3;
     // if (onlyWidth <= 1650) return 4;
     if (onlyWidth <= 2100) return 5;
-    else return 11;
+    else return 9;
   };
 
   const toolsPreview = tools.slice(0, countTools());
