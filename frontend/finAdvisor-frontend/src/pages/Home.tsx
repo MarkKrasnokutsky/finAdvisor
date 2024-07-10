@@ -7,13 +7,10 @@ import { Profile, SignalGrid, TariffItem, ToolsGrid } from "@/components";
 import { CardLayout } from "@/layouts/CardLayout";
 import { useWindowWidth } from "@react-hook/window-size";
 import clsx from "clsx";
-import { useEffect } from "react";
 
 const Home: React.FC = () => {
   useTitle("Панель управления");
   const { authData } = useAuthContext();
-
-  useEffect(() => {}, [authData]);
 
   const { data: tools } = useTools();
   const { data: signals } = useSignals();
@@ -59,7 +56,7 @@ const Home: React.FC = () => {
             name={authData.tariff.name}
             cost={authData.tariff.cost}
             tariffExpiration={authData.tariffInception}
-            allTools={authData.tariff.instrumentCount}
+            instrumentCount={authData.tariff.instrumentCount}
           />
         ) : (
           <Spinner className="size-14 fill-primary dark:fill-primary-dark" />

@@ -2,14 +2,28 @@ import { useTitle } from "@/api/hooks/useContext";
 import { NotificationIcon } from "@/assets";
 import { useWindowWidth } from "@react-hook/window-size";
 import { MobileSidebar } from "./sidebar/MobileSidebar";
+import clsx from "clsx";
 
 export const Header: React.FC = () => {
   const notifications = ["1"];
   const { title } = useTitle();
   const onlyWidth = useWindowWidth();
   return (
-    <div className="flex justify-between items-center mt-16 mb-16">
-      <h2 className="font-semibold text-4xl text-primary dark:text-primary-dark">
+    <div
+      className={clsx("flex justify-between items-center ", {
+        "my-16": onlyWidth > 1600,
+        "my-10": onlyWidth < 1600 && onlyWidth > 1300,
+        "my-4": onlyWidth < 1300,
+      })}
+    >
+      <h2
+        className={clsx(
+          `font-semibold text-primary dark:text-primary-dark`,
+          { "text-4xl": onlyWidth > 850 },
+          { "text-3xl": onlyWidth < 850 },
+          { "text-2xl": onlyWidth < 600 }
+        )}
+      >
         {title}
       </h2>
       <div className="flex gap-x-2">

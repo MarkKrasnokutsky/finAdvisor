@@ -1,22 +1,37 @@
 import { Link } from "react-router-dom";
 import simple from "@/assets/tariffs/simple.png";
+import plus from "@/assets/tariffs/plus.png";
+import pro from "@/assets/tariffs/pro.png";
+import vip from "@/assets/tariffs/vip.png";
 import { useWindowWidth } from "@react-hook/window-size";
 import clsx from "clsx";
+
+const tariffs = [
+  { name: "Simple", img: simple },
+  { name: "Plus", img: plus },
+  { name: "Pro", img: pro },
+  { name: "VIP", img: vip },
+];
 
 type TariffItemProps = {
   name: string;
   cost: number;
   tariffExpiration: string;
-  allTools: number;
+  instrumentCount: number;
 };
 
 export const TariffItem: React.FC<TariffItemProps> = ({
   name,
   cost,
   tariffExpiration,
-  allTools,
+  instrumentCount,
 }) => {
   const date = tariffExpiration.split("T")[0];
+
+  const selectImg = tariffs.find(
+    (a) => a.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+  );
+  console.log("selectImg: ", selectImg);
 
   const onlyWidth = useWindowWidth();
   return (
@@ -32,7 +47,7 @@ export const TariffItem: React.FC<TariffItemProps> = ({
           "text-sm": onlyWidth < 1450,
         })}
       >
-        <p>{allTools} доступных инструментов</p>
+        <p>{instrumentCount} доступных инструментов</p>
         <p>
           Действует до <span className="font-semibold">{date}</span>
         </p>
@@ -65,7 +80,7 @@ export const TariffItem: React.FC<TariffItemProps> = ({
       </div>
       <div className="absolute -right-5 -top-7">
         <img
-          src={simple}
+          src={selectImg?.img}
           alt=""
           className={clsx({
             "w-72": onlyWidth > 1650,
