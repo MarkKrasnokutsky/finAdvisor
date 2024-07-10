@@ -9,6 +9,7 @@ import { PrivateRoute, PublicRoute } from "@/components";
 import { DashboardLayout } from "@/layouts/DashboardLayout";
 import Signals from "@/pages/Signals";
 import { FilterToolProvider } from "@/context/FilterToolContext";
+import Tools from "@/pages/Tools";
 
 const router = createBrowserRouter([
   {
@@ -43,7 +44,7 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <DashboardLayout>
-              <Home />
+              <Tools />
             </DashboardLayout>
           </PrivateRoute>
         ),

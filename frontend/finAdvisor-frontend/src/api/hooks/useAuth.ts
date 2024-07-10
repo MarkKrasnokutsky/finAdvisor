@@ -80,8 +80,7 @@ export const useAuth = (isProtectedRoute: boolean) => {
         setAuthData(result.data);
       } catch (error) {
         try {
-          await refreshTokenMutation.mutateAsync();
-          const result = await meMutation.mutateAsync();
+          const result = await refreshTokenMutation.mutateAsync();
           setAuthData(result.data);
           !isProtectedRoute && navigate("/dashboard");
         } catch (error) {

@@ -12,7 +12,7 @@ export const ToolsItem: React.FC<ToolsItemProps> = ({ tool }) => {
       className={clsx(
         "flex flex-col items-center border w-full border-secondary rounded-[20px] dark:border-profile-dark",
         {
-          "max-w-28 text-xs p-4": onlyWidth > 1900,
+          "max-w-40 text-sm p-4": onlyWidth > 1900,
           "max-w-24 text-[10px] p-4": onlyWidth < 1900 && onlyWidth > 1720,
           "max-w-24 text-[9px] p-2": onlyWidth < 1720 && onlyWidth > 1450,
           "max-w-[90px] text-[10px] p-2": onlyWidth < 1450,
