@@ -60,7 +60,7 @@ public class SecurityConfigurator {
                         httpSecurityCorsConfigurer.configurationSource(request -> {
                             CorsConfiguration configuration = new CorsConfiguration();
                             // TODO добавить адрес хоста
-                            configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); // Разрешить только localhost:8080
+                            configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:5173")); // Разрешить только localhost:8080
                             configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE")); // Разрешить все типы запросов
                             configuration.setAllowCredentials(true);
                             configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); // Разрешить только определенные заголовки
