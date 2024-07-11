@@ -14,9 +14,7 @@ const Home: React.FC = () => {
 
   const { data: tools } = useTools();
   const { data: signals } = useSignals();
-  // if (error) {
-  //   window.location.reload();
-  // }
+
   const onlyWidth = useWindowWidth();
 
   const sortSignals = signals?.sort((a, b) => {

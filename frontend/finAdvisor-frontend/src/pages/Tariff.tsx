@@ -13,7 +13,7 @@ import { useWindowWidth } from "@react-hook/window-size";
 const tariffs = [
   { name: "Simple", img: simple, instrumentCount: 15, cost: 2490 },
   { name: "Plus", img: plus, instrumentCount: 35, cost: 3490 },
-  { name: "Pro", img: pro, instrumentCount: 88, cost: 6490 },
+  { name: "Pro", img: pro, instrumentCount: 88, cost: 4990 },
   { name: "VIP", img: vip, instrumentCount: 175, cost: 7490 },
 ];
 
@@ -36,6 +36,7 @@ const Tariff: React.FC = () => {
             cost={authData.tariff.cost}
             tariffExpiration={authData.tariffExpiration}
             instrumentCount={authData.tariff.instrumentCount}
+            isPage
           />
         ) : (
           <Spinner className="size-14 fill-primary dark:fill-primary-dark" />

@@ -7,10 +7,10 @@ import { useWindowWidth } from "@react-hook/window-size";
 import clsx from "clsx";
 
 const tariffs = [
-  { name: "Simple", img: simple },
-  { name: "Plus", img: plus },
-  { name: "Pro", img: pro },
-  { name: "VIP", img: vip },
+  { name: "Simple", img: simple, cost: 2490 },
+  { name: "Plus", img: plus, cost: 3490 },
+  { name: "Pro", img: pro, cost: 4990 },
+  { name: "VIP", img: vip, cost: 7490 },
 ];
 
 type TariffItemProps = {
@@ -18,6 +18,7 @@ type TariffItemProps = {
   cost: number;
   tariffExpiration: string;
   instrumentCount: number;
+  isPage?: boolean;
 };
 
 export const TariffItem: React.FC<TariffItemProps> = ({
@@ -25,13 +26,15 @@ export const TariffItem: React.FC<TariffItemProps> = ({
   cost,
   tariffExpiration,
   instrumentCount,
+  isPage,
 }) => {
   const date = tariffExpiration.split("T")[0];
 
-  const selectImg = tariffs.find(
+  const selectTariff = tariffs.find(
     (a) => a.name.toLocaleLowerCase() === name.toLocaleLowerCase()
   );
-  console.log("selectImg: ", selectImg);
+
+  console.log("selectImg: ", selectTariff);
 
   const onlyWidth = useWindowWidth();
   return (
@@ -61,12 +64,13 @@ export const TariffItem: React.FC<TariffItemProps> = ({
               "text-xl": onlyWidth < 1450,
             })}
           >
-            2400{cost}₽
+            {selectTariff?.cost}
+            {cost}₽
           </span>{" "}
           в месяц
         </p>
         <Link
-          to="tariffs"
+          to={isPage ? "" : "tariffs"}
           className={clsx(
             " text-center border border-primary rounded-[20px] transition-all hover:bg-primary hover:text-secondaryBg dark:border-primary-dark dark:hover:bg-primary-dark dark:hover:text-secondaryBg-dark",
             {
@@ -75,12 +79,12 @@ export const TariffItem: React.FC<TariffItemProps> = ({
             }
           )}
         >
-          Перейти к тарифам
+          {isPage ? "Продлить" : "Перейти к тарифам"}
         </Link>
       </div>
       <div className="absolute -right-5 -top-7">
         <img
-          src={selectImg?.img}
+          src={selectTariff?.img}
           alt=""
           className={clsx({
             "w-72": onlyWidth > 1650,

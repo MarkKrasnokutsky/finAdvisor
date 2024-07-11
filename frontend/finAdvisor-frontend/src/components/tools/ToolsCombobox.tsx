@@ -30,8 +30,10 @@ export const ToolsCombobox: React.FC<ToolsComboboxProps> = ({
   const { FilterToolData } = useFilterTool();
 
   const filterAndFoundTools = (tools: Tool[], value: string) => {
-    const foundTools = tools.filter((tool) =>
-      tool.shortname.toLowerCase().includes(value.toLowerCase())
+    const foundTools = tools.filter(
+      (tool) =>
+        tool.shortname.toLowerCase().includes(value.toLowerCase()) ||
+        tool.secid.toLowerCase().includes(value.toLowerCase())
     );
 
     return foundTools.sort((a, b) => {
