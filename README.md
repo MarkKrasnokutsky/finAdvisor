@@ -12,4 +12,3 @@
 - ComplexRepos(Николай) - Админ-аккаунт для добавления тасков в GitHub Issues, мониторинга правок и т.д
 - MarkKrasnokutsky - FullStack dev, Team Leader
 - Yaosobolev - FullStack dev, DevOps
-- Dmitriy Rubanov - Landing dev
