@@ -2,15 +2,20 @@ import { createBrowserRouter } from "react-router-dom";
 
 import App from "@/App";
 import Home from "@/pages/Home";
-import Registration from "@/pages/auth/Registration";
 import Login from "@/pages/auth/Login";
 import AuthLayout from "@/layouts/AuthLayout";
 import { PrivateRoute, PublicRoute } from "@/components";
 import { DashboardLayout } from "@/layouts/DashboardLayout";
-import Signals from "@/pages/Signals";
+// import Signals from "@/pages/Signals";
 import { FilterToolProvider } from "@/context/FilterToolContext";
-import Tools from "@/pages/Tools";
-import Tariff from "@/pages/Tariff";
+// import Tools from "@/pages/Tools";
+// import Tariff from "@/pages/Tariff";
+import React, { Suspense } from "react";
+import Registration from "@/pages/auth/Registration";
+
+const Signals = React.lazy(() => import("@/pages/Signals"));
+const Tools = React.lazy(() => import("@/pages/Tools"));
+const Tariff = React.lazy(() => import("@/pages/Tariff"));
 
 const router = createBrowserRouter([
   {
@@ -34,7 +39,9 @@ const router = createBrowserRouter([
           <FilterToolProvider>
             <PrivateRoute>
               <DashboardLayout>
-                <Signals />
+                <Suspense fallback={<div>Загрузка страницы Сигналов</div>}>
+                  <Signals />
+                </Suspense>
               </DashboardLayout>
             </PrivateRoute>
           </FilterToolProvider>
@@ -45,7 +52,9 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <DashboardLayout>
-              <Tools />
+              <Suspense fallback={<div>Загрузка страницы инструментов</div>}>
+                <Tools />
+              </Suspense>
             </DashboardLayout>
           </PrivateRoute>
         ),
@@ -55,7 +64,9 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <DashboardLayout>
-              <Tariff />
+              <Suspense fallback={<div>Загрузка страницы Тарифов</div>}>
+                <Tariff />
+              </Suspense>
             </DashboardLayout>
           </PrivateRoute>
         ),
