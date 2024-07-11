@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Tag(name = "Инструменты", description = "Контроллер для работы с инструментами")
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-@RequestMapping("/instruments")
+@RequestMapping("/api/instruments")
 public class InstrumentController {
     @Autowired
     private StockService stockService;

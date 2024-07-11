@@ -18,7 +18,7 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @Tag(name = "Тестовая защищенная область роутов", description = "Контроллер для теста защищенной области rest-контроллера только для авторизированного пользователя")
-@RequestMapping("/secured")
+@RequestMapping("/api/secured")
 public class MainController {
     private final UserRepository userRepository;
 

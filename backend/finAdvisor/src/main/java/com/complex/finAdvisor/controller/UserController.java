@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @Tag(name = "Пользователи", description = "Контроллер для работы с пользователями")
 @AllArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
     private final UserRepository userRepository;
     private final UserService userService;

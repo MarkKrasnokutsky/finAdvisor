@@ -21,7 +21,7 @@ import java.security.Principal;
 
 @RestController
 @Tag(name = "Аутентификация", description = "Контроллер для работы с регистрацией/авторизацией")
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class SecurityController {
     private final SecurityService securityService;

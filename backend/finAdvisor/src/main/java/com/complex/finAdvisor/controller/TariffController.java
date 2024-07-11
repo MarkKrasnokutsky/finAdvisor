@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @Tag(name = "Тарифы", description = "Контроллер для работы с тарифами")
 @AllArgsConstructor
-@RequestMapping("/tariff")
+@RequestMapping("/api/tariff")
 public class TariffController {
     private final TariffRepository tariffRepository;
     private final TariffService tariffService;

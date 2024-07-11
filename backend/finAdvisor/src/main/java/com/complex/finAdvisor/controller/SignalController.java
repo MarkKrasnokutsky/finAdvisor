@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @Tag(name = "Сигналы", description = "Контроллер для работы с сигналами")
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-@RequestMapping("/signals")
+@RequestMapping("/api/signals")
 @RequiredArgsConstructor
 public class SignalController {
     private final SignalService signalService;
