@@ -16,7 +16,7 @@ const SignalsList = (signals: Signal[] | undefined) => {
     return (
       <div className="flex justify-center items-center size-full text-3xl font-semibold">
         {" "}
-        Сейчас нету сигналов
+        Нет сигналов
       </div>
     );
   }

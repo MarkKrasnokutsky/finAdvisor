@@ -11,7 +11,7 @@ export const ToolsComboboxItem: React.FC<ToolsComboboxItemProps> = ({
 }) => {
   const { FilterToolData, setFilterToolData } = useFilterTool();
 
-  const isSelected = FilterToolData === tool.shortname;
+  const isSelected = FilterToolData === (tool.shortname || tool.secid);
 
   return (
     <div

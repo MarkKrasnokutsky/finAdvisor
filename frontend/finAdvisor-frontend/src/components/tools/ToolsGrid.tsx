@@ -22,9 +22,9 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({ tools }) => {
   const toolsPreview = tools.slice(0, countTools());
   return (
     <div
-      className={clsx("flex flex-col gap-y-10", {
-        "gap-y-10": onlyWidth > 1450,
-        "gap-y-6": onlyWidth < 1650,
+      className={clsx("flex flex-col ", {
+        "gap-y-8": onlyWidth > 1450,
+        "gap-y-4": onlyWidth < 1450,
       })}
     >
       <h3 className="font-semibold text-[28px]">Мои инструменты</h3>
