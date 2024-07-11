@@ -59,9 +59,10 @@ public class SecurityConfigurator {
                 .cors(httpSecurityCorsConfigurer ->
                         httpSecurityCorsConfigurer.configurationSource(request -> {
                             CorsConfiguration configuration = new CorsConfiguration();
-                            // TODO добавить адрес хоста
-                            configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:5173")); // Разрешить только localhost:8080
-                            configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE")); // Разрешить все типы запросов
+                            configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:5173",
+                                    "http://profitpicks.ru/", "https://profitpicks.ru",
+                                    "https://147.45.164.252", "http://147.45.164.252")); // Разрешить корсы
+                            configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE", "PATCH")); // Разрешить все типы запросов
                             configuration.setAllowCredentials(true);
                             configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type")); // Разрешить только определенные заголовки
                             return configuration;
