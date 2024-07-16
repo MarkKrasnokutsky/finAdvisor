@@ -75,14 +75,14 @@ public class SignalService {
             StockSignalEntity lastSignal = this.signalRepository.findBySecid(instrumentEntity.getSecid());
             if (lastSignal != null) {
                 if (lastSignal.getDate().isBefore(signalData.get(7).getTradedate())) {
-                    lastSignal.setDate(signalData.get(7).getTradedate()); // предположим, что у вас есть метод setDate
-                    lastSignal.setOpen(signalData.get(7).getOpen()); // обновите все необходимые поля
-                    this.signalRepository.save(lastSignal); // сохраните обновленную сущность
+                    lastSignal.setDate(signalData.get(7).getTradedate());
+                    lastSignal.setOpen(signalData.get(7).getOpen());
+                    this.signalRepository.save(lastSignal);
                     continue;
                 } else if (lastSignal.getDate().isEqual(signalData.get(7).getTradedate())) {
-                    lastSignal.setDate(signalData.get(7).getTradedate()); // предположим, что у вас есть метод setDate
-                    lastSignal.setOpen(signalData.get(7).getOpen()); // обновите все необходимые поля
-                    this.signalRepository.save(lastSignal); // сохраните обновленную сущность
+                    lastSignal.setDate(signalData.get(7).getTradedate());
+                    lastSignal.setOpen(signalData.get(7).getOpen());
+                    this.signalRepository.save(lastSignal);
                     continue;
                 }
             } else {
@@ -116,6 +116,7 @@ public class SignalService {
         stockSignalEntity.setShortname(signalData.get(7).getShortname());
         stockSignalEntity.setSecid(signalData.get(7).getSecid());
         stockSignalEntity.setOpen(signalData.get(7).getOpen());
+        stockSignalEntity.setStop(signalData.get(5).getLow() - 0.0005 * signalData.get(5).getLow());
         this.signalRepository.save(stockSignalEntity);
     }
 

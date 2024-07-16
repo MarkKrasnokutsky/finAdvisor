@@ -35,6 +35,9 @@ public class StockSignalEntity {
     @Column(name = "open")
     @Schema(description = "Цена открытия(предполагаемая) к дате покупки по сигналу", example = "33.3")
     private double open;
+    @Column(name = "stop")
+    @Schema(description = "СТОП на продажу, если акция упала", example = "33.3")
+    private Double stop;
 //    @ManyToOne
 //    @JoinColumn(referencedColumnName = "stock_id", nullable = false)
 //    private Instrument stock;

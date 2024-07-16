@@ -43,7 +43,7 @@ public class TariffEntity {
 
     @Column(name = "instrument_count")
     @Schema(description = "Количество доступных инструментов", example = "100")
-    private int instrumentCount;
+    private Integer instrumentCount;
 
     @JsonIgnore
     @OneToMany(mappedBy = "tariff", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
