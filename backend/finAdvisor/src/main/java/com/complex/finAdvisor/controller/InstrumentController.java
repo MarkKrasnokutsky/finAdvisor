@@ -6,7 +6,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 
 @RestController
@@ -35,6 +39,16 @@ public class InstrumentController {
             return ResponseEntity.ok(stockRepository.findAll());
         }
         catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error");
+        }
+    }
+    @GetMapping("/getByUserTariff")
+    @Operation(summary = "Возвращает все инструменты по тарифу пользователя")
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    ResponseEntity<?> getByUserTariff(Principal principal) {
+        try {
+            return ResponseEntity.ok(stockService.getInstrumentsByUser(principal.getName()));
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error");
         }
     }

@@ -1,7 +1,12 @@
 package com.complex.finAdvisor.service;
 
 import com.complex.finAdvisor.entity.InstrumentEntity;
+import com.complex.finAdvisor.entity.InstrumentTariffEntity;
+import com.complex.finAdvisor.entity.StockSignalEntity;
+import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.StockRepository;
+import com.complex.finAdvisor.repository.StockTariffRepository;
+import com.complex.finAdvisor.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.AllArgsConstructor;
@@ -11,11 +16,14 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class StockService {
     private final StockRepository stockRepository;
+    private final UserRepository userRepository;
+    private final StockTariffRepository stockTariffRepository;
 //    public void resetIds() {
 //        this.stockRepository.deleteAllAndResetIds();
 //        this.stockRepository.resetAutoIncrement();
@@ -51,6 +59,24 @@ public class StockService {
             return stocks;
         } catch (IOException e) {
             // Обработка ошибки парсинга XML
+            return null;
+        }
+    }
+    public List<InstrumentEntity> getInstrumentsByUser(String username) {
+        try {
+            List<InstrumentEntity> instrumentEntities = new ArrayList<>();
+            Optional<UserEntity> currentUser = userRepository.findByUsername(username);
+
+            currentUser.ifPresent(userEntity -> {
+                Long currentTariff = userEntity.getTariff().getId();
+                List<InstrumentTariffEntity> listRelationship = stockTariffRepository.findByTariffId(currentTariff);
+
+                for (InstrumentTariffEntity relationship : listRelationship) {
+                    instrumentEntities.add(relationship.getInstrument());
+                }
+            });
+            return instrumentEntities;
+        } catch (Exception e) {
             return null;
         }
     }
