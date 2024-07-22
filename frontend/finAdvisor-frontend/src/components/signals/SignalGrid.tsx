@@ -35,7 +35,7 @@ export const SignalGrid: React.FC<SignalGridPtops> = ({ signals }) => {
         ) : (
           <div className="flex justify-center items-center size-full text-3xl font-semibold">
             {" "}
-            Сейчас нету сигналов
+            Нет сигналов
           </div>
         )}
       </div>

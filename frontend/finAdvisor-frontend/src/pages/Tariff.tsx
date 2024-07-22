@@ -22,26 +22,34 @@ const Tariff: React.FC = () => {
 
   const { authData } = useAuthContext();
 
-  const filterTariffs = tariffs.filter(
-    (a) =>
-      a.name.toLocaleLowerCase() !== authData?.tariff.name.toLocaleLowerCase()
-  );
+  const filterTariffs = authData?.tariff
+    ? tariffs.filter(
+        (a) =>
+          a.name.toLocaleLowerCase() !==
+          authData?.tariff.name.toLocaleLowerCase()
+      )
+    : tariffs;
+
+  const isTariff = authData?.tariff ? true : false;
   const onlyWidth = useWindowWidth();
   return (
     <div className="flex flex-col gap-y-5 max-h-full overflow-auto scroll-container">
-      <CardLayout className=" border-primary border-4 ">
-        {authData ? (
-          <TariffItem
-            name={authData.tariff.name}
-            cost={authData.tariff.cost}
-            tariffExpiration={authData.tariffExpiration}
-            instrumentCount={authData.tariff.instrumentCount}
-            isPage
-          />
-        ) : (
-          <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
-        )}
-      </CardLayout>
+      {isTariff && (
+        <CardLayout className=" border-primary border-4 ">
+          {authData ? (
+            <TariffItem
+              name={authData.tariff.name}
+              cost={authData.tariff.cost}
+              tariffExpiration={authData.tariffExpiration}
+              instrumentCount={authData.tariff.instrumentCount}
+              isPage
+              isTariff={isTariff}
+            />
+          ) : (
+            <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
+          )}
+        </CardLayout>
+      )}
 
       <div
         className={`flex justify-around gap-5 ${

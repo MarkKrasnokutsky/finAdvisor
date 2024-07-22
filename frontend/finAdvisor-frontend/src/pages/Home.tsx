@@ -14,12 +14,20 @@ const Home: React.FC = () => {
 
   const { data: tools } = useTools();
   const { data: signals } = useSignals();
+  console.log("authData.tariff.name: ", authData?.tariff);
 
   const onlyWidth = useWindowWidth();
 
-  const sortSignals = signals?.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
+  const isTariff = authData?.tariff ? true : false;
+
+  const sortSignals =
+    typeof signals !== "string"
+      ? signals?.sort((a, b) => {
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+        })
+      : [];
+
+  const sortTools = typeof tools !== "string" ? tools : [];
   return (
     <div
       className={clsx("gap-5 w-full h-full", {
@@ -54,18 +62,19 @@ const Home: React.FC = () => {
       <CardLayout columns={5} rows={2} rowStart={3} rowEnd={4}>
         {authData ? (
           <TariffItem
-            name={authData.tariff.name}
-            cost={authData.tariff.cost}
-            tariffExpiration={authData.tariffInception}
-            instrumentCount={authData.tariff.instrumentCount}
+            name={authData.tariff?.name || "Нет тарифа"}
+            cost={authData.tariff?.cost || 0}
+            tariffExpiration={authData.tariffInception || ""}
+            instrumentCount={authData.tariff?.instrumentCount || 0}
+            isTariff={isTariff}
           />
         ) : (
           <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
         )}
       </CardLayout>
       <CardLayout columns={7} rows={2}>
-        {tools ? (
-          <ToolsGrid tools={tools} />
+        {sortTools ? (
+          <ToolsGrid tools={sortTools} />
         ) : (
           <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
         )}
