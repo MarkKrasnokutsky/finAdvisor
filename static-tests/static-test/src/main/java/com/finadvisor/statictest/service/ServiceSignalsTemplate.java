@@ -86,13 +86,14 @@ public class ServiceSignalsTemplate {
             List<Stock> subListLow = allStockDatumDtos.subList(i, i + 5);
             // Если фрактал найден
             if (isFractal(subListLow)) {
+                // Находим конечный индекс, учитывая максимум 6 элементов после 5-го
                 // далее уже от фрактала идем вперед и ищем ложный пробой
-                for (int j = i + 5; j <= allStockDatumDtos.size() - 6; j++) { // Упрощенное условие для цикла
+                for (int j = i + 5; j <= Math.min(allStockDatumDtos.size() - 1, i + 5 + 6); j++) { // Упрощенное условие для цикла
                     // Если ложный пробой найден
                     System.out.println(allStockDatumDtos.get(j));
                     if (isFalseBreakdown(subListLow.get(2), allStockDatumDtos.get(j))) {
                         // Идем опять далее, но уже от пробойной свечи и ищем сигнальную
-                        for (int k = j + 1; k <= j + 5; k++) { // Упрощенное условие для цикла
+                        for (int k = j + 1; k < Math.min(j + 6, allStockDatumDtos.size()); k++) { // Упрощенное условие для цикла
                             if (isTrueBreakdown(allStockDatumDtos.get(j), allStockDatumDtos.get(k))) {
                                 continue outerLoop;
                             }
