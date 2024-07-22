@@ -14,11 +14,12 @@ const tariffs = [
 ];
 
 type TariffItemProps = {
-  name: string;
-  cost: number;
-  tariffExpiration: string;
-  instrumentCount: number;
+  name?: string;
+  cost?: number;
+  tariffExpiration?: string;
+  instrumentCount?: number;
   isPage?: boolean;
+  isTariff?: boolean;
 };
 
 export const TariffItem: React.FC<TariffItemProps> = ({
@@ -27,11 +28,12 @@ export const TariffItem: React.FC<TariffItemProps> = ({
   tariffExpiration,
   instrumentCount,
   isPage,
+  isTariff,
 }) => {
-  const date = tariffExpiration.split("T")[0];
+  const date = tariffExpiration?.split("T")[0];
 
   const selectTariff = tariffs.find(
-    (a) => a.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+    (a) => a.name.toLocaleLowerCase() === name?.toLocaleLowerCase()
   );
 
   console.log("selectImg: ", selectTariff);
@@ -50,25 +52,36 @@ export const TariffItem: React.FC<TariffItemProps> = ({
           "text-sm": onlyWidth < 1450,
         })}
       >
-        <p>{instrumentCount} доступных инструментов</p>
-        <p>
-          Действует до <span className="font-semibold">{date}</span>
-        </p>
+        {isTariff ? (
+          <>
+            <p>{instrumentCount} доступных инструментов</p>
+            <p>
+              Действует до <span className="font-semibold">{date}</span>
+            </p>
+          </>
+        ) : (
+          <p>
+            Подберите подходящий тарифный план и начните пользоваться всеми
+            возможностями Profit Picks
+          </p>
+        )}
       </div>
       <div className="flex flex-col gap-y-4 font-medium">
-        <p>
-          <span
-            className={clsx(" font-semibold", {
-              "text-3xl": onlyWidth > 1930,
-              "text-2xl": onlyWidth < 1930 && onlyWidth > 1450,
-              "text-xl": onlyWidth < 1450,
-            })}
-          >
-            {selectTariff?.cost}
-            {cost}₽
-          </span>{" "}
-          в месяц
-        </p>
+        {isTariff && (
+          <p>
+            <span
+              className={clsx(" font-semibold", {
+                "text-3xl": onlyWidth > 1930,
+                "text-2xl": onlyWidth < 1930 && onlyWidth > 1450,
+                "text-xl": onlyWidth < 1450,
+              })}
+            >
+              {selectTariff?.cost}
+              {cost}₽
+            </span>{" "}
+            в месяц
+          </p>
+        )}
         <Link
           to={isPage ? "" : "tariffs"}
           className={clsx(
