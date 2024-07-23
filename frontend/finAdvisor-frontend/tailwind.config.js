@@ -68,10 +68,14 @@ module.exports = {
           active: "#BD3D2B",
         },
         arrow: {
-          green: "#3AAA13",
-          red: "#BD3D2B",
-          greenDark: "#1D6E00",
-          redDark: "#6E0D00",
+          green: "#3DD009",
+          red: "#EA1D01",
+          greenDark: "#3DD009",
+          redDark: "#EA1D01",
+          // green: "#3AAA13",
+          // red: "#BD3D2B",
+          // greenDark: "#1D6E00",
+          // redDark: "#6E0D00",
         },
         secondary: {
           DEFAULT: "#8C8C8C",

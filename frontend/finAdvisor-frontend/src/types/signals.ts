@@ -4,4 +4,5 @@ export type Signal = {
   secid: string;
   shortname: string;
   open: number;
+  stop: number;
 };

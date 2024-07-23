@@ -64,7 +64,7 @@ const Home: React.FC = () => {
           <TariffItem
             name={authData.tariff?.name || "Нет тарифа"}
             cost={authData.tariff?.cost || 0}
-            tariffExpiration={authData.tariffInception || ""}
+            tariffExpiration={authData.tariffExpiration || ""}
             instrumentCount={authData.tariff?.instrumentCount || 0}
             isTariff={isTariff}
           />

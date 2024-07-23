@@ -10,9 +10,19 @@ export const Profile: React.FC<ProfileProps> = ({ username, email }) => {
   const onlyWidth = useWindowWidth();
   return (
     <div className="flex flex-col justify-between h-full ">
-      <div className="flex flex-col gap-y-6 ">
+      <div
+        className={clsx("flex flex-col", {
+          "gap-y-6": onlyWidth > 1400,
+          "gap-y-2": onlyWidth < 1400,
+        })}
+      >
         <h3 className="font-semibold text-[28px]">Профиль</h3>
-        <div className={clsx("flex flex-col gap-y-5")}>
+        <div
+          className={clsx("flex flex-col", {
+            " gap-y-5": onlyWidth > 1400,
+            "gap-y-2": onlyWidth < 1400,
+          })}
+        >
           <div className="">
             <span
               className={clsx("text-secondary dark:text-profile-dark", {
