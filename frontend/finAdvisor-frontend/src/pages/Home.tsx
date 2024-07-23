@@ -14,7 +14,6 @@ const Home: React.FC = () => {
 
   const { data: tools } = useTools();
   const { data: signals } = useSignals();
-  console.log("authData.tariff.name: ", authData?.tariff);
 
   const onlyWidth = useWindowWidth();
 

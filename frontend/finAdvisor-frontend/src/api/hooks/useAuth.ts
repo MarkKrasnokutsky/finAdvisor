@@ -3,15 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { authService } from "../service/authService";
 import { useContext, useEffect } from "react";
 import { AuthContext, AuthContextType } from "@/context/AuthContext";
-import { AxiosResponse } from "axios";
 
 export const useLogin = () => {
   const navigate = useNavigate();
 
   const loginMutation = useMutation({
     mutationFn: authService.login,
-    onSuccess: (res: AxiosResponse) => {
-      console.log("Login: ", res);
+    onSuccess: () => {
       navigate("/dashboard");
     },
     onError: (error: Error) => {
@@ -40,12 +38,8 @@ export const useRegistration = () => {
 export const useMe = () => {
   const meMutation = useMutation({
     mutationFn: authService.me,
-    onSuccess: (res: AxiosResponse) => {
-      console.log("useMe True: ", res);
+    onSuccess: () => {
       console.log("Данные получены");
-    },
-    onError: (error: Error) => {
-      console.log("useMe False", error);
     },
   });
 
@@ -54,8 +48,7 @@ export const useMe = () => {
 export const useRefreshToken = () => {
   const refreshTokenMutation = useMutation({
     mutationFn: authService.refreshToken,
-    onSuccess: (res: AxiosResponse) => {
-      console.log("res: ", res);
+    onSuccess: () => {
       console.log("Данные получены");
     },
     onError: (error: Error) => {
