@@ -10,7 +10,7 @@ export const ArrowGreen: React.FC<ArrowGreenProps> = ({ className }) => {
       viewBox="0 0 17 18"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`fill-current ${className}`}
+      className={`fill-current min-h-[17px] min-w-[18px] ${className}`}
     >
       <path
         d="M11.2238 6.08301L2.14922 15.1575"

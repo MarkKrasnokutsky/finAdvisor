@@ -40,8 +40,8 @@ export const ToolsGrid: React.FC<ToolsGridProps> = ({ tools }) => {
           className={clsx(
             "flex flex-col items-center border  w-full border-secondary rounded-[20px] dark:border-profile-dark",
             {
-              "max-w-40 text-sm p-4": onlyWidth > 1900,
-              "max-w-24 text-xs p-4": onlyWidth < 1900 && onlyWidth > 1720,
+              "max-w-40 text-sm p-4": onlyWidth > 1940,
+              "max-w-24 text-xs p-4": onlyWidth < 1940 && onlyWidth > 1720,
               "max-w-24 text-[9px] p-2": onlyWidth < 1720 && onlyWidth > 1450,
               "max-w-[90px] text-[10px] p-2": onlyWidth < 1450,
               //   "max-w-20 text-[8px] p-1": onlyWidth < 1350,

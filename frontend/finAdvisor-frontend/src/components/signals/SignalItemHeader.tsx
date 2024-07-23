@@ -16,14 +16,14 @@ export const SignalItemHeader: React.FC = () => {
         }
       )}
     >
-      <div className="">Инструменты</div>
+      <div className="">Инструмент</div>
       <div
         className={clsx("", {
           "text-center": onlyWidth > 1650,
           "text-right": onlyWidth < 1650,
         })}
       >
-        Дата сигналов
+        Дата сигнала
       </div>
       <div
         className={clsx("", {

@@ -10,6 +10,12 @@ type SignalItemProps = {
 };
 
 export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
+  // const open = signal.open.toFixed(2);
+  // const open = Math.floor(signal.open * 100) / 100;
+  // const open = signal.open.toString().replace(/(\d{2})\d*/, "$1");
+  const open = signal.open;
+  // const stop = 32.2;
+  const stop = signal.stop.toFixed(2);
   const onlyWidth = useWindowWidth();
   return (
     <div
@@ -85,10 +91,10 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
             "text-sm": onlyWidth < 1270,
           })}
         >
-          {signal.open}
+          {open}
         </span>
       </div>
-      <div className="flex items-center justify-end gap-x-1 text-arrow-red stroke-arrow-red dark:text-arrow-redDark dark:stroke-arrow-redDark">
+      <div className="flex items-center justify-left pl-[70%] gap-x-1 text-arrow-red stroke-arrow-red dark:text-arrow-redDark dark:stroke-arrow-redDark">
         <ArrowRed />
         <span
           className={clsx("font-medium", {
@@ -97,7 +103,7 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
             "text-sm": onlyWidth < 1270,
           })}
         >
-          32.2
+          {stop}
         </span>
       </div>
     </div>

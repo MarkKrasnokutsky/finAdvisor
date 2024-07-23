@@ -24,7 +24,6 @@ type TariffItemProps = {
 
 export const TariffItem: React.FC<TariffItemProps> = ({
   name,
-  cost,
   tariffExpiration,
   instrumentCount,
   isPage,
@@ -76,8 +75,7 @@ export const TariffItem: React.FC<TariffItemProps> = ({
                 "text-xl": onlyWidth < 1450,
               })}
             >
-              {selectTariff?.cost}
-              {cost}₽
+              {selectTariff?.cost}₽
             </span>{" "}
             в месяц
           </p>
@@ -100,7 +98,7 @@ export const TariffItem: React.FC<TariffItemProps> = ({
           src={selectTariff?.img}
           alt=""
           className={clsx({
-            "w-72": onlyWidth > 1650,
+            "w-64": onlyWidth > 1650,
             "w-44": onlyWidth < 1650 && onlyWidth > 1300,
             "w-36": onlyWidth < 1300,
           })}

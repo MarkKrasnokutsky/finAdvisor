@@ -22,7 +22,7 @@ export const SignalGrid: React.FC<SignalGridPtops> = ({ signals }) => {
       <div className="flex justify-between">
         <h3 className="font-semibold text-[28px]">Список сигналов</h3>
         <Link to="signals">
-          <ArrowRightUp className="text-primary dark:text-primary-dark" />
+          <ArrowRightUp className="text-primary transition-all dark:text-primary-dark hover:-translate-y-0.5" />
         </Link>
       </div>
       <div
