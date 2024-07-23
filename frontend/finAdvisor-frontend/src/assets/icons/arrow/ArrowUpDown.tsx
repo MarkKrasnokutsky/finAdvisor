@@ -14,7 +14,6 @@ export const ArrowUpDown: React.FC<ArrowUpDownProps> = ({ className }) => {
     >
       <path
         d="M10.5 0.75L6.70711 4.54289C6.31658 4.93342 5.68342 4.93342 5.29289 4.54289L1.5 0.750001"
-        // stroke="#D9D9D9"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"

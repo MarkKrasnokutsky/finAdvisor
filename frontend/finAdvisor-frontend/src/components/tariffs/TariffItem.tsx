@@ -35,8 +35,6 @@ export const TariffItem: React.FC<TariffItemProps> = ({
     (a) => a.name.toLocaleLowerCase() === name?.toLocaleLowerCase()
   );
 
-  console.log("selectImg: ", selectTariff);
-
   const onlyWidth = useWindowWidth();
   return (
     <div className="flex flex-col justify-between h-full relative">
