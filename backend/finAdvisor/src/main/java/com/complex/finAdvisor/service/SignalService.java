@@ -65,6 +65,7 @@ public class SignalService {
     @Scheduled(cron = "0 0 0 * * ?", zone = "Europe/Moscow")
     public void updateAllSignals() {
         List<InstrumentEntity> allStocks = stockRepository.findAll();
+        signalRepository.deleteAll();
         for (InstrumentEntity instrumentEntity : allStocks) {
             int last = getLastHistoryInstrument(instrumentEntity);
             String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrumentEntity.getSecid() + ".xml?limit=" + 100 + "&start=" + last;
@@ -80,23 +81,19 @@ public class SignalService {
             if (signalDtoData.isEmpty() || signalData.isEmpty()) {
                 continue;
             }
-            StockSignalEntity lastSignal = this.signalRepository.findBySecid(instrumentEntity.getSecid());
-            if (lastSignal != null) {
-                if (lastSignal.getDate().isBefore(signalData.get(7).getTradedate())) {
-                    lastSignal.setDate(signalData.get(7).getTradedate());
-                    lastSignal.setOpen(signalData.get(7).getOpen());
-                    this.signalRepository.save(lastSignal);
-                    continue;
-                } else if (lastSignal.getDate().isEqual(signalData.get(7).getTradedate())) {
-                    lastSignal.setDate(signalData.get(7).getTradedate());
-                    lastSignal.setOpen(signalData.get(7).getOpen());
-                    this.signalRepository.save(lastSignal);
-                    continue;
-                }
-            } else {
-                saveStockSignal(signalData);
-                continue;
-            }
+//            StockSignalEntity lastSignal = this.signalRepository.findBySecid(instrumentEntity.getSecid());
+//            if (lastSignal != null) {
+//                if (lastSignal.getDate().isBefore(signalData.get(7).getTradedate()) || lastSignal.getDate().isEqual(signalData.get(7).getTradedate())) {
+//                    lastSignal.setDate(signalData.get(7).getTradedate());
+//                    lastSignal.setOpen(signalData.get(7).getOpen());
+//                    lastSignal.setStop(signalData.get(5).getLow() - 0.0005 * signalData.get(5).getLow());
+//                    this.signalRepository.save(lastSignal);
+//                    continue;
+//                }
+//            } else {
+//                saveStockSignal(signalData);
+//                continue;
+//            }
             saveStockSignal(signalData);
         }
     }
