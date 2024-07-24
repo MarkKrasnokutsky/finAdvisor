@@ -1,6 +1,7 @@
 package com.complex.finAdvisor.dto;
 
 import com.complex.finAdvisor.entity.TariffEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.Column;
@@ -25,9 +26,11 @@ public class UserResponse {
     private String email;
     @Schema(description = "Длительность текущего тарифа пользователя (в сутках)", example = "30")
     private Integer tariffDuration;
-    @Schema(description = "Дата начала текущего тарифного плана пользователя", example = "2007-12-03T10:15:30")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy'T'HH:mm:ss")
+    @Schema(description = "Дата начала текущего тарифного плана пользователя", example = "03-12-2007T10:15:30")
     private LocalDateTime tariffInception;
-    @Schema(description = "Дата истечения текущего тарифа пользователя", example = "2007-12-03T10:15:30")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy'T'HH:mm:ss")
+    @Schema(description = "Дата истечения текущего тарифа пользователя", example = "03-12-2007T10:15:30")
     private LocalDateTime tariffExpiration;
     @Schema(description = "Никнейм пользователя в телеграмме", example = "mark")
     private String tgNickname;
