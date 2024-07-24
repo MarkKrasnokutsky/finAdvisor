@@ -1,6 +1,7 @@
 package com.complex.finAdvisor.service;
 
 import com.complex.finAdvisor.dto.SignalDto;
+import com.complex.finAdvisor.dto.SignalResponse;
 import com.complex.finAdvisor.entity.InstrumentEntity;
 import com.complex.finAdvisor.entity.InstrumentTariffEntity;
 import com.complex.finAdvisor.entity.StockSignalEntity;
@@ -31,9 +32,9 @@ public class SignalService {
     private final UserRepository userRepository;
     private final StockTariffRepository stockTariffRepository;
 
-    public List<StockSignalEntity> getSignalsByUser(String username) {
+    public List<SignalResponse> getSignalsByUser(String username) {
         try {
-            List<StockSignalEntity> stockSignalEntities = new ArrayList<>();
+            List<SignalResponse> stockSignals = new ArrayList<>();
             Optional<UserEntity> currentUser = userRepository.findByUsername(username);
 
             currentUser.ifPresent(userEntity -> {
@@ -45,10 +46,17 @@ public class SignalService {
                     if (stockSignalEntity == null) {
                         continue;
                     }
-                    stockSignalEntities.add(stockSignalEntity);
+                    SignalResponse signalResponse = new SignalResponse();
+                    signalResponse.setId(stockSignalEntity.getId());
+                    signalResponse.setDate(stockSignalEntity.getDate());
+                    signalResponse.setSecid(stockSignalEntity.getSecid());
+                    signalResponse.setShortname(stockSignalEntity.getShortname());
+                    signalResponse.setOpen(stockSignalEntity.getOpen());
+                    signalResponse.setStop(stockSignalEntity.getStop());
+                    stockSignals.add(signalResponse);
                 }
             });
-            return stockSignalEntities;
+            return stockSignals;
         } catch (Exception e) {
             return null;
         }
