@@ -121,6 +121,7 @@ public class SignalService {
         stockSignalEntity.setShortname(signalData.get(7).getShortname());
         stockSignalEntity.setSecid(signalData.get(7).getSecid());
         stockSignalEntity.setOpen(signalData.get(7).getOpen());
+        stockSignalEntity.setProfitFix(signalData.get(7).getOpen() + signalData.get(7).getOpen() * 0.06);
         stockSignalEntity.setStop(signalData.get(5).getLow() - 0.0005 * signalData.get(5).getLow());
         this.signalRepository.save(stockSignalEntity);
     }

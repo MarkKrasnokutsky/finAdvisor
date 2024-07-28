@@ -35,7 +35,10 @@ public class StockSignalEntity {
     private String shortname;
     @Column(name = "open")
     @Schema(description = "Цена открытия(предполагаемая) к дате покупки по сигналу", example = "33.3")
-    private double open;
+    private Double open;
+    @Column(name = "profit_fix")
+    @Schema(description = "Фиксация прибыли", example = "100.0")
+    private Double profitFix;
     @Column(name = "stop")
     @Schema(description = "СТОП на продажу, если акция упала", example = "33.3")
     private Double stop;
