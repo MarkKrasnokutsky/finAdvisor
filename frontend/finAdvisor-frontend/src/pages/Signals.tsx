@@ -36,6 +36,7 @@ const Signals: React.FC = () => {
   const { FilterToolData } = useFilterTool();
 
   const [dateSignals, setDateSignals] = useState("");
+  console.log("dateSignals: ", dateSignals);
 
   const filterSignals = useFilterSignals(signals!, dateSignals, FilterToolData);
 

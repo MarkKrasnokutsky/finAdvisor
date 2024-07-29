@@ -38,7 +38,10 @@ export const useFilterSignals = (
     return undefined;
   }
   const sortSignals = signals?.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
+    const dateA = new Date(a.date.split("-").reverse().join("-"));
+    const dateB = new Date(b.date.split("-").reverse().join("-"));
+
+    return dateB.getTime() - dateA.getTime();
   });
 
   const filteredByDate = date
@@ -49,9 +52,22 @@ export const useFilterSignals = (
     ? filteredByDate.filter((signal) => signal.shortname === tool)
     : filteredByDate;
 
-  const total = filteredByTool.sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
+  const total = filteredByTool.sort((a, b) => {
+    const dateA = new Date(a.date.split("-").reverse().join("-"));
+    const dateB = new Date(b.date.split("-").reverse().join("-"));
+
+    return dateB.getTime() - dateA.getTime();
+  });
+
+  // signals?.sort((a, b) => {
+  //   const dateA = new Date(a.date.split("-").reverse().join("-"));
+  //   const dateB = new Date(b.date.split("-").reverse().join("-"));
+
+  //   return dateB.getTime() - dateA.getTime();
+  // }
+  // const total = filteredByTool.sort(
+  //   (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  // );
 
   return total;
 };

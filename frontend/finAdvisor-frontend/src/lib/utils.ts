@@ -9,6 +9,10 @@ export function cn(...inputs: ClassValue[]) {
 export function getDataCookies(key: string) {
   return Cookies.get(key);
 }
+export function removeToken() {
+  Cookies.remove("accessToken");
+  Cookies.remove("refreshToken");
+}
 // export function getDataLocalStorage(key: string) {
 //   return localStorage.getItem(key);
 // }

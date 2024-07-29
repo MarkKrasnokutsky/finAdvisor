@@ -1,3 +1,4 @@
+import { removeToken } from "@/lib/utils";
 import { useWindowWidth } from "@react-hook/window-size";
 import clsx from "clsx";
 import { ReactNode } from "react";
@@ -19,6 +20,7 @@ export const Nav: React.FC<NavProps> = ({ links, closeMenuHandler }) => {
     return location.pathname === `/dashboard${path}`;
   };
   const onlyWidth = useWindowWidth();
+
   return (
     <nav className="flex flex-col space-y-4">
       {links.map((item, index) => (
@@ -28,6 +30,7 @@ export const Nav: React.FC<NavProps> = ({ links, closeMenuHandler }) => {
               event.stopPropagation();
               closeMenuHandler();
             }
+            item.path === "/login" && removeToken();
           }}
           to={`/dashboard${item.path}`}
           key={index}

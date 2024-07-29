@@ -8,7 +8,7 @@ import { useWindowWidth } from "@react-hook/window-size";
 import clsx from "clsx";
 import { useRef, useState } from "react";
 
-import { Calendar, ToolsCombobox } from "@/components";
+import { Calendar, ClearDate, ToolsCombobox } from "@/components";
 import { ru } from "date-fns/locale";
 import { format } from "date-fns";
 import { useClickOutside } from "@/api/hooks/useClickOutside";
@@ -49,7 +49,7 @@ export const SignalHeader: React.FC<SignalHeaderProps> = ({
       setFilteredSignals("");
     } else {
       setDate(date);
-      setFilteredSignals(format(date, "yyyy-MM-dd"));
+      setFilteredSignals(format(date, "dd-MM-yyyy"));
     }
   };
 
@@ -93,10 +93,14 @@ export const SignalHeader: React.FC<SignalHeaderProps> = ({
           Вчера
         </div>
         <div
-          className={clsx("flex items-center gap-x-4 pr-4 ", {
-            "border rounded-full border-primary dark:border-primary-dark":
-              filteredSignals,
-          })}
+          className={clsx(
+            "relative cursor-pointer flex items-center gap-x-4 pr-4 ",
+            {
+              "border rounded-full border-primary dark:border-primary-dark":
+                filteredSignals,
+            }
+          )}
+          onClick={() => filteredSignals && setFilteredSignals("")}
         >
           <div
             ref={caledarRef}
@@ -133,6 +137,7 @@ export const SignalHeader: React.FC<SignalHeaderProps> = ({
             )}
           </div>
           {filteredSignals}
+          {filteredSignals && <ClearDate />}
         </div>
       </div>
       {isFocusedTools && tools ? (

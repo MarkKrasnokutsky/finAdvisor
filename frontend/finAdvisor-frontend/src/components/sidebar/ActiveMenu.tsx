@@ -1,4 +1,4 @@
-import { Help, Home, Signal, Tariff, Tool } from "@/assets";
+import { Exit, Help, Home, Signal, Tariff, Tool } from "@/assets";
 import { Nav, ToggleTheme } from "@/components";
 
 const links = [
@@ -27,6 +27,11 @@ const links = [
     title: "Помощь",
     path: "/help",
     icon: <Help />,
+  },
+  {
+    title: "Выход",
+    path: "/login",
+    icon: <Exit />,
   },
 ];
 type ActiveMenuProps = {

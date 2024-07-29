@@ -22,7 +22,10 @@ const Home: React.FC = () => {
   const sortSignals =
     typeof signals !== "string"
       ? signals?.sort((a, b) => {
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
+          const dateA = new Date(a.date.split("-").reverse().join("-"));
+          const dateB = new Date(b.date.split("-").reverse().join("-"));
+
+          return dateB.getTime() - dateA.getTime();
         })
       : [];
 
