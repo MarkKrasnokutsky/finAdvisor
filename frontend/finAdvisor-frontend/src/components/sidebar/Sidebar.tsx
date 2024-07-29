@@ -1,5 +1,5 @@
 import { Nav, ToggleTheme } from "@/components";
-import { Logo, Help, Home, Signal, Tariff, Tool } from "@/assets";
+import { Logo, Help, Home, Signal, Tariff, Tool, Exit } from "@/assets";
 import clsx from "clsx";
 import { useWindowWidth } from "@react-hook/window-size";
 
@@ -30,6 +30,11 @@ const links = [
     path: "/help",
     icon: <Help />,
   },
+  {
+    title: "Выход",
+    path: "/login",
+    icon: <Exit />,
+  },
 ];
 
 export const Sidebar: React.FC = () => {
@@ -59,6 +64,7 @@ export const Sidebar: React.FC = () => {
         <Nav links={links} />
       </div>
       <ToggleTheme />
+      {/* <Nav links={links} /> */}
     </div>
   );
 };

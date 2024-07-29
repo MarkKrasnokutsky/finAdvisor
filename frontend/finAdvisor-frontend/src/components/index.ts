@@ -40,6 +40,7 @@ export * from "./ui/input";
 export * from "./ui/label";
 export * from "./ui/Line";
 export * from "./ui/calendar";
+export * from "./ui/ClearDate";
 
 // routing
 export * from "./routing/PrivateRoute";

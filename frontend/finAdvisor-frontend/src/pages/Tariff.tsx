@@ -57,7 +57,7 @@ const Tariff: React.FC = () => {
         }`}
       >
         {filterTariffs.map((tariff, index) => (
-          <CardLayout>
+          <CardLayout key={index}>
             <TariffBuyCard key={index} tariff={tariff} />
           </CardLayout>
         ))}

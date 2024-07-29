@@ -8,9 +8,6 @@ const API_URL = import.meta.env.VITE_BASE_URL;
 export const instance = axios.create({
   baseURL: `${API_URL}`,
   withCredentials: true,
-  headers: {
-    "Set-Cookie": "SameSite=Strict",
-  },
 });
 
 instance.interceptors.request.use(
