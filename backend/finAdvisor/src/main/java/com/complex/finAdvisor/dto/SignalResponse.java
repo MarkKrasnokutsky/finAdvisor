@@ -29,6 +29,8 @@ public class SignalResponse {
     private String shortname;
     @Schema(description = "Цена открытия(предполагаемая) к дате покупки по сигналу", example = "33.3")
     private double open;
+    @Schema(description = "Фиксация прибыли", example = "100.0")
+    private Double profitFix;
     @Schema(description = "СТОП на продажу, если акция упала", example = "33.3")
     private Double stop;
 }
