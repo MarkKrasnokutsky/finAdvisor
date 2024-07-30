@@ -53,6 +53,7 @@ public class SignalService {
                     signalResponse.setShortname(stockSignalEntity.getShortname());
                     signalResponse.setOpen(stockSignalEntity.getOpen());
                     signalResponse.setStop(stockSignalEntity.getStop());
+                    signalResponse.setProfitFix(stockSignalEntity.getProfitFix());
                     stockSignals.add(signalResponse);
                 }
             });
