@@ -3,6 +3,7 @@ import { ArrowGreen, ArrowRed } from "@/assets";
 import { Signal } from "@/types/signals";
 import { useWindowWidth } from "@react-hook/window-size";
 import clsx from "clsx";
+import { useEffect, useState } from "react";
 
 type SignalItemProps = {
   signal: Signal;
@@ -10,13 +11,69 @@ type SignalItemProps = {
 };
 
 export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
-  console.log("signal: ", signal);
-  // const open = signal.open.toFixed(2);
+  const [svgContent, setSvgContent] = useState("");
+  console.log("svgContent: ", svgContent);
+
+  useEffect(() => {
+    const fetchSVG = async () => {
+      const response = await fetch(
+        `https://s3.timeweb.cloud/432b8bc2-cde0d2b0-8512-478d-a65f-555f9e22470f/instrument_icons/${signal.secid}.svg`,
+        {
+          method: "GET",
+          mode: "no-cors",
+        }
+      );
+
+      if (response.ok) {
+        const svg = await response.text();
+        setSvgContent(svg);
+      } else {
+        console.error(
+          "Ошибка при загрузке SVG:",
+          response.status,
+          response.statusText
+        );
+      }
+    };
+
+    fetchSVG();
+  }, [signal.secid]);
+
+  const fetchSVG = async () => {
+    try {
+      const response = await fetch(
+        `https://s3.timeweb.cloud/432b8bc2-cde0d2b0-8512-478d-a65f-555f9e22470f/instrument_icons/${signal.secid}.svg`,
+        {
+          method: "GET",
+          mode: "no-cors",
+        }
+      );
+
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers.get("content-type"));
+
+      if (response.ok) {
+        const svg = await response.text();
+        setSvgContent(svg);
+      } else {
+        console.error(
+          "Ошибка при загрузке SVG:",
+          response.status,
+          response.statusText
+        );
+      }
+    } catch (error) {
+      console.error("Ошибка при выполнении fetch:", error);
+    }
+  };
+  fetchSVG();
+  const open = signal.open.toFixed(2);
   // const open = Math.floor(signal.open * 100) / 100;
   // const open = signal.open.toString().replace(/(\d{2})\d*/, "$1");
-  const open = signal.open;
+  // const open = signal.open;
   // const stop = 32.2;
   const stop = signal.stop.toFixed(2);
+  const profitFix = signal.profitFix.toFixed(2);
   const onlyWidth = useWindowWidth();
   return (
     <div
@@ -37,6 +94,10 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
           "gap-x-2 ": onlyWidth < 1650,
         })}
       >
+        <div
+          dangerouslySetInnerHTML={{ __html: svgContent }}
+          className="size-4"
+        />
         <img
           src={`https://s3.timeweb.cloud/432b8bc2-cde0d2b0-8512-478d-a65f-555f9e22470f/instrument_icons/${signal.secid}.svg`}
           alt="logo"
@@ -82,7 +143,7 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
             "text-sm": onlyWidth < 1270,
           })}
         >
-          {signal.profitFix}
+          {profitFix}
         </span>
       </div>
       {isPages && (

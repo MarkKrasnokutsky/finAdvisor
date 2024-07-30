@@ -10,12 +10,11 @@ import { useRef, useState } from "react";
 
 import { Calendar, ClearDate, ToolsCombobox } from "@/components";
 import { ru } from "date-fns/locale";
-import { format } from "date-fns";
 import { useClickOutside } from "@/api/hooks/useClickOutside";
 import { useTools } from "@/api/hooks/useTools";
 
 type SignalHeaderProps = {
-  getDateHandler: (date: string) => void;
+  getDateHandler: (date: Date | undefined) => void;
 };
 
 export const SignalHeader: React.FC<SignalHeaderProps> = ({
@@ -28,7 +27,6 @@ export const SignalHeader: React.FC<SignalHeaderProps> = ({
   const [isFocusedTools, setIsFocusedTools] = useState(false);
   const [isFocusedCalendar, setIsFocusedCalenar] = useState(false);
   const [date, setDate] = useState<Date | undefined>(new Date());
-  const [filteredSignals, setFilteredSignals] = useState("");
 
   const { data: tools } = useTools();
 
@@ -39,21 +37,15 @@ export const SignalHeader: React.FC<SignalHeaderProps> = ({
   useClickOutside(caledarRef, setIsFocusedCalenar);
   useClickOutside(arrowRef, setIsFocusedTools);
 
-  const getTodayDateHandler = (func: () => string) => {
-    setFilteredSignals(func);
-  };
-
   const handleDayPickerSelect = (date: Date | undefined) => {
     if (!date) {
       setDate(undefined);
-      setFilteredSignals("");
+      getDateHandler(undefined);
     } else {
       setDate(date);
-      setFilteredSignals(format(date, "dd-MM-yyyy"));
+      getDateHandler(date);
     }
   };
-
-  getDateHandler(filteredSignals);
 
   return (
     <div
@@ -67,7 +59,10 @@ export const SignalHeader: React.FC<SignalHeaderProps> = ({
     >
       <div className="flex gap-x-4 items-center">
         <div
-          onClick={() => getTodayDateHandler(todayMoscowDate)}
+          onClick={() => {
+            getDateHandler(new Date(todayMoscowDate())),
+              setDate(new Date(todayMoscowDate()));
+          }}
           className={clsx(
             "cursor-pointer transition-all border border-primary rounded-[50px] hover:bg-profile-dark/50  dark:border-primary-dark dark:hover:bg-primary-dark/10 ",
             {
@@ -80,7 +75,10 @@ export const SignalHeader: React.FC<SignalHeaderProps> = ({
           Сегодня
         </div>
         <div
-          onClick={() => getTodayDateHandler(getYesterdayDate)}
+          onClick={() => {
+            getDateHandler(new Date(getYesterdayDate())),
+              setDate(new Date(getYesterdayDate()));
+          }}
           className={clsx(
             "cursor-pointer transition-all border border-primary rounded-[50px]  hover:bg-profile-dark/50 dark:border-primary-dark dark:hover:bg-primary-dark/10",
             {
@@ -97,10 +95,12 @@ export const SignalHeader: React.FC<SignalHeaderProps> = ({
             "relative cursor-pointer flex items-center gap-x-4 pr-4 ",
             {
               "border rounded-full border-primary dark:border-primary-dark":
-                filteredSignals,
+                date,
             }
           )}
-          onClick={() => filteredSignals && setFilteredSignals("")}
+          onClick={() =>
+            date && !isFocusedCalendar && handleDayPickerSelect(undefined)
+          }
         >
           <div
             ref={caledarRef}
@@ -114,30 +114,34 @@ export const SignalHeader: React.FC<SignalHeaderProps> = ({
                 "p-4": onlyWidth > 1450,
                 "p-3": onlyWidth < 1450,
                 "bg-primary dark:bg-primary-dark text-primary-dark hover:text-primary dark:text-primary dark:hover:text-primary-dark":
-                  filteredSignals,
+                  date,
               }
             )}
           >
             {isFocusedCalendar ? (
-              <div className="absolute left-0 top-0 z-40">
+              <div className="absolute left-0 top-0 z-50">
                 <Calendar
                   locale={ru}
                   mode="single"
                   selected={date}
                   onSelect={handleDayPickerSelect}
-                  className="rounded-md border  bg-secondaryBg border-primary dark:border-primary-dark  dark:bg-secondaryBg-dark"
+                  className="rounded-md border  bg-secondaryBg border-primary dark:border-primary-dark  dark:bg-secondaryBg-dark dark:text-primary-dark text-primary"
                 />
               </div>
             ) : (
               <CalendarIcon
                 className={clsx(``, {
-                  "text-primary dark:text-primary-dark": !filteredSignals,
+                  "text-primary dark:text-primary-dark": !date,
                 })}
               />
             )}
           </div>
-          {filteredSignals}
-          {filteredSignals && <ClearDate />}
+          {date ? date.toLocaleDateString() : ""}
+          {date && (
+            // <div onClick={() => date && handleDayPickerSelect(undefined)}> Если закрытие только по крестику
+            <ClearDate />
+            // </div>
+          )}
         </div>
       </div>
       {isFocusedTools && tools ? (

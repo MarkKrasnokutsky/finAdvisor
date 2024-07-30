@@ -6,6 +6,7 @@ import { CardLayout } from "@/layouts/CardLayout";
 import { Signal } from "@/types/signals";
 import { useWindowWidth } from "@react-hook/window-size";
 import { useState } from "react";
+import { format } from "date-fns";
 
 const SignalsList = (signals: Signal[] | undefined) => {
   if (!signals) {
@@ -35,15 +36,14 @@ const Signals: React.FC = () => {
 
   const { FilterToolData } = useFilterTool();
 
-  const [dateSignals, setDateSignals] = useState("");
-  console.log("dateSignals: ", dateSignals);
+  const [dateSignals, setDateSignals] = useState<string>("");
 
   const filterSignals = useFilterSignals(signals!, dateSignals, FilterToolData);
 
   const onlyWidth = useWindowWidth();
 
-  const getDateHandler = (date: string) => {
-    setDateSignals(date);
+  const getDateHandler = (date: Date | undefined) => {
+    setDateSignals(date ? format(date, "dd-MM-yyyy") : "");
   };
 
   return (
