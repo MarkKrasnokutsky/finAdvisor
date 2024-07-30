@@ -10,6 +10,7 @@ type SignalItemProps = {
 };
 
 export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
+  console.log("signal: ", signal);
   // const open = signal.open.toFixed(2);
   // const open = Math.floor(signal.open * 100) / 100;
   // const open = signal.open.toString().replace(/(\d{2})\d*/, "$1");
@@ -72,18 +73,7 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
       >
         {signal.date}
       </div>
-      {isPages && (
-        <div
-          className={clsx("font-medium", {
-            "text-lg text-center": onlyWidth > 1650,
-            "text-base text-right": onlyWidth < 1650 && onlyWidth > 1270,
-            "text-sm text-right": onlyWidth < 1270,
-          })}
-        >
-          {3820}
-        </div>
-      )}
-      <div className="flex items-center justify-left pl-[50%] gap-x-1 text-arrow-green stroke-arrow-green dark:text-arrow-greenDark dark:stroke-arrow-greenDark col-span-1">
+      <div className="flex items-center justify-left pl-[20%] gap-x-1 text-arrow-green stroke-arrow-green dark:text-arrow-greenDark dark:stroke-arrow-greenDark col-span-1">
         <ArrowGreen />
         <span
           className={clsx("font-medium", {
@@ -92,9 +82,20 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
             "text-sm": onlyWidth < 1270,
           })}
         >
-          {open}
+          {signal.profitFix}
         </span>
       </div>
+      {isPages && (
+        <div
+          className={clsx("font-medium", {
+            "text-lg text-center": onlyWidth > 1650,
+            "text-base text-right": onlyWidth < 1650 && onlyWidth > 1270,
+            "text-sm text-right": onlyWidth < 1270,
+          })}
+        >
+          {open}
+        </div>
+      )}
       <div className="flex items-center justify-left pl-[70%] gap-x-1 text-arrow-red stroke-arrow-red dark:text-arrow-redDark dark:stroke-arrow-redDark">
         <ArrowRed />
         <span
