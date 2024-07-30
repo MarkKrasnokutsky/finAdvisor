@@ -5,4 +5,5 @@ export type Signal = {
   shortname: string;
   open: number;
   stop: number;
+  profitFix: number;
 };
