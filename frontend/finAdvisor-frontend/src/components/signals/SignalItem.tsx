@@ -36,13 +36,14 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
           "gap-x-2 ": onlyWidth < 1650,
         })}
       >
-        <div
-          className={clsx("rounded-full bg-white", {
+        <img
+          src={`https://s3.timeweb.cloud/432b8bc2-cde0d2b0-8512-478d-a65f-555f9e22470f/instrument_icons/${signal.secid}.svg`}
+          alt="logo"
+          className={clsx({
             "size-12": onlyWidth > 1920,
             "size-10": onlyWidth < 1920,
           })}
-        ></div>
-        {/* <img src={sberLogo} alt="logo" className="size-12" /> */}
+        />
         <div>
           <p
             className={clsx("font-semibold", {

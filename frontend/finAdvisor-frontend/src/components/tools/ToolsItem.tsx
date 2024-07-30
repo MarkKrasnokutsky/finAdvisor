@@ -19,14 +19,19 @@ export const ToolsItem: React.FC<ToolsItemProps> = ({ tool }) => {
         }
       )}
     >
-      <div
+      {/* <div
         className={clsx("mb-2 bg-white rounded-full", {
           "size-10": onlyWidth > 1720,
           "size-8": onlyWidth < 1720 && onlyWidth > 1450,
           "size-7": onlyWidth < 1450,
         })}
-      ></div>
-      {/* <img src={sberLogo} alt="" className="size-10 mb-2" /> */}
+      ></div> */}
+      {/* Мб стянуть стили с круга */}
+      <img
+        src={`https://s3.timeweb.cloud/432b8bc2-cde0d2b0-8512-478d-a65f-555f9e22470f/instrument_icons/${tool.secid}.svg`}
+        alt=""
+        className="size-10 mb-2"
+      />
       <h4 className="font-semibold ">{tool.shortname}</h4>
       <span className=" font-medium text-secondary">{tool.secid}</span>
     </div>
