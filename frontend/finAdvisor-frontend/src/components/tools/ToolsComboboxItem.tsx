@@ -23,7 +23,12 @@ export const ToolsComboboxItem: React.FC<ToolsComboboxItemProps> = ({
         onClick={() => setFilterToolData(tool.shortname)}
         className="flex items-center gap-x-2"
       >
-        <div className="bg-white size-6 rounded-full"></div>
+        {/* <div className="bg-white size-6 rounded-full"></div> */}
+        <img
+          src={`https://s3.timeweb.cloud/432b8bc2-cde0d2b0-8512-478d-a65f-555f9e22470f/instrument_icons/${tool.secid}.svg`}
+          alt=""
+          className="size-6"
+        />
         <div className="font-semibold ">{tool.shortname}</div>
       </div>
 
