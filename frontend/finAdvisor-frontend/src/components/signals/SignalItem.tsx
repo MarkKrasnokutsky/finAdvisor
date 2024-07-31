@@ -75,20 +75,19 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
   return (
     <div
       className={clsx(
-        `grid grid-cols-${
-          isPages ? 5 : 4
-        } grid-flow-col items-center py-4 pr-10`,
+        `grid grid-cols-${5} grid-flow-col items-center py-4 pr-10`,
         {
           "gap-x-6": onlyWidth > 1650,
           "gap-x-2": onlyWidth < 1650,
-          "w-[700px]": onlyWidth < 620,
+          "w-[700px]": onlyWidth < 750,
         }
       )}
     >
       <div
-        className={clsx("flex items-center p-1 w-44", {
+        className={clsx("flex items-center  p-1 w-44", {
           "gap-x-6 ": onlyWidth > 1650,
           "gap-x-2 ": onlyWidth < 1650,
+          "col-span-2": !isPages,
         })}
       >
         {/* <div

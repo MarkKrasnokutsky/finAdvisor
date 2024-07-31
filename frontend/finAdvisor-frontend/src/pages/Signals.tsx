@@ -52,13 +52,13 @@ const Signals: React.FC = () => {
         <div className="flex flex-col gap-y-5 h-full">
           <SignalHeader getDateHandler={getDateHandler} />
 
-          {onlyWidth > 620 && <SignalItemHeader />}
+          {onlyWidth > 750 && <SignalItemHeader />}
           <div
             className={`flex flex-col w-full h-full overflow-y-auto ${
-              onlyWidth < 620 && "overflow-x-scroll"
+              onlyWidth < 750 && "overflow-x-scroll"
             } scroll-container`}
           >
-            {onlyWidth < 620 && <SignalItemHeader />}
+            {onlyWidth < 750 && <SignalItemHeader />}
             {SignalsList(filterSignals && filterSignals)}
           </div>
         </div>
