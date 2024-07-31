@@ -12,7 +12,7 @@ export const SignalItemHeader: React.FC = () => {
           "gap-x-6": onlyWidth > 1650,
           "gap-x-2": onlyWidth < 1650,
           "text-sm": onlyWidth < 1450,
-          "w-[700px] text-xs": onlyWidth < 620,
+          "w-[700px] text-xs": onlyWidth < 750,
         }
       )}
     >
@@ -34,7 +34,14 @@ export const SignalItemHeader: React.FC = () => {
         {" "}
         Фиксация прибыли
       </div>
-      <div className=" pl-[40%]">Точка входа</div>
+      <div
+        className={clsx({
+          "text-center": onlyWidth > 1650,
+          "text-right": onlyWidth < 1650,
+        })}
+      >
+        Точка входа
+      </div>
       <div className="text-right pr-1">Стоп</div>
     </div>
   );
