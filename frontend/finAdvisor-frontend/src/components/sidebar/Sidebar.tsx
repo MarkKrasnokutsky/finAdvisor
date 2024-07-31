@@ -49,7 +49,7 @@ export const Sidebar: React.FC = () => {
         }
       )}
     >
-      <div className=" ">
+      <div>
         <div className="ml-0 mb-14 flex items-center gap-4">
           <Logo
             className={clsx("", {

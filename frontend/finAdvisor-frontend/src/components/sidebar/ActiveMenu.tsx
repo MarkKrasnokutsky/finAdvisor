@@ -40,7 +40,7 @@ type ActiveMenuProps = {
 
 export const ActiveMenu: React.FC<ActiveMenuProps> = ({ onClick }) => {
   return (
-    <div className="absolute top-0 left-0 h-full w-full z-50 bg-background pt-16 pl-6 dark:bg-background-dark">
+    <div className="absolute top-0 left-0 h-screen w-full z-50 bg-background pt-12 pl-6 dark:bg-background-dark">
       <h4 className="text-primary font-semibold text-2xl mb-8 dark:text-primary-dark">
         Меню
       </h4>

@@ -8,7 +8,7 @@ export const ToggleTheme: React.FC = () => {
   const onlyWidth = useWindowWidth();
   return (
     <div
-      className={clsx("flex items-center gap-x-4 font-medium text-xs ", {
+      className={clsx("flex items-center gap-x-4 font-medium text-xs mt-3 ", {
         "px-14": onlyWidth > 1720,
         "px-4": onlyWidth < 1000,
       })}
