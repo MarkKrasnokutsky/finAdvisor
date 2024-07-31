@@ -12,7 +12,7 @@ type SignalItemProps = {
 
 export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
   const [svgContent, setSvgContent] = useState("");
-  // console.log("svgContent: ", svgContent);
+  console.log("svgContent: ", svgContent);
 
   useEffect(() => {
     const fetchSVG = async () => {
@@ -36,7 +36,7 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
       }
     };
 
-    // fetchSVG();
+    fetchSVG();
   }, [signal.secid]);
 
   const fetchSVG = async () => {
@@ -66,7 +66,7 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
       console.error("Ошибка при выполнении fetch:", error);
     }
   };
-  // fetchSVG();
+  fetchSVG();
   const open = signal.open.toFixed(2);
   const stop = signal.stop.toFixed(2);
   const profitFix = signal.profitFix.toFixed(2);

@@ -22,7 +22,12 @@ export const Nav: React.FC<NavProps> = ({ links, closeMenuHandler }) => {
   const onlyWidth = useWindowWidth();
 
   return (
-    <nav className="flex flex-col space-y-4">
+    <nav
+      className={clsx("flex flex-col", {
+        "space-y-4": onlyWidth > 1000,
+        "space-y-2": onlyWidth < 1000,
+      })}
+    >
       {links.map((item, index) => (
         <Link
           onClick={(event) => {
