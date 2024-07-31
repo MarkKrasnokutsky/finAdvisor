@@ -68,12 +68,9 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
   };
   // fetchSVG();
   const open = signal.open.toFixed(2);
-  // const open = Math.floor(signal.open * 100) / 100;
-  // const open = signal.open.toString().replace(/(\d{2})\d*/, "$1");
-  // const open = signal.open;
-  // const stop = 32.2;
   const stop = signal.stop.toFixed(2);
   const profitFix = signal.profitFix.toFixed(2);
+
   const onlyWidth = useWindowWidth();
   return (
     <div
@@ -94,10 +91,10 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
           "gap-x-2 ": onlyWidth < 1650,
         })}
       >
-        <div
+        {/* <div
           dangerouslySetInnerHTML={{ __html: svgContent }}
           className="size-4"
-        />
+        /> */}
         <img
           src={`https://s3.timeweb.cloud/432b8bc2-cde0d2b0-8512-478d-a65f-555f9e22470f/instrument_icons/${signal.secid}.svg`}
           alt="logo"
