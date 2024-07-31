@@ -26,7 +26,8 @@ export const SignalHeader: React.FC<SignalHeaderProps> = ({
   const caledarRef = useRef<HTMLDivElement>(null);
   const [isFocusedTools, setIsFocusedTools] = useState(false);
   const [isFocusedCalendar, setIsFocusedCalenar] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  console.log("date: ", date);
 
   const { data: tools } = useTools();
 
