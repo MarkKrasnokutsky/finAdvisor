@@ -1,5 +1,6 @@
 package com.complex.finAdvisor.service;
 
+import com.complex.finAdvisor.dto.PositionInfoDto;
 import com.complex.finAdvisor.dto.SignalDto;
 import com.complex.finAdvisor.dto.SignalResponse;
 import com.complex.finAdvisor.entity.InstrumentEntity;
@@ -68,13 +69,21 @@ public class SignalService {
         List<InstrumentEntity> allStocks = stockRepository.findAll();
         signalRepository.deleteAll();
         for (InstrumentEntity instrumentEntity : allStocks) {
-            int last = getLastHistoryInstrument(instrumentEntity);
-            String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrumentEntity.getSecid() + ".xml?limit=" + 100 + "&start=" + last;
+            int last;
+            PositionInfoDto info = getLastHistoryInstrument(instrumentEntity);
+            if(info.getTotal() < info.getPageSize()) {
+                last = 0;
+            }
+            else {
+                last = info.getTotal() - info.getPageSize();
+            }
+            String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrumentEntity.getSecid() + ".xml?limit=" + info.getPageSize() + "&start=" + last;
             RestTemplate restTemplate = new RestTemplate();
             String xmlResponse = restTemplate.getForObject(apiUrl, String.class);
             // Парсинг и сохранение всех элементов <row> в базу данных
             ArrayList<SignalDto> signalDtoData = parseXmlResponse(xmlResponse);
             ArrayList<SignalDto> signalData = findLastSignal(signalDtoData);
+            System.out.println("------------------------------------------------------");
             System.out.println(instrumentEntity.getSecid());
             System.out.println(last);
             System.out.println(signalDtoData.size());
@@ -99,20 +108,47 @@ public class SignalService {
         }
     }
 
-    private int getLastHistoryInstrument(InstrumentEntity instrumentEntity) {
-        int start = 0;
-        while(true) {
-            String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrumentEntity.getSecid() + ".xml?limit=" + 100 + "&start=" + start;
+    private PositionInfoDto getLastHistoryInstrument(InstrumentEntity instrumentEntity) {
+        try {
+            String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrumentEntity.getSecid() + ".xml?limit=" + 100 + "&start=" + 0;
             RestTemplate restTemplate = new RestTemplate();
             String xmlResponse = restTemplate.getForObject(apiUrl, String.class);
-            ArrayList<SignalDto> signalDtoData = parseXmlResponse(xmlResponse);
-            if (signalDtoData.size() < 100) {
-                return start;
+            XmlMapper xmlMapper = new XmlMapper();
+            JsonNode rootNode = xmlMapper.readTree(xmlResponse);
+
+            // Итерация по узлам "data" и поиск узла с id "history.cursor"
+            Iterator<JsonNode> dataNodes = rootNode.path("data").elements();
+            JsonNode historyCursorDataNode = null;
+            while (dataNodes.hasNext()) {
+                JsonNode dataNode = dataNodes.next();
+                if (dataNode.has("id") && dataNode.path("id").asText().equals("history.cursor")) {
+                    historyCursorDataNode = dataNode;
+                    break;
+                }
             }
-            if (signalDtoData.isEmpty()) {
-                return Math.max(0, start - 100);
+
+            if (historyCursorDataNode == null) {
+                // Если узел "data" с id "history.cursor" не найден, вернуть пустой список
+                return null;
             }
-            start += 100;
+
+            // Доступ к узлу "rows" из найденного узла "data"
+            JsonNode rowsNode = historyCursorDataNode.path("rows");
+            JsonNode rowNode = rowsNode.get("row"); // Предполагается, что "row" - это массив
+
+            PositionInfoDto instrumentInfo = new PositionInfoDto();
+            if (rowNode != null) {
+                SignalDto signalDto = new SignalDto();
+                // Извлечение значений из атрибутов
+                instrumentInfo.setIndex(rowNode.get("INDEX").asInt());
+                instrumentInfo.setTotal(rowNode.get("TOTAL").asInt());
+                instrumentInfo.setPageSize(rowNode.get("PAGESIZE").asInt());
+            }
+            return instrumentInfo;
+        } catch (IOException e) {
+            // Обработка ошибки парсинга XML
+            e.printStackTrace(); // Рекомендуется логировать ошибку
+            return null;
         }
     }
 
