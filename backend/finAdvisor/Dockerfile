@@ -15,5 +15,10 @@ FROM openjdk:17-jdk-slim
 # Копируем JAR-файл из предыдущего этапа сборки
 COPY --from=build /app/finAdvisor/target/*.jar /app.jar
 
+# Настраиваем временную зону
+RUN rm -rf /etc/localtime
+RUN ln -s /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+RUN echo "Europe/Moscow" > /etc/timezone
+
 # Запускаем Spring Boot приложение
 CMD ["java", "-jar", "/app.jar"]
