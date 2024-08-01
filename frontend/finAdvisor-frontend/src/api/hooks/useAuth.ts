@@ -70,11 +70,11 @@ export const useAuth = (isProtectedRoute: boolean) => {
       try {
         const result = await meMutation.mutateAsync();
         !isProtectedRoute && navigate("/dashboard");
-        setAuthData(result.data);
+        await setAuthData(result.data);
       } catch (error) {
         try {
           const result = await refreshTokenMutation.mutateAsync();
-          setAuthData(result.data);
+          await setAuthData(result.data);
           !isProtectedRoute && navigate("/dashboard");
         } catch (error) {
           navigate("/dashboard/login");

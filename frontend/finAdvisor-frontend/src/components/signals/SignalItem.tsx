@@ -1,9 +1,7 @@
 import { ArrowGreen, ArrowRed } from "@/assets";
-// import sberLogo from "@/assets/sber.png";
 import { Signal } from "@/types/signals";
 import { useWindowWidth } from "@react-hook/window-size";
 import clsx from "clsx";
-import { useEffect, useState } from "react";
 
 type SignalItemProps = {
   signal: Signal;
@@ -11,62 +9,6 @@ type SignalItemProps = {
 };
 
 export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
-  const [svgContent, setSvgContent] = useState("");
-  console.log("svgContent: ", svgContent);
-
-  useEffect(() => {
-    const fetchSVG = async () => {
-      const response = await fetch(
-        `https://s3.timeweb.cloud/432b8bc2-cde0d2b0-8512-478d-a65f-555f9e22470f/instrument_icons/${signal.secid}.svg`,
-        {
-          method: "GET",
-          mode: "no-cors",
-        }
-      );
-
-      if (response.ok) {
-        const svg = await response.text();
-        setSvgContent(svg);
-      } else {
-        console.error(
-          "Ошибка при загрузке SVG:",
-          response.status,
-          response.statusText
-        );
-      }
-    };
-
-    fetchSVG();
-  }, [signal.secid]);
-
-  const fetchSVG = async () => {
-    try {
-      const response = await fetch(
-        `https://s3.timeweb.cloud/432b8bc2-cde0d2b0-8512-478d-a65f-555f9e22470f/instrument_icons/${signal.secid}.svg`,
-        {
-          method: "GET",
-          mode: "no-cors",
-        }
-      );
-
-      console.log("Response status:", response.status);
-      console.log("Response headers:", response.headers.get("content-type"));
-
-      if (response.ok) {
-        const svg = await response.text();
-        setSvgContent(svg);
-      } else {
-        console.error(
-          "Ошибка при загрузке SVG:",
-          response.status,
-          response.statusText
-        );
-      }
-    } catch (error) {
-      console.error("Ошибка при выполнении fetch:", error);
-    }
-  };
-  fetchSVG();
   const open = signal.open.toFixed(2);
   const stop = signal.stop.toFixed(2);
   const profitFix = signal.profitFix.toFixed(2);
@@ -90,16 +32,12 @@ export const SignalItem: React.FC<SignalItemProps> = ({ signal, isPages }) => {
           "col-span-2": !isPages,
         })}
       >
-        {/* <div
-          dangerouslySetInnerHTML={{ __html: svgContent }}
-          className="size-4"
-        /> */}
         <img
           src={`https://s3.timeweb.cloud/432b8bc2-cde0d2b0-8512-478d-a65f-555f9e22470f/instrument_icons/${signal.secid}.svg`}
           alt="logo"
           className={clsx({
             "size-12": onlyWidth > 1920,
-            "size-10": onlyWidth < 1920,
+            "size-10": onlyWidth <= 1920,
           })}
         />
         <div>
