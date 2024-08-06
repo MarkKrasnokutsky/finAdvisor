@@ -1,7 +1,12 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Cookies from "js-cookie";
+import { ResponseData } from "@/types/auth";
 
+type tariffChangeData = {
+  name: string;
+  duration: string;
+};
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -9,6 +14,13 @@ export function cn(...inputs: ClassValue[]) {
 export function getDataCookies(key: string) {
   return Cookies.get(key);
 }
+export function setDataCookies(
+  key: string,
+  value: string | ResponseData | tariffChangeData
+) {
+  return Cookies.set(key, JSON.stringify(value));
+}
+
 export function removeToken() {
   Cookies.remove("accessToken");
   Cookies.remove("refreshToken");

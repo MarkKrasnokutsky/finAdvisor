@@ -4,3 +4,8 @@ export type Tariff = {
   name: string;
   instrumentCount: number;
 };
+
+export type TariffChangeInput = {
+  name: string;
+  duration: string;
+};
