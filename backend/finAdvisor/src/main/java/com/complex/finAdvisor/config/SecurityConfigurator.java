@@ -59,7 +59,7 @@ public class SecurityConfigurator {
                 .cors(httpSecurityCorsConfigurer ->
                         httpSecurityCorsConfigurer.configurationSource(request -> {
                             CorsConfiguration configuration = new CorsConfiguration();
-                            configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080", "http://localhost:5173",
+                            configuration.setAllowedOrigins(Arrays.asList(
                                     "http://profitpicks.ru/", "https://profitpicks.ru",
                                     "https://147.45.164.252", "http://147.45.164.252")); // Разрешить корсы
                             configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE", "PATCH")); // Разрешить все типы запросов
@@ -77,11 +77,11 @@ public class SecurityConfigurator {
                 )
                 // TODO настроить права для эндПоинтов
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/signals/**").fullyAuthenticated()
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("api/signals/**").fullyAuthenticated()
+                        .requestMatchers("api/auth/**").permitAll()
                         //.requestMatchers("/tariff/**").fullyAuthenticated()
-                        .requestMatchers("/user/**").fullyAuthenticated()
-                        .requestMatchers("/secured/user").fullyAuthenticated()
+                        .requestMatchers("api/user/**").fullyAuthenticated()
+                        .requestMatchers("api/secured/user").fullyAuthenticated()
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
