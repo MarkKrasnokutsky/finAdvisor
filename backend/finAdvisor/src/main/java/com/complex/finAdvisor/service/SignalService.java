@@ -64,20 +64,20 @@ public class SignalService {
         }
     }
 
-    @Scheduled(cron = "0 0 0 * * ?", zone = "Europe/Moscow")
+    @Scheduled(cron = "0 0 2 * * ?", zone = "Europe/Moscow")
     public void updateAllSignals() {
         List<InstrumentEntity> allStocks = stockRepository.findAll();
         signalRepository.deleteAll();
         for (InstrumentEntity instrumentEntity : allStocks) {
-            int last;
+            int start;
             PositionInfoDto info = getLastHistoryInstrument(instrumentEntity);
             if(info.getTotal() < info.getPageSize()) {
-                last = 0;
+                start = 7;
             }
             else {
-                last = info.getTotal() - info.getPageSize();
+                start = info.getTotal() - info.getPageSize() + 7;
             }
-            String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrumentEntity.getSecid() + ".xml?limit=" + info.getPageSize() + "&start=" + last;
+            String apiUrl = "https://iss.moex.com/iss/history/engines/stock/markets/shares/boards/TQBR/securities/" + instrumentEntity.getSecid() + ".xml?limit=" + info.getPageSize() + "&start=" + start;
             RestTemplate restTemplate = new RestTemplate();
             String xmlResponse = restTemplate.getForObject(apiUrl, String.class);
             // Парсинг и сохранение всех элементов <row> в базу данных
@@ -85,7 +85,7 @@ public class SignalService {
             ArrayList<SignalDto> signalData = findLastSignal(signalDtoData);
             System.out.println("------------------------------------------------------");
             System.out.println(instrumentEntity.getSecid());
-            System.out.println(last);
+            System.out.println(start);
             System.out.println(signalDtoData.size());
             System.out.println(signalData.size());
             if (signalDtoData.isEmpty() || signalData.isEmpty()) {
