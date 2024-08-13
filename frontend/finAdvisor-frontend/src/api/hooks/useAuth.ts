@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { authService } from "../service/authService";
 import { useContext, useEffect } from "react";
 import { AuthContext, AuthContextType } from "@/context/AuthContext";
+import { useCheckPayment, useTariffChange } from "./usePayment";
+import { getDataCookies } from "@/lib/utils";
 
 export const useLogin = () => {
   const navigate = useNavigate();
@@ -60,19 +62,36 @@ export const useRefreshToken = () => {
 };
 
 export const useAuth = (isProtectedRoute: boolean) => {
+  const { data: payment } = useCheckPayment();
+
+  const tariffChangeData = getDataCookies("tariffChangeData");
+  const parseTariffChangeData = tariffChangeData
+    ? JSON.parse(tariffChangeData)
+    : "";
+
+  const tariffChangeMutation = useTariffChange();
+
   const navigate = useNavigate();
   const meMutation = useMe();
   const refreshTokenMutation = useRefreshToken();
   const { setAuthData } = useAuthContext();
-
+  // const { res } = usePayment();
   useEffect(() => {
     const isAuth = async () => {
       try {
+        // мб провкерку на isProtectedRoute
+        (await payment?.status) === "succeeded" &&
+          tariffChangeMutation.mutateAsync(parseTariffChangeData);
+
         const result = await meMutation.mutateAsync();
+        console.log("result: ", result);
         !isProtectedRoute && navigate("/dashboard");
         await setAuthData(result.data);
       } catch (error) {
         try {
+          (await payment?.status) === "succeeded" &&
+            tariffChangeMutation.mutateAsync(parseTariffChangeData);
+
           const result = await refreshTokenMutation.mutateAsync();
           await setAuthData(result.data);
           !isProtectedRoute && navigate("/dashboard");
@@ -83,7 +102,7 @@ export const useAuth = (isProtectedRoute: boolean) => {
     };
 
     isAuth();
-  }, []);
+  }, [payment]);
 };
 
 export const useAuthContext = (): AuthContextType => {

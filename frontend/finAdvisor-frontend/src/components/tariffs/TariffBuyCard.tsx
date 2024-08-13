@@ -18,8 +18,8 @@ export const TariffBuyCard: React.FC<TariffBuyCardProps> = ({ tariff }) => {
     ...authData!,
     tariff: {
       // ...authData?.tariff,
-      id: authData?.tariff.id || 0,
-      cost: authData?.tariff.cost || 0,
+      id: authData?.tariff?.id || 0,
+      cost: authData?.tariff?.cost || 0,
       name: tariff.name,
       instrumentCount: tariff.instrumentCount,
     },

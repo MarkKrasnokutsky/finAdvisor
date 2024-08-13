@@ -38,15 +38,12 @@ export const useCreatePayment = () => {
 export const useCheckPayment = () => {
   const paymentId = getDataCookies("paymentId");
   const finPayId = paymentId ? JSON.parse(paymentId) : "";
-  console.log("finPayId: ", finPayId);
   const checkPaymentMutation = useQuery({
     queryKey: ["payment"],
     queryFn: async () => {
-      console.log("paymentId: ", paymentId);
       try {
         const { data } = await paymentService.checkPayment(finPayId);
 
-        console.log("res: ", data);
         return data;
       } catch (error) {
         console.log(error);
@@ -59,6 +56,7 @@ export const useCheckPayment = () => {
 
 export const usePayment = () => {
   const { data: payment } = useCheckPayment();
+  const res = payment!;
 
   const updateData = getDataCookies("updateData");
   const parseUpdateData = updateData ? JSON.parse(updateData) : "";
@@ -85,5 +83,5 @@ export const usePayment = () => {
     }
   }, [payment]);
 
-  return payment;
+  return { res };
 };
