@@ -79,18 +79,17 @@ export const useAuth = (isProtectedRoute: boolean) => {
   useEffect(() => {
     const isAuth = async () => {
       try {
-        // мб провкерку на isProtectedRoute
-        (await payment?.status) === "succeeded" &&
-          tariffChangeMutation.mutateAsync(parseTariffChangeData);
-
+        await tariffChangeMutation.mutateAsync(
+          payment?.status === "succeeded" ? parseTariffChangeData : {}
+        );
         const result = await meMutation.mutateAsync();
-        console.log("result: ", result);
         !isProtectedRoute && navigate("/dashboard");
         await setAuthData(result.data);
       } catch (error) {
         try {
-          (await payment?.status) === "succeeded" &&
-            tariffChangeMutation.mutateAsync(parseTariffChangeData);
+          await tariffChangeMutation.mutateAsync(
+            payment?.status === "succeeded" ? parseTariffChangeData : {}
+          );
 
           const result = await refreshTokenMutation.mutateAsync();
           await setAuthData(result.data);
@@ -100,9 +99,47 @@ export const useAuth = (isProtectedRoute: boolean) => {
         }
       }
     };
+    // };
 
     isAuth();
   }, [payment]);
+  // useEffect(() => {
+  //   const isAuth = async () => {
+  //     // try {
+  //     //   await tariffChangeMutation.mutateAsync(parseTariffChangeData);
+  //     //   const result = await meMutation.mutateAsync();
+  //     //   // console.log("result: ", result);
+  //     //   !isProtectedRoute && navigate("/dashboard");
+  //     //   await setAuthData(result.data);
+  //     // } catch (error) {
+  //     try {
+  //       // мб провкерку на isProtectedRoute
+  //       // if ((await payment?.status) === "succeeded") {
+  //       // }
+  //       // (await payment?.status) === "succeeded" &&
+  //       //   (await tariffChangeMutation.mutateAsync(parseTariffChangeData));
+  //       await tariffChangeMutation.mutateAsync(parseTariffChangeData);
+  //       const result = await meMutation.mutateAsync();
+  //       // console.log("result: ", result);
+  //       !isProtectedRoute && navigate("/dashboard");
+  //       await setAuthData(result.data);
+  //     } catch (error) {
+  //       try {
+  //         (await payment?.status) === "succeeded" &&
+  //           (await tariffChangeMutation.mutateAsync(parseTariffChangeData));
+
+  //         const result = await refreshTokenMutation.mutateAsync();
+  //         await setAuthData(result.data);
+  //         !isProtectedRoute && navigate("/dashboard");
+  //       } catch (error) {
+  //         navigate("/dashboard/login");
+  //       }
+  //     }
+  //   };
+  //   // };
+
+  //   isAuth();
+  // }, [payment]);
 };
 
 export const useAuthContext = (): AuthContextType => {
