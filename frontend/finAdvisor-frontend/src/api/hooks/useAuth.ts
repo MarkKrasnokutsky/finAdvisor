@@ -4,7 +4,7 @@ import { authService } from "../service/authService";
 import { useContext, useEffect } from "react";
 import { AuthContext, AuthContextType } from "@/context/AuthContext";
 import { useCheckPayment, useTariffChange } from "./usePayment";
-import { getDataCookies } from "@/lib/utils";
+import { getDataCookies, setDataCookies } from "@/lib/utils";
 
 export const useLogin = () => {
   const navigate = useNavigate();
@@ -82,6 +82,10 @@ export const useAuth = (isProtectedRoute: boolean) => {
         await tariffChangeMutation.mutateAsync(
           payment?.status === "succeeded" ? parseTariffChangeData : {}
         );
+        payment?.status === "succeeded" &&
+          (await setDataCookies("tariffChangeData", ""),
+          await setDataCookies("paymentId", "")),
+          await setDataCookies("updateData", "");
         const result = await meMutation.mutateAsync();
         !isProtectedRoute && navigate("/dashboard");
         await setAuthData(result.data);
