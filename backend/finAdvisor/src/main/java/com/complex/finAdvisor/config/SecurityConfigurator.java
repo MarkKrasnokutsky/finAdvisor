@@ -60,7 +60,7 @@ public class SecurityConfigurator {
                         httpSecurityCorsConfigurer.configurationSource(request -> {
                             CorsConfiguration configuration = new CorsConfiguration();
                             configuration.setAllowedOrigins(Arrays.asList(
-                                    "http://profitpicks.ru/", "https://profitpicks.ru",
+                                    "http://localhost:5173", "http://localhost:8080","http://profitpicks.ru/", "https://profitpicks.ru",
                                     "https://147.45.164.252", "http://147.45.164.252")); // Разрешить корсы
                             configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE", "PATCH")); // Разрешить все типы запросов
                             configuration.setAllowCredentials(true);
