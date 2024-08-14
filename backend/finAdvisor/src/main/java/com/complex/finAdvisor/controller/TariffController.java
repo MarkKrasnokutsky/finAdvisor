@@ -1,6 +1,7 @@
 package com.complex.finAdvisor.controller;
 
 import com.complex.finAdvisor.dto.TariffRequest;
+import com.complex.finAdvisor.dto.UpdatedTariffResponse;
 import com.complex.finAdvisor.entity.TariffEntity;
 import com.complex.finAdvisor.repository.TariffRepository;
 import com.complex.finAdvisor.service.TariffService;
@@ -40,6 +41,11 @@ public class TariffController {
         catch (Exception e) {
             return ResponseEntity.badRequest().body("Error");
         }
+    }
+    @PostMapping("/getDifferenceDays")
+    @Operation(summary = "Обновляет тариф авторизированного пользователя. Указание тарифа в теле запроса")
+    public UpdatedTariffResponse getDifferenceDaysTariff(@RequestBody TariffRequest tariffRequest, Principal principal) {
+        return tariffService.getDifferenceDaysTariff(tariffRequest, principal.getName());
     }
     @GetMapping("/getTariffs")
     @Operation(summary = "Запускает парсинг тарифов из json файла, создавая в БД схемы тариф " +

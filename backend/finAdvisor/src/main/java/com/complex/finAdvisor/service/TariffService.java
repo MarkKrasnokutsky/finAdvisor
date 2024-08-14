@@ -1,6 +1,7 @@
 package com.complex.finAdvisor.service;
 
 import com.complex.finAdvisor.dto.TariffRequest;
+import com.complex.finAdvisor.dto.UpdatedTariffResponse;
 import com.complex.finAdvisor.entity.TariffEntity;
 import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.TariffRepository;
@@ -12,7 +13,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -45,6 +48,26 @@ public class TariffService {
             userEntity.setTariffExpiration(moscowTime.toLocalDateTime().plusDays(tariffRequest.getDuration()));
             userRepository.save(userEntity);
         });
+    }
+
+    public UpdatedTariffResponse getDifferenceDaysTariff(TariffRequest tariffRequest, String username) {
+        UpdatedTariffResponse response = new UpdatedTariffResponse();
+        Optional<UserEntity> currentUser = userRepository.findByUsername(username);
+        currentUser.ifPresent(userEntity -> {
+            ZonedDateTime moscowTime = ZonedDateTime.now(ZoneId.of("Europe/Moscow"));
+            // Вычисление разницы в днях
+            long daysDifference = ChronoUnit.DAYS.between(moscowTime.toLocalDate(),
+                    userEntity.getTariffExpiration().toLocalDate());
+
+            // Если текущая дата позже даты истечения тарифа, устанавливаем разницу в 0
+            if (daysDifference < 0 || !Objects.equals(tariffRequest.getName(), userEntity.getTariff().getName())) {
+                daysDifference = 0;
+            }
+            response.setUsername(userEntity.getUsername());
+            response.setDayDifference(daysDifference);
+            response.setTariffName(tariffRequest.getName());
+        });
+        return response;
     }
 
     private boolean isTariffExpired(LocalDateTime tariffExpiration) {
