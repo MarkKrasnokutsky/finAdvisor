@@ -9,6 +9,7 @@ import plus from "@/assets/tariffs/plus.png";
 import pro from "@/assets/tariffs/pro.png";
 import vip from "@/assets/tariffs/vip.png";
 import { useWindowWidth } from "@react-hook/window-size";
+import { toast, Toaster } from "sonner";
 
 const tariffs = [
   { name: "Simple", img: simple, instrumentCount: 15, cost: 2490 },
@@ -32,37 +33,61 @@ const Tariff: React.FC = () => {
   const isTariff = authData?.tariff ? true : false;
   const onlyWidth = useWindowWidth();
 
-  return (
-    <div className="flex flex-col gap-y-5 max-h-full overflow-auto scroll-container">
-      {isTariff && (
-        <CardLayout className=" border-primary border-4 ">
-          {authData ? (
-            <TariffItem
-              name={authData.tariff.name}
-              cost={authData.tariff.cost}
-              tariffExpiration={authData.tariffExpiration}
-              instrumentCount={authData.tariff.instrumentCount}
-              isPage
-              isTariff={isTariff}
-            />
-          ) : (
-            <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
-          )}
-        </CardLayout>
-      )}
-
-      <div
-        className={`flex justify-around gap-5 ${
-          onlyWidth < 800 && "flex-wrap"
-        }`}
+  const isAcceptedCookie = localStorage.getItem("cookie");
+  const handleAcceptCookie = () => {
+    localStorage.setItem("cookie", "Accepted");
+  };
+  toast(
+    <div className="flex text-[12px] w-max rounded-">
+      <p className="">
+        Мы используем куки, так как без них все работало бы плохо
+      </p>
+      <button
+        className="text-nowrap border  rounded-[10px] px-2"
+        onClick={() => (handleAcceptCookie(), toast.dismiss())}
       >
-        {filterTariffs.map((tariff, index) => (
-          <CardLayout key={index}>
-            <TariffBuyCard key={index} tariff={tariff} />
+        Принять
+      </button>
+    </div>,
+    { duration: Infinity }
+  );
+
+  return (
+    <>
+      {!isAcceptedCookie && (
+        <Toaster position="bottom-center" visibleToasts={1} />
+      )}
+      <div className="flex flex-col gap-y-5 max-h-full overflow-auto scroll-container">
+        {isTariff && (
+          <CardLayout className=" border-primary border-4 ">
+            {authData ? (
+              <TariffItem
+                name={authData.tariff.name}
+                cost={authData.tariff.cost}
+                tariffExpiration={authData.tariffExpiration}
+                instrumentCount={authData.tariff.instrumentCount}
+                isPage
+                isTariff={isTariff}
+              />
+            ) : (
+              <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
+            )}
           </CardLayout>
-        ))}
+        )}
+
+        <div
+          className={`flex justify-around gap-5 ${
+            onlyWidth < 800 && "flex-wrap"
+          }`}
+        >
+          {filterTariffs.map((tariff, index) => (
+            <CardLayout key={index}>
+              <TariffBuyCard key={index} tariff={tariff} />
+            </CardLayout>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
