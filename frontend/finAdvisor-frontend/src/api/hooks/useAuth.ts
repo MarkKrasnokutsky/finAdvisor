@@ -75,7 +75,6 @@ export const useAuth = (isProtectedRoute: boolean) => {
   const meMutation = useMe();
   const refreshTokenMutation = useRefreshToken();
   const { setAuthData } = useAuthContext();
-  // const { res } = usePayment();
   useEffect(() => {
     const isAuth = async () => {
       try {

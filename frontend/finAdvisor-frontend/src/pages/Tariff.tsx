@@ -19,7 +19,6 @@ const tariffs = [
 
 const Tariff: React.FC = () => {
   useTitle("Тарифы");
-  // const paymentData = usePayment();
   const { authData } = useAuthContext();
 
   const filterTariffs = authData?.tariff
