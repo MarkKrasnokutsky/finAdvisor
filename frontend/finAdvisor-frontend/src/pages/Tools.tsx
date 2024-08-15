@@ -18,6 +18,7 @@ const Tools: React.FC = () => {
   const instrumentCount = isCheck;
 
   const onlyWidth = useWindowWidth();
+
   return (
     <div className="flex flex-col h-full">
       <CardLayout className={`pb-2 ${onlyWidth > 600 ? "pr-8" : "pr-4 pl-4"} `}>

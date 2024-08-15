@@ -30,6 +30,7 @@ const Home: React.FC = () => {
       : [];
 
   const sortTools = typeof tools !== "string" ? tools : [];
+
   return (
     <div
       className={clsx("gap-5 w-full h-full", {
