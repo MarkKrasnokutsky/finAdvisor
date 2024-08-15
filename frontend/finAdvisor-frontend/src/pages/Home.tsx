@@ -7,7 +7,6 @@ import { Profile, SignalGrid, TariffItem, ToolsGrid } from "@/components";
 import { CardLayout } from "@/layouts/CardLayout";
 import { useWindowWidth } from "@react-hook/window-size";
 import clsx from "clsx";
-import { toast, Toaster } from "sonner";
 
 const Home: React.FC = () => {
   useTitle("Панель управления");
@@ -32,87 +31,63 @@ const Home: React.FC = () => {
 
   const sortTools = typeof tools !== "string" ? tools : [];
 
-  const isAcceptedCookie = localStorage.getItem("cookie");
-  const handleAcceptCookie = () => {
-    localStorage.setItem("cookie", "Accepted");
-  };
-  toast(
-    <div className="flex text-[12px] w-max rounded-">
-      <p className="">
-        Мы используем куки, так как без них все работало бы плохо
-      </p>
-      <button
-        className="text-nowrap border  rounded-[10px] px-2"
-        onClick={() => (handleAcceptCookie(), toast.dismiss())}
-      >
-        Принять
-      </button>
-    </div>,
-    { duration: Infinity }
-  );
-
   return (
-    <>
-      {!isAcceptedCookie && (
-        <Toaster position="bottom-center" visibleToasts={1} />
-      )}
-      <div
-        className={clsx("gap-5 w-full h-full", {
-          "grid grid-cols-12 grid-rows-4": onlyWidth > 860,
-          "flex flex-col scroll-container": onlyWidth < 860,
-        })}
+    <div
+      className={clsx("gap-5 w-full h-full", {
+        "grid grid-cols-12 grid-rows-4": onlyWidth > 860,
+        "flex flex-col scroll-container": onlyWidth < 860,
+      })}
+    >
+      <CardLayout
+        columns={8}
+        // columns={onlyWidth > 1920 ? 10 : 8}
+        rows={2}
+        className="pb-0 pr-4"
       >
-        <CardLayout
-          columns={8}
-          // columns={onlyWidth > 1920 ? 10 : 8}
-          rows={2}
-          className="pb-0 pr-4"
-        >
-          {sortSignals ? (
-            <SignalGrid signals={sortSignals} />
-          ) : (
-            <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
-          )}
-        </CardLayout>
-        <CardLayout
-          columns={4}
-          // columns={onlyWidth > 1920 ? 2 : 4}
-          rows={2}
-          className=""
-        >
-          {authData ? (
-            <Profile username={authData.username} email={authData.email} />
-          ) : (
-            <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
-          )}
-        </CardLayout>
-        <CardLayout columns={5} rows={2} rowStart={3} rowEnd={4}>
-          {authData ? (
-            <TariffItem
-              name={authData.tariff?.name || "Нет тарифа"}
-              cost={authData.tariff?.cost || 0}
-              tariffExpiration={authData.tariffExpiration || ""}
-              instrumentCount={authData.tariff?.instrumentCount || 0}
-              isTariff={isTariff}
-            />
-          ) : (
-            <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
-          )}
-        </CardLayout>
-        <CardLayout columns={7} rows={2}>
-          {sortTools ? (
-            <ToolsGrid tools={sortTools} />
-          ) : (
-            <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
-          )}
-        </CardLayout>
+        {sortSignals ? (
+          <SignalGrid signals={sortSignals} />
+        ) : (
+          <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
+        )}
+      </CardLayout>
+      <CardLayout
+        columns={4}
+        // columns={onlyWidth > 1920 ? 2 : 4}
+        rows={2}
+        className=""
+      >
+        {authData ? (
+          <Profile username={authData.username} email={authData.email} />
+        ) : (
+          <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
+        )}
+      </CardLayout>
+      <CardLayout columns={5} rows={2} rowStart={3} rowEnd={4}>
+        {authData ? (
+          <TariffItem
+            name={authData.tariff?.name || "Нет тарифа"}
+            cost={authData.tariff?.cost || 0}
+            tariffExpiration={authData.tariffExpiration || ""}
+            instrumentCount={authData.tariff?.instrumentCount || 0}
+            isTariff={isTariff}
+          />
+        ) : (
+          <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
+        )}
+      </CardLayout>
+      <CardLayout columns={7} rows={2}>
+        {sortTools ? (
+          <ToolsGrid tools={sortTools} />
+        ) : (
+          <Spinner className="size-14 fill-primary dark:fill-primary-dark" />
+        )}
+      </CardLayout>
 
-        {/* <div className={`col-span-8 row-span-2 bg-slate-400`}></div>
+      {/* <div className={`col-span-8 row-span-2 bg-slate-400`}></div>
       <div className={`col-span-4 row-span-2 bg-slate-400`}></div>
       <div className="col-span-5 row-span-2 bg-slate-400"></div>
       <div className="col-span-7 row-span-2 bg-slate-400"></div> */}
-      </div>
-    </>
+    </div>
   );
 };
 
