@@ -31,6 +31,7 @@ const Tariff: React.FC = () => {
 
   const isTariff = authData?.tariff ? true : false;
   const onlyWidth = useWindowWidth();
+
   return (
     <div className="flex flex-col gap-y-5 max-h-full overflow-auto scroll-container">
       {isTariff && (
