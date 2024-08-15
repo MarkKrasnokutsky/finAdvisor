@@ -2,8 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { paymentService } from "../service/paymentService";
 import { AxiosResponse } from "axios";
 import { getDataCookies, setDataCookies } from "@/lib/utils";
-import { useEffect } from "react";
-import { useAuthContext } from "./useAuth";
+
 import { CreatePaymentResponse } from "@/types/payment";
 
 export const useTariffChange = () => {
@@ -19,16 +18,29 @@ export const useTariffChange = () => {
 
   return tariffChangeMutation;
 };
+
+export const useDifferenceDays = () => {
+  const differenceDaysMutation = useMutation({
+    mutationFn: paymentService.differenceDays,
+    onSuccess: (res: AxiosResponse<string>) => {
+      console.log("res: ", res);
+    },
+    onError: (error: Error) => {
+      console.log(error);
+    },
+  });
+
+  return differenceDaysMutation;
+};
 export const useCreatePayment = () => {
   const createPaymentMutation = useMutation({
     mutationFn: paymentService.createPayment,
     onSuccess: (res: AxiosResponse<CreatePaymentResponse>) => {
       setDataCookies("paymentId", res.data.id);
       window.location.href = res.data.confirmation.confirmation_url;
-      console.log("res: ", res);
     },
     onError: (error: Error) => {
-      console.log("ddd", error);
+      console.log("useCreatePayment error:", error);
     },
   });
 
@@ -54,34 +66,34 @@ export const useCheckPayment = () => {
   return checkPaymentMutation;
 };
 
-export const usePayment = () => {
-  const { data: payment } = useCheckPayment();
-  const res = payment!;
+// export const usePayment = () => {
+//   const { data: payment } = useCheckPayment();
+//   const res = payment!;
 
-  const updateData = getDataCookies("updateData");
-  const parseUpdateData = updateData ? JSON.parse(updateData) : "";
+//   const updateData = getDataCookies("updateData");
+//   const parseUpdateData = updateData ? JSON.parse(updateData) : "";
 
-  const tariffChangeData = getDataCookies("tariffChangeData");
-  const parseTariffChangeData = tariffChangeData
-    ? JSON.parse(tariffChangeData)
-    : "";
+//   const tariffChangeData = getDataCookies("tariffChangeData");
+//   const parseTariffChangeData = tariffChangeData
+//     ? JSON.parse(tariffChangeData)
+//     : "";
 
-  const tariffChangeMutation = useTariffChange();
-  const { setAuthData } = useAuthContext();
-  useEffect(() => {
-    if (payment?.status === "succeeded") {
-      const handleTariffChange = async () => {
-        try {
-          await tariffChangeMutation.mutateAsync(parseTariffChangeData);
-          await setAuthData(parseUpdateData);
-        } catch (error) {
-          console.log("error: ", error);
-        }
-      };
+//   const tariffChangeMutation = useTariffChange();
+//   const { setAuthData } = useAuthContext();
+//   useEffect(() => {
+//     if (payment?.status === "succeeded") {
+//       const handleTariffChange = async () => {
+//         try {
+//           await tariffChangeMutation.mutateAsync(parseTariffChangeData);
+//           await setAuthData(parseUpdateData);
+//         } catch (error) {
+//           console.log("error: ", error);
+//         }
+//       };
 
-      handleTariffChange();
-    }
-  }, [payment]);
+//       handleTariffChange();
+//     }
+//   }, [payment]);
 
-  return { res };
-};
+//   return { res };
+// };

@@ -5,6 +5,7 @@ import pro from "@/assets/tariffs/pro.png";
 import vip from "@/assets/tariffs/vip.png";
 import { useWindowWidth } from "@react-hook/window-size";
 import clsx from "clsx";
+import { useDifferenceDays } from "@/api/hooks/usePayment";
 
 const tariffs = [
   { name: "Simple", img: simple, cost: 2490 },
@@ -34,6 +35,22 @@ export const TariffItem: React.FC<TariffItemProps> = ({
   const selectTariff = tariffs.find(
     (a) => a.name.toLocaleLowerCase() === name?.toLocaleLowerCase()
   );
+
+  const differenceDaysMutatiton = useDifferenceDays();
+
+  const differenceDaysData = {
+    name: name || "",
+    duration: "30",
+  };
+
+  // RENAME!!!
+  const onSubmit = async () => {
+    try {
+      await differenceDaysMutatiton.mutateAsync(differenceDaysData);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
 
   const onlyWidth = useWindowWidth();
   return (
@@ -87,6 +104,7 @@ export const TariffItem: React.FC<TariffItemProps> = ({
               "py-3 max-w-52": onlyWidth < 860,
             }
           )}
+          onClick={onSubmit}
         >
           {isPage ? "Продлить" : "Перейти к тарифам"}
         </Link>

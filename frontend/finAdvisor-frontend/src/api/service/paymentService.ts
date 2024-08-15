@@ -30,6 +30,15 @@ export const paymentService = {
     );
     return response;
   },
+  differenceDays: async (
+    input: TariffChangeInput
+  ): Promise<AxiosResponse<string>> => {
+    const response = await instance.post<string>(`/tariff/getDifferenceDays`, {
+      name: input.name,
+      duration: input.duration,
+    });
+    return response;
+  },
   checkPayment: async (
     id: string
   ): Promise<AxiosResponse<CheckPaymentResponse>> => {
