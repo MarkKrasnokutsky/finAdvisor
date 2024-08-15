@@ -7,7 +7,6 @@ import { Signal } from "@/types/signals";
 import { useWindowWidth } from "@react-hook/window-size";
 import { useState } from "react";
 import { format } from "date-fns";
-import { toast, Toaster } from "sonner";
 
 const SignalsList = (signals: Signal[] | undefined) => {
   if (!signals) {
@@ -47,48 +46,24 @@ const Signals: React.FC = () => {
     setDateSignals(date ? format(date, "dd-MM-yyyy") : "");
   };
 
-  const isAcceptedCookie = localStorage.getItem("cookie");
-  const handleAcceptCookie = () => {
-    localStorage.setItem("cookie", "Accepted");
-  };
-  toast(
-    <div className="flex text-[12px] w-max rounded-">
-      <p className="">
-        Мы используем куки, так как без них все работало бы плохо
-      </p>
-      <button
-        className="text-nowrap border  rounded-[10px] px-2"
-        onClick={() => (handleAcceptCookie(), toast.dismiss())}
-      >
-        Принять
-      </button>
-    </div>,
-    { duration: Infinity }
-  );
-
   return (
-    <>
-      {!isAcceptedCookie && (
-        <Toaster position="bottom-center" visibleToasts={1} />
-      )}
-      <div className="flex flex-col h-full">
-        <CardLayout className="pb-0 pr-8">
-          <div className="flex flex-col gap-y-5 h-full">
-            <SignalHeader getDateHandler={getDateHandler} />
+    <div className="flex flex-col h-full">
+      <CardLayout className="pb-0 pr-8">
+        <div className="flex flex-col gap-y-5 h-full">
+          <SignalHeader getDateHandler={getDateHandler} />
 
-            {onlyWidth > 750 && <SignalItemHeader />}
-            <div
-              className={`flex flex-col w-full h-full overflow-y-auto ${
-                onlyWidth < 750 && "overflow-x-scroll"
-              } scroll-container`}
-            >
-              {onlyWidth < 750 && <SignalItemHeader />}
-              {SignalsList(filterSignals && filterSignals)}
-            </div>
+          {onlyWidth > 750 && <SignalItemHeader />}
+          <div
+            className={`flex flex-col w-full h-full overflow-y-auto ${
+              onlyWidth < 750 && "overflow-x-scroll"
+            } scroll-container`}
+          >
+            {onlyWidth < 750 && <SignalItemHeader />}
+            {SignalsList(filterSignals && filterSignals)}
           </div>
-        </CardLayout>
-      </div>
-    </>
+        </div>
+      </CardLayout>
+    </div>
   );
 };
 
