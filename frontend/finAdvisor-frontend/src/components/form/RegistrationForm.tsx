@@ -79,6 +79,13 @@ export const RegistrationForm = () => {
       });
     }
   };
+
+  const handleOpenLegal = (name: string) => {
+    window.open(
+      `https://s3.timeweb.cloud/432b8bc2-cde0d2b0-8512-478d-a65f-555f9e22470f/legal/${name}.pdf`,
+      "_blank"
+    );
+  };
   return (
     <Form {...form}>
       <form
@@ -156,6 +163,29 @@ export const RegistrationForm = () => {
             Создать
           </Button>
         </div>
+        <p className="text-white text-center text-balance mt-2  max-550:text-sm">
+          Продолжая, вы соглашаетесь с{" "}
+          <a
+            className="underline cursor-pointer"
+            onClick={() => handleOpenLegal("personal_data")}
+          >
+            обработкой персональных данных
+          </a>
+          ,{" "}
+          <a
+            className="underline cursor-pointer"
+            onClick={() => handleOpenLegal("useragreement")}
+          >
+            пользовательским соглашением
+          </a>{" "}
+          и{" "}
+          <a
+            className="underline cursor-pointer"
+            onClick={() => handleOpenLegal("risks")}
+          >
+            рисками
+          </a>
+        </p>
         <p className="text-center text-white mt-2 max-550:text-sm">
           Есть аккаунт?{" "}
           <Link
