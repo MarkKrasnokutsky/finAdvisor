@@ -1,6 +1,7 @@
 package com.complex.finAdvisor.controller;
 
 import com.complex.finAdvisor.dto.TariffRequest;
+import com.complex.finAdvisor.dto.TariffResponse;
 import com.complex.finAdvisor.dto.UpdatedTariffResponse;
 import com.complex.finAdvisor.entity.TariffEntity;
 import com.complex.finAdvisor.repository.TariffRepository;
@@ -32,25 +33,20 @@ public class TariffController {
 
     @PutMapping("/updateByUser")
     @Operation(summary = "Обновляет тариф авторизированного пользователя. Указание тарифа в теле запроса")
-    public ResponseEntity<?> updateByUser(@RequestBody @Parameter(description = "Тело запроса для обновления тарифа. Описание тарифа") TariffRequest tariffRequest,
-                                          @Parameter(description = "Пользователь, прошедший успешно аутентификацию") Principal principal) {
-        try {
-            tariffService.updateTariffAuthUser(principal.getName(), tariffRequest);
-            return ResponseEntity.ok("Updated tariff to " + tariffRequest.getName() + " for user - " + principal.getName());
-        }
-        catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error");
-        }
+    public ResponseEntity<TariffResponse> updateByUser(@RequestBody @Parameter(description = "Тело запроса для обновления тарифа. Описание тарифа") TariffRequest tariffRequest,
+                                                       @Parameter(description = "Пользователь, прошедший успешно аутентификацию") Principal principal) {
+        return ResponseEntity.ok(tariffService.updateTariffAuthUser(principal.getName(), tariffRequest));
     }
+
     @PostMapping("/getDifferenceDays")
     @Operation(summary = "Обновляет тариф авторизированного пользователя. Указание тарифа в теле запроса")
     public UpdatedTariffResponse getDifferenceDaysTariff(@RequestBody TariffRequest tariffRequest, Principal principal) {
         return tariffService.getDifferenceDaysTariff(tariffRequest, principal.getName());
     }
-    @GetMapping("/getTariffs")
+    @GetMapping("/fetchTariffs")
     @Operation(summary = "Запускает парсинг тарифов из json файла, создавая в БД схемы тариф " +
             "и отношение тариф-инструмент")
-    public void getTariffs() {
+    public void fetchTariffs() {
         tariffParser.parseJson("src/main/resources/tariffs_instruments.json");
     }
 }
