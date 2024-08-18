@@ -1,6 +1,7 @@
 package com.complex.finAdvisor.service;
 
 import com.complex.finAdvisor.dto.TariffRequest;
+import com.complex.finAdvisor.dto.TariffResponse;
 import com.complex.finAdvisor.dto.UpdatedTariffResponse;
 import com.complex.finAdvisor.entity.TariffEntity;
 import com.complex.finAdvisor.entity.UserEntity;
@@ -37,17 +38,37 @@ public class TariffService {
         }
     }
 
-    public void updateTariffAuthUser(String username, TariffRequest tariffRequest) {
+    public TariffResponse updateTariffAuthUser(String username, TariffRequest tariffRequest) {
         Optional<UserEntity> currentUser = userRepository.findByUsername(username);
-        currentUser.ifPresent(userEntity -> {
+        TariffResponse response = new TariffResponse();
+
+        if (currentUser.isPresent()) {
+            UserEntity userEntity = currentUser.get();
+
+            if (tariffRequest == null || (tariffRequest.getName() == null && tariffRequest.getDuration() == 0)) {
+                response.setName(userEntity.getTariff().getName());
+                response.setDuration(userEntity.getTariffDuration());
+                response.setTariffInception(userEntity.getTariffInception());
+                response.setTariffExpiration(userEntity.getTariffExpiration());
+                return response; // Возвращаем response, если tariffRequest == null
+            }
+
             Optional<TariffEntity> currentTariff = tariffRepository.findByName(tariffRequest.getName());
+            ZonedDateTime moscowTime = ZonedDateTime.now(ZoneId.of("Europe/Moscow"));
+
             currentTariff.ifPresent(userEntity::setTariff);
             userEntity.setTariffDuration(tariffRequest.getDuration());
-            ZonedDateTime moscowTime = ZonedDateTime.now(ZoneId.of("Europe/Moscow"));
             userEntity.setTariffInception(moscowTime.toLocalDateTime());
             userEntity.setTariffExpiration(moscowTime.toLocalDateTime().plusDays(tariffRequest.getDuration()));
             userRepository.save(userEntity);
-        });
+
+            response.setName(userEntity.getTariff().getName());
+            response.setDuration(userEntity.getTariffDuration());
+            response.setTariffInception(userEntity.getTariffInception());
+            response.setTariffExpiration(userEntity.getTariffExpiration());
+        }
+
+        return response; // Возвращаем response в конце метода
     }
 
     public UpdatedTariffResponse getDifferenceDaysTariff(TariffRequest tariffRequest, String username) {
