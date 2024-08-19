@@ -1,11 +1,16 @@
 import { Link } from "react-router-dom";
-import simple from "@/assets/tariffs/simple.png";
-import plus from "@/assets/tariffs/plus.png";
-import pro from "@/assets/tariffs/pro.png";
-import vip from "@/assets/tariffs/vip.png";
+// import simple from "@/assets/tariffs/simple.png";
+// import plus from "@/assets/tariffs/plus.png";
+// import pro from "@/assets/tariffs/pro.png";
+// import vip from "@/assets/tariffs/vip.png";
 import { useWindowWidth } from "@react-hook/window-size";
 import clsx from "clsx";
 import { useDifferenceDays } from "@/api/hooks/usePayment";
+
+const simple = "rofl";
+const plus = "rofl";
+const pro = "rofl";
+const vip = "rofl";
 
 const tariffs = [
   { name: "Simple", img: simple, cost: 2490 },
