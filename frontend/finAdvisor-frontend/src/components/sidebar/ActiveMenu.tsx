@@ -1,4 +1,4 @@
-import { Exit, Help, Home, Signal, Tariff, Tool } from "@/assets";
+import { Exit, Home, Signal, Tariff, Tool } from "@/assets";
 import { Nav, ToggleTheme } from "@/components";
 
 const links = [
@@ -23,11 +23,12 @@ const links = [
     path: "/tariffs",
     icon: <Tariff />,
   },
-  {
-    title: "Помощь",
-    path: "/help",
-    icon: <Help />,
-  },
+  // SECRET RED FLAGS 0.5 * 1 /4
+  // {
+  //   title: "Помощь",
+  //   path: "/help",
+  //   icon: <Help />,
+  // },
   {
     title: "Выход",
     path: "/login",

@@ -1,5 +1,5 @@
 import { Nav, ToggleTheme } from "@/components";
-import { Logo, Help, Home, Signal, Tariff, Tool, Exit } from "@/assets";
+import { Logo, Home, Signal, Tariff, Tool, Exit } from "@/assets";
 import clsx from "clsx";
 import { useWindowWidth } from "@react-hook/window-size";
 
@@ -25,11 +25,13 @@ const links = [
     path: "/tariffs",
     icon: <Tariff />,
   },
-  {
-    title: "Помощь",
-    path: "/help",
-    icon: <Help />,
-  },
+
+  // SECRET RED FLAGS 0.5 * 2 /4
+  // {
+  //   title: "Помощь",
+  //   path: "/help",
+  //   icon: <Help />,
+  // },
   {
     title: "Выход",
     path: "/login",
