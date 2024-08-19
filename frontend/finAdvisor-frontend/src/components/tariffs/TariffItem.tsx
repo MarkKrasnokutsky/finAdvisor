@@ -111,7 +111,7 @@ export const TariffItem: React.FC<TariffItemProps> = ({
       </div>
       <div className="absolute -right-5 -top-7">
         <img
-          src={selectTariff?.img}
+          src={`https://s3.timeweb.cloud/432b8bc2-cde0d2b0-8512-478d-a65f-555f9e22470f/tariffs/${selectTariff?.name.toLocaleLowerCase()}.png`}
           alt=""
           className={clsx({
             "w-64": onlyWidth > 1650,
