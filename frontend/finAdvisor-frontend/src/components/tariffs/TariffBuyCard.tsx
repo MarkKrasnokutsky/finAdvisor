@@ -52,7 +52,11 @@ export const TariffBuyCard: React.FC<TariffBuyCardProps> = ({ tariff }) => {
   return (
     <div className="flex flex-col text-center items-center gap-y-2">
       <h4 className="text-[28px] font-semibold">{tariff.name}</h4>
-      <img className="w-40 " src={tariff.img} alt="тариф" />
+      <img
+        className="w-40 "
+        src={`https://s3.timeweb.cloud/432b8bc2-cde0d2b0-8512-478d-a65f-555f9e22470f/tariffs/${tariff.name.toLocaleLowerCase()}.png`}
+        alt="тариф"
+      />
       <p className="text-lg font-medium ">
         {tariff.instrumentCount} доступных инструментов
       </p>
