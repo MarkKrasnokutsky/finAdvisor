@@ -69,9 +69,13 @@ export const Profile: React.FC<ProfileProps> = ({ username, email }) => {
           })}
         >
           Получайте уведомления обо всех сигналах прямо у себя в{" "}
-          <span className="cursor-pointer text-telegram dark:text-telegram-dark">
+          {/* SECRET RED FLAG 2/4 - ссылка на тг канал */}
+          <a
+            href="https://t.me/profitpicks_news"
+            className="cursor-pointer text-telegram dark:text-telegram-dark"
+          >
             telegram
-          </span>
+          </a>
         </p>
       </div>
     </div>

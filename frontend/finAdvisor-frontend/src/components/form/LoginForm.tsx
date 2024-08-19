@@ -110,10 +110,10 @@ export const LoginForm = () => {
                   />
                 </FormControl>
                 <FormMessage></FormMessage>
-
-                <Link to={"/forgot-password"}>
+                {/* SECRET RED FLAG 4/4 */}
+                {/* <Link to={"/forgot-password"}>
                   <FormDescription>Восстановите пароль</FormDescription>
-                </Link>
+                </Link> */}
               </FormItem>
             )}
           />
