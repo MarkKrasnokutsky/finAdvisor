@@ -4,6 +4,7 @@ import { AxiosResponse } from "axios";
 import { getDataCookies, setDataCookies } from "@/lib/utils";
 
 import { CreatePaymentResponse } from "@/types/payment";
+import { differenceDaysResponce } from "@/types/tariff";
 
 export const useTariffChange = () => {
   const tariffChangeMutation = useMutation({
@@ -22,7 +23,7 @@ export const useTariffChange = () => {
 export const useDifferenceDays = () => {
   const differenceDaysMutation = useMutation({
     mutationFn: paymentService.differenceDays,
-    onSuccess: (res: AxiosResponse<string>) => {
+    onSuccess: (res: AxiosResponse<differenceDaysResponce>) => {
       console.log("res: ", res);
     },
     onError: (error: Error) => {

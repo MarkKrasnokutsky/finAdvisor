@@ -9,3 +9,9 @@ export type TariffChangeInput = {
   name: string;
   duration: string;
 };
+
+export type differenceDaysResponce = {
+  username: string;
+  tariffName: string;
+  dayDifference: number;
+};

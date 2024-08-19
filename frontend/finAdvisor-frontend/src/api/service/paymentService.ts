@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import instance from "../config";
-import { TariffChangeInput } from "@/types/tariff";
+import { differenceDaysResponce, TariffChangeInput } from "@/types/tariff";
 import {
   CreatePaymentRequest,
   CheckPaymentResponse,
@@ -25,18 +25,22 @@ export const paymentService = {
       {
         value: tariff.value,
         currency: "RUB",
-        description: `Покупка тарифа: ${tariff.description}`,
+        description: tariff.description,
+        // description: `Покупка тарифа: ${tariff.description}`,
       }
     );
     return response;
   },
   differenceDays: async (
     input: TariffChangeInput
-  ): Promise<AxiosResponse<string>> => {
-    const response = await instance.post<string>(`/tariff/getDifferenceDays`, {
-      name: input.name,
-      duration: input.duration,
-    });
+  ): Promise<AxiosResponse<differenceDaysResponce>> => {
+    const response = await instance.post<differenceDaysResponce>(
+      `/tariff/getDifferenceDays`,
+      {
+        name: input.name,
+        duration: input.duration,
+      }
+    );
     return response;
   },
   checkPayment: async (
