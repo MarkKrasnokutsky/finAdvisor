@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 // import vip from "@/assets/tariffs/vip.png";
 import { useWindowWidth } from "@react-hook/window-size";
 import clsx from "clsx";
-import { useDifferenceDays } from "@/api/hooks/usePayment";
+import { useCreatePayment, useDifferenceDays } from "@/api/hooks/usePayment";
+import { setDataCookies } from "@/lib/utils";
 
 const simple = "rofl";
 const plus = "rofl";
@@ -34,6 +35,7 @@ export const TariffItem: React.FC<TariffItemProps> = ({
   instrumentCount,
   isPage,
   isTariff,
+  // cost,
 }) => {
   const date = tariffExpiration?.split("T")[0];
 
@@ -48,10 +50,31 @@ export const TariffItem: React.FC<TariffItemProps> = ({
     duration: "30",
   };
 
+  const createPaymentData = {
+    value: selectTariff?.cost.toString() || "",
+    description: `Продление тарифа: ${name}`,
+  };
+
+  // const tariffChangeData = {
+  //   name: name?.toLowerCase() || "",
+  //   duration: "30",
+  // };
+  const createPaymentMutation = useCreatePayment();
   // RENAME!!!
   const onSubmit = async () => {
     try {
-      await differenceDaysMutatiton.mutateAsync(differenceDaysData);
+      const { data: diffResData } = await differenceDaysMutatiton.mutateAsync(
+        differenceDaysData
+      );
+      const { data } = await createPaymentMutation.mutateAsync(
+        createPaymentData
+      );
+
+      await setDataCookies("paymentId", data.id);
+      await setDataCookies("tariffChangeData", {
+        name: diffResData.tariffName,
+        duration: (diffResData.dayDifference + 30).toString(),
+      });
     } catch (error) {
       console.log("error: ", error);
     }
