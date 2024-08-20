@@ -41,21 +41,22 @@ public class SignalService {
             currentUser.ifPresent(userEntity -> {
                 Long currentTariff = userEntity.getTariff().getId();
                 List<InstrumentTariffEntity> listRelationship = stockTariffRepository.findByTariffId(currentTariff);
-
+                // TODO
                 for (InstrumentTariffEntity relationship : listRelationship) {
-                    StockSignalEntity stockSignalEntity = signalRepository.findBySecid(relationship.getInstrument().getSecid());
-                    if (stockSignalEntity == null) {
+                    List<StockSignalEntity> stockSignalEntity = signalRepository.findBySecid(relationship.getInstrument().getSecid());
+                    if (stockSignalEntity.isEmpty()) {
                         continue;
                     }
                     SignalResponse signalResponse = new SignalResponse();
-                    signalResponse.setId(stockSignalEntity.getId());
-                    signalResponse.setDate(stockSignalEntity.getDate());
-                    signalResponse.setSecid(stockSignalEntity.getSecid());
-                    signalResponse.setShortname(stockSignalEntity.getShortname());
-                    signalResponse.setOpen(stockSignalEntity.getOpen());
-                    signalResponse.setStop(stockSignalEntity.getStop());
-                    signalResponse.setProfitFix(stockSignalEntity.getProfitFix());
+                    signalResponse.setId(stockSignalEntity.get(0).getId());
+                    signalResponse.setDate(stockSignalEntity.get(0).getDate());
+                    signalResponse.setSecid(stockSignalEntity.get(0).getSecid());
+                    signalResponse.setShortname(stockSignalEntity.get(0).getShortname());
+                    signalResponse.setOpen(stockSignalEntity.get(0).getOpen());
+                    signalResponse.setStop(stockSignalEntity.get(0).getStop());
+                    signalResponse.setProfitFix(stockSignalEntity.get(0).getProfitFix());
                     stockSignals.add(signalResponse);
+
                 }
             });
             return stockSignals;
