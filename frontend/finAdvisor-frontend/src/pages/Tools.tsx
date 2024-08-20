@@ -32,9 +32,9 @@ const Tools: React.FC = () => {
           {/* justify-center */}
           <div
             className={clsx(
-              "flex flex-wrap gap-x-5 w-full h-full gap-y-4 items-start overflow-y-auto scroll-container",
+              "flex flex-wrap gap-x-5  w-full  gap-y-4 items-start overflow-y-auto scroll-container",
               {
-                "justify-center": !tools,
+                "justify-center h-full": !tools,
               }
             )}
           >
