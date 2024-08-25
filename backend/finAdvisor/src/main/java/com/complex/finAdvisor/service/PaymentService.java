@@ -1,14 +1,14 @@
 package com.complex.finAdvisor.service;
 
-import com.complex.finAdvisor.dto.PaymentAmountRequest;
-import com.complex.finAdvisor.dto.PaymentConfirmationRequest;
-import com.complex.finAdvisor.dto.PaymentCustomRequest;
-import com.complex.finAdvisor.dto.PaymentRequest;
+import com.complex.finAdvisor.dto.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.client.RestTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PaymentService {
@@ -32,12 +32,26 @@ public class PaymentService {
         amountRequest.setValue(customRequest.getValue());
         amountRequest.setCurrency(customRequest.getCurrency());
         request.setAmount(amountRequest);
-        request.setDescription(customRequest.getDescription());
-        request.setCapture(true);
         PaymentConfirmationRequest confirmationRequest = new PaymentConfirmationRequest();
         confirmationRequest.setType("redirect");
         confirmationRequest.setReturn_url(returnUrl);
         request.setConfirmation(confirmationRequest);
+        PaymentReceiptRequest paymentReceipt = new PaymentReceiptRequest();
+        PaymentCustomerRequest paymentCustomer = new PaymentCustomerRequest();
+        paymentCustomer.setFull_name(customRequest.getFullName());
+        paymentCustomer.setEmail(customRequest.getEmail());
+        paymentReceipt.setCustomer(paymentCustomer);
+        List<PaymentItemRequest> paymentItems = new ArrayList<PaymentItemRequest>();
+        PaymentItemRequest paymentItem = new PaymentItemRequest();
+        paymentItem.setDescription(customRequest.getDescription());
+        paymentItem.setQuantity(1.0);
+        paymentItem.setAmount(amountRequest);
+        paymentItem.setVat_code(2);
+        paymentItem.setPayment_mode("full_prepayment");
+        paymentItem.setPayment_subject("commodity");
+        paymentItems.add(paymentItem);
+        paymentReceipt.setItems(paymentItems);
+        request.setReceipt(paymentReceipt);
         HttpEntity<PaymentRequest> requestEntity = new HttpEntity<>(request, headers);
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.postForObject(url, requestEntity, String.class);

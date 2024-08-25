@@ -5,7 +5,6 @@ import lombok.Data;
 @Data
 public class PaymentRequest {
     private PaymentAmountRequest amount;
-    private boolean capture;
-    private String description;
+    private PaymentReceiptRequest receipt;
     private PaymentConfirmationRequest confirmation;
 }
