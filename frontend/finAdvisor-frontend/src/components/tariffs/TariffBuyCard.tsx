@@ -34,6 +34,8 @@ export const TariffBuyCard: React.FC<TariffBuyCardProps> = ({ tariff }) => {
   const createPaymentData = {
     value: tariff.cost.toString(),
     description: `Покупка тарифа: ${tariff.name}`,
+    username: authData?.username || "",
+    email: authData?.email || "",
   };
 
   const onSubmit = async () => {
