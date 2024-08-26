@@ -11,4 +11,6 @@ export type CreatePaymentResponse = {
 export type CreatePaymentRequest = {
   value: string;
   description: string;
+  username: string;
+  email: string;
 };

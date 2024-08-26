@@ -7,6 +7,7 @@ import { useWindowWidth } from "@react-hook/window-size";
 import clsx from "clsx";
 import { useCreatePayment, useDifferenceDays } from "@/api/hooks/usePayment";
 import { setDataCookies } from "@/lib/utils";
+import { useAuthContext } from "@/api/hooks/useAuth";
 
 const simple = "rofl";
 const plus = "rofl";
@@ -38,6 +39,7 @@ export const TariffItem: React.FC<TariffItemProps> = ({
   // cost,
 }) => {
   const date = tariffExpiration?.split("T")[0];
+  const { authData } = useAuthContext();
 
   const selectTariff = tariffs.find(
     (a) => a.name.toLocaleLowerCase() === name?.toLocaleLowerCase()
@@ -53,6 +55,8 @@ export const TariffItem: React.FC<TariffItemProps> = ({
   const createPaymentData = {
     value: selectTariff?.cost.toString() || "",
     description: `Продление тарифа: ${name}`,
+    username: authData?.username || "",
+    email: authData?.email || "",
   };
 
   // const tariffChangeData = {

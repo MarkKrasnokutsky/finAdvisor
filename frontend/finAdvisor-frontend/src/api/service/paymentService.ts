@@ -26,6 +26,8 @@ export const paymentService = {
         value: tariff.value,
         currency: "RUB",
         description: tariff.description,
+        fullName: tariff.username,
+        email: tariff.email,
         // description: `Покупка тарифа: ${tariff.description}`,
       }
     );
