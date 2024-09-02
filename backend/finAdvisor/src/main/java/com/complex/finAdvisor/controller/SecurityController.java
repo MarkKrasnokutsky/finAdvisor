@@ -1,23 +1,20 @@
 package com.complex.finAdvisor.controller;
 
-import com.complex.finAdvisor.dto.SigninRequest;
-import com.complex.finAdvisor.dto.SignupRequest;
-import com.complex.finAdvisor.dto.TokenRefreshResponse;
+import com.complex.finAdvisor.dto.*;
+import com.complex.finAdvisor.service.MailSenderService;
 import com.complex.finAdvisor.service.SecurityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
+import java.io.IOException;
 
 @RestController
 @Tag(name = "Аутентификация", description = "Контроллер для работы с регистрацией/авторизацией")
@@ -25,6 +22,7 @@ import java.security.Principal;
 @RequiredArgsConstructor
 public class SecurityController {
     private final SecurityService securityService;
+    private final MailSenderService senderService;
 
     @PostMapping("/signup")
     @Operation(summary = "Регистрация пользователя")
@@ -42,5 +40,16 @@ public class SecurityController {
     @Operation(summary = "Обновление access-токена по refresh-токену с записью в куки-файлы")
     public ResponseEntity<?> refresh(HttpServletRequest request, HttpServletResponse response) {
         return securityService.refresh(request, response);
+    }
+
+    @PostMapping("/sendCode")
+    @Operation(summary = "Отправляет код подтверждения сброса пароля на указанный email")
+    public ResponseEntity<?> sendCode(@RequestBody MailRequest request) throws MessagingException, IOException {
+        return securityService.sendResetCode(request);
+    }
+    @PostMapping("/resetPassword")
+    @Operation(summary = "Изменяет пароль пользователя по введенному коду")
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+        return securityService.resetPassword(request);
     }
 }
