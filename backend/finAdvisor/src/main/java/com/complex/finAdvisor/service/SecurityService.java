@@ -1,10 +1,7 @@
 package com.complex.finAdvisor.service;
 
 import com.complex.finAdvisor.config.JwtCore;
-import com.complex.finAdvisor.dto.SigninRequest;
-import com.complex.finAdvisor.dto.SignupRequest;
-import com.complex.finAdvisor.dto.TokenRefreshResponse;
-import com.complex.finAdvisor.dto.TokenResponse;
+import com.complex.finAdvisor.dto.*;
 import com.complex.finAdvisor.entity.TariffEntity;
 import com.complex.finAdvisor.entity.UserEntity;
 import com.complex.finAdvisor.repository.UserRepository;
@@ -12,6 +9,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,8 +30,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.WebUtils;
 
+import java.io.IOException;
+import java.security.SecureRandom;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -47,6 +48,13 @@ public class SecurityService {
     @Value("${jwt-token.refresh-lifetime}")
     private int refreshTokenLifetime;
     private UserRepository userRepository;
+
+    private final MailSenderService mailService;
+
+    private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private static final int CODE_LENGTH = 6;
+    private static final SecureRandom random = new SecureRandom();
+
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -159,5 +167,46 @@ public class SecurityService {
         } catch (JwtException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token is invalid");
         }
+    }
+
+    public ResponseEntity<?> sendResetCode(MailRequest request) throws MessagingException, IOException {
+        Optional<UserEntity> currentUser = userRepository.findByEmail(request.getEmail());
+        if (currentUser.isPresent()) {
+            String resetCode = generateRandomCode();
+            currentUser.get().setResetCode(resetCode);
+            userRepository.save(currentUser.get());
+            String subject = "Попытка сброса пароля";
+            mailService.sendHtmlMessage(currentUser.get().getEmail(), subject, resetCode);
+            return ResponseEntity.ok("Код отправлен");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователь с таким email не найден");
+    }
+
+    public ResponseEntity<?> resetPassword(ResetPasswordRequest request) {
+        if (request.getNewPassword() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Пароль не должен быть пустой");
+        }
+        Optional<UserEntity> currentUser = userRepository.findByEmail(request.getEmail());
+        if (currentUser.isPresent()) {
+            if (Objects.equals(request.getCode(), currentUser.get().getResetCode())) {
+                String newPassword = passwordEncoder.encode(request.getNewPassword());
+                currentUser.get().setPassword(newPassword);
+                currentUser.get().setResetCode(null);
+                userRepository.save(currentUser.get());
+                return ResponseEntity.ok("Пароль успешно изменен");
+            }
+            else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Неверный код подтверждения");
+            }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователь с таким email не найден");
+    }
+    private static String generateRandomCode() {
+        StringBuilder code = new StringBuilder(CODE_LENGTH);
+        for (int i = 0; i < CODE_LENGTH; i++) {
+            int index = random.nextInt(CHARACTERS.length());
+            code.append(CHARACTERS.charAt(index));
+        }
+        return code.toString();
     }
 }

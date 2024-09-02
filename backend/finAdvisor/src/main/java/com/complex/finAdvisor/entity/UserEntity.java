@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -61,6 +62,10 @@ public class UserEntity {
     @Column(name = "created_at", nullable = false)
     @Schema(description = "Дата регистрации пользователя", example = "2007-12-03T10:15:30")
     private LocalDateTime createdAt;
+
+    @Column(name = "reset_code", nullable = true, length = 6)
+    @Schema(description = "Код для сброса пароля пользователя")
+    private String resetCode;
 
     @Override
     public String toString() {
