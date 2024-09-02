@@ -10,6 +10,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 @Service
@@ -39,12 +41,19 @@ public class MailSenderService {
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(to);
         helper.setSubject(subject);
-        String htmlContent = new String(Files.readAllBytes(new ClassPathResource("templates/resetPasswordLetter.html").getFile().toPath()));
-        // Замена плейсхолдеров на динамический контент
-        htmlContent = htmlContent.replace("{userEmail}", to);
-        htmlContent = htmlContent.replace("{resetCode}", resetCode);
 
-        helper.setText(htmlContent, true); // true - для отправки как HTML
+        // Используем InputStream для загрузки HTML-шаблона
+        try (InputStream inputStream = new ClassPathResource("templates/resetPasswordLetter.html").getInputStream()) {
+            String htmlContent = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+
+            // Замена плейсхолдеров на динамический контент
+            htmlContent = htmlContent.replace("{userEmail}", to);
+            htmlContent = htmlContent.replace("{resetCode}", resetCode);
+
+            helper.setText(htmlContent, true); // true - для отправки как HTML
+        }
+
         mailSender.send(message);
     }
+
 }
