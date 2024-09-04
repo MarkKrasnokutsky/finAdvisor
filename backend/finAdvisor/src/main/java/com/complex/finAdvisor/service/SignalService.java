@@ -32,6 +32,37 @@ public class SignalService {
     private final SignalRepository signalRepository;
     private final UserRepository userRepository;
     private final StockTariffRepository stockTariffRepository;
+    private final TimeService clockService;
+
+    public List<SignalResponse> getSignalsOfThisDay() {
+        List<SignalResponse> stockSignals = new ArrayList<>();
+        List<StockSignalEntity> allSignals = signalRepository.findAll();
+        for (StockSignalEntity signal : allSignals) {
+            if (clockService.getServerTime().isEqual(signal.getDate())) {
+                SignalResponse signalResponse = new SignalResponse();
+                signalResponse.setId(signal.getId());
+                signalResponse.setDate(signal.getDate());
+                signalResponse.setSecid(signal.getSecid());
+                signalResponse.setShortname(signal.getShortname());
+                signalResponse.setOpen(signal.getOpen());
+                signalResponse.setStop(signal.getStop());
+                signalResponse.setProfitFix(signal.getProfitFix());
+                stockSignals.add(signalResponse);
+            }
+        }
+        return stockSignals;
+    }
+
+    public List<SignalResponse> getSignalsOfThisDay(String username) {
+        List<SignalResponse> stockSignals = getSignalsByUser(username);
+        List<SignalResponse> stockSignalsOfThisDay = new ArrayList<>();
+        for (SignalResponse signal : stockSignals) {
+            if (clockService.getServerTime().isEqual(signal.getDate())) {
+                stockSignalsOfThisDay.add(signal);
+            }
+        }
+        return stockSignalsOfThisDay;
+    }
 
     public List<SignalResponse> getSignalsByUser(String username) {
         try {
