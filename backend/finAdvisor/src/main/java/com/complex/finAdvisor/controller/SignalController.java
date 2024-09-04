@@ -30,11 +30,31 @@ public class SignalController {
     }
     @GetMapping("/getAll")
     @Operation(summary = "Возвращает все сигналы из БД")
-    ResponseEntity<?> findLastSignal() {
+    ResponseEntity<?> getAllSignals() {
         try {
             return ResponseEntity.ok(signalRepository.findAll());
         }
         catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error");
+        }
+    }
+    @GetMapping("/getSignalsOnThisDayByUser")
+    @Operation(summary = "Возвращает все сигналы по тарифу пользователя текущего дня")
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    ResponseEntity<?> getSignalsOfThisDayByUser(Principal principal) {
+        try {
+            return ResponseEntity.ok(signalService.getSignalsOfThisDay(principal.getName()));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error");
+        }
+    }
+    @GetMapping("/getSignalsOnThisDay")
+    @Operation(summary = "Возвращает все сигналы по тарифу пользователя текущего дня")
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    ResponseEntity<?> getSignalsOfThisDay() {
+        try {
+            return ResponseEntity.ok(signalService.getSignalsOfThisDay());
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error");
         }
     }
