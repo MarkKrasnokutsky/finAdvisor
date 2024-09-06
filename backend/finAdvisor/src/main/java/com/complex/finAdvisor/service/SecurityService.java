@@ -2,8 +2,9 @@ package com.complex.finAdvisor.service;
 
 import com.complex.finAdvisor.config.JwtCore;
 import com.complex.finAdvisor.dto.*;
-import com.complex.finAdvisor.entity.TariffEntity;
+import com.complex.finAdvisor.entity.ResetCodeEntity;
 import com.complex.finAdvisor.entity.UserEntity;
+import com.complex.finAdvisor.repository.ResetCodeRepository;
 import com.complex.finAdvisor.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -48,7 +49,7 @@ public class SecurityService {
     @Value("${jwt-token.refresh-lifetime}")
     private int refreshTokenLifetime;
     private UserRepository userRepository;
-
+    private final ResetCodeRepository resetCodeRepository;
     private final MailSenderService mailService;
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -172,9 +173,11 @@ public class SecurityService {
     public ResponseEntity<?> sendResetCode(MailRequest request) throws MessagingException, IOException {
         Optional<UserEntity> currentUser = userRepository.findByEmail(request.getEmail());
         if (currentUser.isPresent()) {
+            Optional<ResetCodeEntity> currentCode = resetCodeRepository.findByEmail(currentUser.get().getEmail());
+            currentCode.ifPresent(resetCodeRepository::delete);
             String resetCode = generateRandomCode();
-            currentUser.get().setResetCode(resetCode);
-            userRepository.save(currentUser.get());
+            ResetCodeEntity resetCodeEntity = new ResetCodeEntity(resetCode,currentUser.get().getEmail());
+            resetCodeRepository.save(resetCodeEntity);
             String subject = "Попытка сброса пароля";
             mailService.sendHtmlMessage(currentUser.get().getEmail(), subject, resetCode);
             return ResponseEntity.ok("Код отправлен");
@@ -188,12 +191,19 @@ public class SecurityService {
         }
         Optional<UserEntity> currentUser = userRepository.findByEmail(request.getEmail());
         if (currentUser.isPresent()) {
-            if (Objects.equals(request.getCode(), currentUser.get().getResetCode())) {
-                String newPassword = passwordEncoder.encode(request.getNewPassword());
-                currentUser.get().setPassword(newPassword);
-                currentUser.get().setResetCode(null);
-                userRepository.save(currentUser.get());
-                return ResponseEntity.ok("Пароль успешно изменен");
+            Optional<ResetCodeEntity> currentCode = resetCodeRepository.findByEmail(request.getEmail());
+            if (currentCode.isPresent()) {
+                if (Objects.equals(request.getCode(), currentCode.get().getCode())) {
+                    if (!currentCode.get().isExpired()) {
+                        String newPassword = passwordEncoder.encode(request.getNewPassword());
+                        currentUser.get().setPassword(newPassword);
+                        resetCodeRepository.delete(currentCode.get());
+                        return ResponseEntity.ok("Пароль успешно изменен");
+                    }
+                    else {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Код подтверждения устарел. Перевыпустите код");
+                    }
+                }
             }
             else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Неверный код подтверждения");
@@ -201,6 +211,7 @@ public class SecurityService {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователь с таким email не найден");
     }
+
     private static String generateRandomCode() {
         StringBuilder code = new StringBuilder(CODE_LENGTH);
         for (int i = 0; i < CODE_LENGTH; i++) {

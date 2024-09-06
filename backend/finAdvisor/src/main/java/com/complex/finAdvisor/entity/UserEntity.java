@@ -1,6 +1,7 @@
 package com.complex.finAdvisor.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.persistence.*;
@@ -11,7 +12,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -63,9 +66,11 @@ public class UserEntity {
     @Schema(description = "Дата регистрации пользователя", example = "2007-12-03T10:15:30")
     private LocalDateTime createdAt;
 
-    @Column(name = "reset_code", nullable = true, length = 6)
-    @Schema(description = "Код для сброса пароля пользователя")
-    private String resetCode;
+//    @Column(name = "reset_code", nullable = true, length = 6)
+//    @Schema(description = "Код для сброса пароля пользователя")
+//    private String resetCode;
+
+
 
     @Override
     public String toString() {
