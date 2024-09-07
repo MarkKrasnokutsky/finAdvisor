@@ -204,9 +204,9 @@ public class SecurityService {
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Код подтверждения устарел. Перевыпустите код");
                     }
                 }
-            }
-            else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Неверный код подтверждения");
+                else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Неверный код подтверждения");
+                }
             }
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователь с таким email не найден");
