@@ -44,7 +44,14 @@ public class TariffService {
 
         if (currentUser.isPresent()) {
             UserEntity userEntity = currentUser.get();
-
+            Optional<TariffEntity> currentTariff = tariffRepository.findByName(tariffRequest.getName());
+            if (currentTariff.isEmpty()) {
+                response.setName("");
+                response.setDuration(0);
+                response.setTariffInception(null);
+                response.setTariffExpiration(null);
+                return response;
+            }
             if (tariffRequest == null || (tariffRequest.getName() == null && tariffRequest.getDuration() == 0)) {
                 response.setName(userEntity.getTariff().getName());
                 response.setDuration(userEntity.getTariffDuration());
@@ -53,7 +60,6 @@ public class TariffService {
                 return response; // Возвращаем response, если tariffRequest == null
             }
 
-            Optional<TariffEntity> currentTariff = tariffRepository.findByName(tariffRequest.getName());
             ZonedDateTime moscowTime = ZonedDateTime.now(ZoneId.of("Europe/Moscow"));
 
             currentTariff.ifPresent(userEntity::setTariff);
