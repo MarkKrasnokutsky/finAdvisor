@@ -153,6 +153,37 @@ export const useAuthContext = (): AuthContextType => {
   return context;
 };
 
+export const useSendCode = () => {
+  const navigate = useNavigate();
+
+  const sendCodeMutation = useMutation({
+    mutationFn: authService.sendCode,
+    onSuccess: () => {
+      navigate("/dashboard/forgot-password");
+    },
+    onError: (error: Error) => {
+      console.log(error);
+    },
+  });
+
+  return sendCodeMutation;
+};
+export const useResetPassword = () => {
+  const navigate = useNavigate();
+
+  const resetPasswordMutation = useMutation({
+    mutationFn: authService.resetPassword,
+    onSuccess: () => {
+      navigate("/dashboard/login");
+    },
+    onError: (error: Error) => {
+      console.log(error);
+    },
+  });
+
+  return resetPasswordMutation;
+};
+
 // export const useMe = () => {
 //   const meQuery = useQuery({
 //     queryKey: ["me"],
