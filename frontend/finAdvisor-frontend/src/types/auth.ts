@@ -25,3 +25,10 @@ export interface ResponseData {
   tariffInception: string;
   tariffExpiration: string;
 }
+
+export type InputResetPasswordData = {
+  email: string;
+  code: string;
+  newPassword: string;
+  confirmPassword: string;
+};

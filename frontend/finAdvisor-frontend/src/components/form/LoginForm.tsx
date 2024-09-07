@@ -13,7 +13,7 @@ import {
   Input,
   Form,
   FormControl,
-  // FormDescription,
+  FormDescription,
   FormField,
   FormItem,
   FormMessage,
@@ -111,9 +111,9 @@ export const LoginForm = () => {
                 </FormControl>
                 <FormMessage></FormMessage>
                 {/* SECRET RED FLAG 4/4 */}
-                {/* <Link to={"/forgot-password"}>
+                <Link to={"/dashboard/request-code"}>
                   <FormDescription>Восстановите пароль</FormDescription>
-                </Link> */}
+                </Link>
               </FormItem>
             )}
           />

@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 
-import { InputData, ResponseData } from "@/types/auth";
+import { InputData, InputResetPasswordData, ResponseData } from "@/types/auth";
 import instance from "../config";
 
 export const authService = {
@@ -26,6 +26,22 @@ export const authService = {
   },
   refreshToken: async (): Promise<AxiosResponse<ResponseData>> => {
     return await instance.post<ResponseData>(`/auth/refresh_token`);
+  },
+  sendCode: async (data: {
+    email: string;
+  }): Promise<AxiosResponse<ResponseData>> => {
+    return await instance.post<ResponseData>(`/auth/sendCode`, {
+      email: data.email,
+    });
+  },
+  resetPassword: async (
+    resetPasswordData: InputResetPasswordData
+  ): Promise<AxiosResponse<ResponseData>> => {
+    return await instance.post<ResponseData>(`/auth/resetPassword`, {
+      email: resetPasswordData.email,
+      code: resetPasswordData.code,
+      newPassword: resetPasswordData.newPassword,
+    });
   },
 
   // logout: () => {

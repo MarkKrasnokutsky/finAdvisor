@@ -12,6 +12,8 @@ import { FilterToolProvider } from "@/context/FilterToolContext";
 // import Tariff from "@/pages/Tariff";
 import React, { Suspense } from "react";
 import Registration from "@/pages/auth/Registration";
+import RequestCode from "@/pages/auth/RequestCode";
+import ForgotPassword from "@/pages/auth/ForgotPassword";
 
 const Signals = React.lazy(() => import("@/pages/Signals"));
 const Tools = React.lazy(() => import("@/pages/Tools"));
@@ -95,6 +97,26 @@ const router = createBrowserRouter([
           <PublicRoute>
             <AuthLayout>
               <Registration />
+            </AuthLayout>
+          </PublicRoute>
+        ),
+      },
+      {
+        path: "request-code",
+        element: (
+          <PublicRoute>
+            <AuthLayout>
+              <RequestCode />
+            </AuthLayout>
+          </PublicRoute>
+        ),
+      },
+      {
+        path: "forgot-password",
+        element: (
+          <PublicRoute>
+            <AuthLayout>
+              <ForgotPassword />
             </AuthLayout>
           </PublicRoute>
         ),

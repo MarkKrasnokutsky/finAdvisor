@@ -32,6 +32,8 @@ export * from "./sidebar/ActiveMenu";
 // form
 export * from "./form/LoginForm";
 export * from "./form/RegistrationForm";
+export * from "./form/RequestCodeForm";
+export * from "./form/ForgotPasswordForm";
 
 // ui
 export * from "./ui/button";
