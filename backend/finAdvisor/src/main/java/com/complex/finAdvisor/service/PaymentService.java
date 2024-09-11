@@ -31,6 +31,7 @@ public class PaymentService {
         PaymentAmountRequest amountRequest = new PaymentAmountRequest();
         amountRequest.setValue(customRequest.getValue());
         amountRequest.setCurrency(customRequest.getCurrency());
+        request.setCapture(true);
         request.setAmount(amountRequest);
         PaymentConfirmationRequest confirmationRequest = new PaymentConfirmationRequest();
         confirmationRequest.setType("redirect");
