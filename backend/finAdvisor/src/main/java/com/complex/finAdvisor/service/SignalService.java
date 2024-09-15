@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -319,6 +320,9 @@ public class SignalService {
     }
     // Создание структуры для сигнала
     private SignalDto createLongPoint(SignalDto signal) {
+        if (signal.getTradedate().getDayOfWeek() == DayOfWeek.FRIDAY) {
+            return new SignalDto(signal.getSecid(), 0, 0, signal.getClose(), 0, signal.getShortname(), signal.getTradedate().plusDays(3));
+        }
         return new SignalDto(signal.getSecid(), 0, 0, signal.getClose(), 0, signal.getShortname(), signal.getTradedate().plusDays(1));
     }
 }
