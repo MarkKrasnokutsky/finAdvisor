@@ -15,10 +15,10 @@ const pro = "rofl";
 const vip = "rofl";
 
 const tariffs = [
-  { name: "Simple", img: simple, cost: 2490 },
-  { name: "Plus", img: plus, cost: 3490 },
-  { name: "Pro", img: pro, cost: 4990 },
-  { name: "VIP", img: vip, cost: 7490 },
+  { name: "Simple", img: simple, cost: 499 },
+  { name: "Plus", img: plus, cost: 799 },
+  { name: "Pro", img: pro, cost: 999 },
+  { name: "VIP", img: vip, cost: 1499 },
 ];
 
 type TariffItemProps = {
