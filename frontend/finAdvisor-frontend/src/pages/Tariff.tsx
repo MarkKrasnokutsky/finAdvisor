@@ -16,10 +16,10 @@ const pro = "rofl";
 const vip = "rofl";
 
 const tariffs = [
-  { name: "Simple", img: simple, instrumentCount: 15, cost: 2490 },
-  { name: "Plus", img: plus, instrumentCount: 35, cost: 3490 },
-  { name: "Pro", img: pro, instrumentCount: 88, cost: 4990 },
-  { name: "VIP", img: vip, instrumentCount: 175, cost: 7490 },
+  { name: "Simple", img: simple, instrumentCount: 15, cost: 499 },
+  { name: "Plus", img: plus, instrumentCount: 35, cost: 799 },
+  { name: "Pro", img: pro, instrumentCount: 88, cost: 999 },
+  { name: "VIP", img: vip, instrumentCount: 175, cost: 1499 },
 ];
 
 const Tariff: React.FC = () => {
