@@ -75,7 +75,7 @@ public class SecurityService {
     public void setJwtCore(JwtCore jwtCore) {
         this.jwtCore = jwtCore;
     }
-    public ResponseEntity<?> register(SignupRequest signupRequest) {
+    public ResponseEntity<?> register(SignupRequest signupRequest) throws MessagingException, IOException {
         if (userRepository.existsByUsername(signupRequest.getUsername())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Имя занято");
         }
@@ -92,6 +92,8 @@ public class SecurityService {
         ZonedDateTime moscowTime = ZonedDateTime.now(ZoneId.of("Europe/Moscow"));
         userEntity.setCreatedAt(moscowTime.toLocalDateTime());
         userRepository.save(userEntity);
+        String subject = "ProfitPicks. Добро пожаловать !";
+        mailService.sendWelcomeHtmlMessage(userEntity.getEmail(), subject);
         return ResponseEntity.ok("Added user successfully");
     }
     public ResponseEntity<?> login(SigninRequest signinRequest, HttpServletResponse response) {
@@ -179,7 +181,7 @@ public class SecurityService {
             ResetCodeEntity resetCodeEntity = new ResetCodeEntity(resetCode,currentUser.get().getEmail());
             resetCodeRepository.save(resetCodeEntity);
             String subject = "Попытка сброса пароля";
-            mailService.sendHtmlMessage(currentUser.get().getEmail(), subject, resetCode);
+            mailService.sendResetCodeHtmlMessage(currentUser.get().getEmail(), subject, resetCode);
             return ResponseEntity.ok("Код отправлен");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователь с таким email не найден");

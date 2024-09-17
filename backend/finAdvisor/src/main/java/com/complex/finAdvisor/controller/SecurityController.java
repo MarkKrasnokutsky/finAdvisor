@@ -26,7 +26,7 @@ public class SecurityController {
 
     @PostMapping("/signup")
     @Operation(summary = "Регистрация пользователя")
-    ResponseEntity<?> signup(@Valid @RequestBody @Parameter(description = "Тело запроса на регистрацию") SignupRequest signupRequest) {
+    ResponseEntity<?> signup(@Valid @RequestBody @Parameter(description = "Тело запроса на регистрацию") SignupRequest signupRequest) throws MessagingException, IOException {
         return securityService.register(signupRequest);
     }
 

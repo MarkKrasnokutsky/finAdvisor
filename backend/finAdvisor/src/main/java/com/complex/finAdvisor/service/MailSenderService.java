@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +35,7 @@ public class MailSenderService {
         mailSender.send(message);
     }
 
-    public void sendHtmlMessage(String to, String subject, String resetCode) throws MessagingException, IOException {
+    public void sendResetCodeHtmlMessage(String to, String subject, String resetCode) throws MessagingException, IOException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(to);
@@ -55,5 +54,22 @@ public class MailSenderService {
 
         mailSender.send(message);
     }
+    public void sendWelcomeHtmlMessage(String to, String subject) throws MessagingException, IOException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        helper.setTo(to);
+        helper.setSubject(subject);
 
+        // Используем InputStream для загрузки HTML-шаблона
+        try (InputStream inputStream = new ClassPathResource("templates/welcomeLetter.html").getInputStream()) {
+            String htmlContent = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+
+            // Замена плейсхолдеров на динамический контент
+            htmlContent = htmlContent.replace("{userEmail}", to);
+
+            helper.setText(htmlContent, true); // true - для отправки как HTML
+        }
+
+        mailSender.send(message);
+    }
 }
