@@ -2,7 +2,7 @@ import { useAuthContext } from "@/api/hooks/useAuth";
 import { useTitle } from "@/api/hooks/useContext";
 import { useTools } from "@/api/hooks/useTools";
 import { Spinner } from "@/assets";
-import { ToolsItem } from "@/components";
+import { ChooseTariff, ToolsItem } from "@/components";
 import { CardLayout } from "@/layouts/CardLayout";
 import { useWindowWidth } from "@react-hook/window-size";
 import clsx from "clsx";
@@ -41,7 +41,13 @@ const Tools: React.FC = () => {
             {tools ? (
               tools.map((tool, index) => <ToolsItem key={index} tool={tool} />)
             ) : (
-              <Spinner className=" w-full  m-auto size-14 fill-primary dark:fill-primary-dark" />
+              <>
+                {authData?.tariff === null ? (
+                  <ChooseTariff />
+                ) : (
+                  <Spinner className=" w-full  m-auto size-14 fill-primary dark:fill-primary-dark" />
+                )}
+              </>
             )}
           </div>
         </div>

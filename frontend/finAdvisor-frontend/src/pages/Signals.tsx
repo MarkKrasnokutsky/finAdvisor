@@ -1,14 +1,42 @@
 import { useFilterTool, useTitle } from "@/api/hooks/useContext";
 import { useFilterSignals, useSignals } from "@/api/hooks/useSignals";
 import { Spinner } from "@/assets";
-import { Line, SignalHeader, SignalItem, SignalItemHeader } from "@/components";
+import {
+  ChooseTariff,
+  Line,
+  SignalHeader,
+  SignalItem,
+  SignalItemHeader,
+} from "@/components";
 import { CardLayout } from "@/layouts/CardLayout";
 import { Signal } from "@/types/signals";
 import { useWindowWidth } from "@react-hook/window-size";
 import { useState } from "react";
 import { format } from "date-fns";
+import { useAuthContext } from "@/api/hooks/useAuth";
+import { ResponseData } from "@/types/auth";
 
-const SignalsList = (signals: Signal[] | undefined) => {
+const SignalsList = (signals: Signal[] | undefined, authData: ResponseData) => {
+  if (authData?.tariff === null) {
+    return (
+      // <div className="flex flex-col items-center justify-center h-full gap-3">
+      //   <h3 className="text-3xl">Выберите тариф</h3>
+      //   <Link
+      //     to={"/dashboard/tariffs"}
+      //     className={clsx(
+      //       " text-center border border-primary rounded-[20px] transition-all hover:bg-primary hover:text-secondaryBg dark:border-primary-dark dark:hover:bg-primary-dark dark:hover:text-secondaryBg-dark",
+      //       {
+      //         "p-5": onlyWidth > 860,
+      //         "py-3 max-w-52": onlyWidth < 860,
+      //       }
+      //     )}
+      //   >
+      //     Перейти к тарифам
+      //   </Link>
+      // </div>
+      <ChooseTariff />
+    );
+  }
   if (!signals) {
     return <Spinner className="size-14 fill-primary dark:fill-primary-dark" />;
   }
@@ -33,6 +61,8 @@ const SignalsList = (signals: Signal[] | undefined) => {
 const Signals: React.FC = () => {
   useTitle("Список сигналов");
   const { data: signals } = useSignals();
+  const { authData } = useAuthContext();
+  console.log("authData: ", authData);
 
   const { FilterToolData } = useFilterTool();
 
@@ -46,6 +76,8 @@ const Signals: React.FC = () => {
     setDateSignals(date ? format(date, "dd-MM-yyyy") : "");
   };
 
+  console.log("authData === null: ", authData?.tariff === null);
+
   return (
     <div className="flex flex-col h-full">
       <CardLayout className="pb-0 pr-8">
@@ -58,8 +90,10 @@ const Signals: React.FC = () => {
               onlyWidth < 750 && "overflow-x-scroll"
             } scroll-container`}
           >
-            {onlyWidth < 750 && <SignalItemHeader />}
-            {SignalsList(filterSignals && filterSignals)}
+            {onlyWidth < 750 && authData?.tariff !== null && (
+              <SignalItemHeader />
+            )}
+            {SignalsList(filterSignals && filterSignals, authData!)}
           </div>
         </div>
       </CardLayout>
