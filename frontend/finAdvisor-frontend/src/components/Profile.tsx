@@ -19,8 +19,8 @@ export const Profile: React.FC<ProfileProps> = ({ username, email }) => {
         <h3 className="font-semibold text-[28px]">Профиль</h3>
         <div
           className={clsx("flex flex-col", {
-            " gap-y-5": onlyWidth > 1400,
-            "gap-y-2": onlyWidth < 1400,
+            " gap-y-5": onlyWidth > 1600,
+            "gap-y-2": onlyWidth < 1600,
           })}
         >
           <div className="">

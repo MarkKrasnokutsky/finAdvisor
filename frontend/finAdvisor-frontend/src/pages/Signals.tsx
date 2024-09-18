@@ -18,24 +18,7 @@ import { ResponseData } from "@/types/auth";
 
 const SignalsList = (signals: Signal[] | undefined, authData: ResponseData) => {
   if (authData?.tariff === null) {
-    return (
-      // <div className="flex flex-col items-center justify-center h-full gap-3">
-      //   <h3 className="text-3xl">Выберите тариф</h3>
-      //   <Link
-      //     to={"/dashboard/tariffs"}
-      //     className={clsx(
-      //       " text-center border border-primary rounded-[20px] transition-all hover:bg-primary hover:text-secondaryBg dark:border-primary-dark dark:hover:bg-primary-dark dark:hover:text-secondaryBg-dark",
-      //       {
-      //         "p-5": onlyWidth > 860,
-      //         "py-3 max-w-52": onlyWidth < 860,
-      //       }
-      //     )}
-      //   >
-      //     Перейти к тарифам
-      //   </Link>
-      // </div>
-      <ChooseTariff />
-    );
+    return <ChooseTariff />;
   }
   if (!signals) {
     return <Spinner className="size-14 fill-primary dark:fill-primary-dark" />;
