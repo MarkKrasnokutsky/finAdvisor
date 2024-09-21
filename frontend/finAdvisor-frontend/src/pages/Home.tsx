@@ -42,7 +42,7 @@ const Home: React.FC = () => {
         columns={8}
         // columns={onlyWidth > 1920 ? 10 : 8}
         rows={2}
-        className="pb-0 pr-4"
+        className={clsx(" pr-4", { "pb-0": onlyWidth > 860 })}
       >
         {sortSignals ? (
           <SignalGrid signals={sortSignals} />

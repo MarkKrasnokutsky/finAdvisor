@@ -1,9 +1,10 @@
 import { ArrowRightUp } from "@/assets";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Line, SignalItem } from "@/components";
+import { ChooseTariff, Line, SignalItem } from "@/components";
 import { Signal } from "@/types/signals";
 import { useWindowWidth } from "@react-hook/window-size";
+import { useAuthContext } from "@/api/hooks/useAuth";
 type SignalGridPtops = {
   signals: Signal[];
 };
@@ -17,6 +18,8 @@ export const SignalGrid: React.FC<SignalGridPtops> = ({ signals }) => {
   ));
   const onlyWidth = useWindowWidth();
 
+  const { authData } = useAuthContext();
+
   return (
     <div className="flex flex-col gap-4 h-full">
       <div className="flex justify-between">
@@ -27,10 +30,12 @@ export const SignalGrid: React.FC<SignalGridPtops> = ({ signals }) => {
       </div>
       <div
         className={`w-full h-full overflow-y-auto ${
-          onlyWidth < 620 && "overflow-x-scroll"
+          onlyWidth < 620 && authData?.tariff !== null && "overflow-x-scroll"
         } scroll-container`}
       >
-        {Signals.length > 0 ? (
+        {authData?.tariff === null ? (
+          <ChooseTariff />
+        ) : Signals.length > 0 ? (
           Signals
         ) : (
           <div className="flex justify-center items-center size-full text-3xl font-semibold">
