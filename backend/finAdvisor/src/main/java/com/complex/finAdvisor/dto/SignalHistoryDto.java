@@ -14,8 +14,8 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Tag(name = "Объект-ответ сигнала", description = "Структура данных из при запросе сигналов")
-public class SignalResponse {
+@Tag(name = "Объект сигнала в истории", description = "Структура данных из при запросе сигналов")
+public class SignalHistoryDto {
     @Schema(description = "Id сигнала", example = "1")
     private long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
