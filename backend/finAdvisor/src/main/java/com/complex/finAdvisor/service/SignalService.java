@@ -2,6 +2,7 @@ package com.complex.finAdvisor.service;
 
 import com.complex.finAdvisor.dto.PositionInfoDto;
 import com.complex.finAdvisor.dto.SignalDto;
+import com.complex.finAdvisor.dto.SignalHistoryDto;
 import com.complex.finAdvisor.dto.SignalResponse;
 import com.complex.finAdvisor.entity.*;
 import com.complex.finAdvisor.repository.*;
@@ -29,6 +30,41 @@ public class SignalService {
     private final StockTariffRepository stockTariffRepository;
     private final TimeService clockService;
     private final HistorySignalRepository historySignalRepository;
+
+    @Scheduled(cron = "0 0 3 * * ?", zone = "Europe/Moscow")
+    public void saveSignalsOfThisDayInHistory() {
+        List<StockSignalEntity> allSignals = signalRepository.findAll();
+        List<SignalHistoryDto> savedSignalsList = new ArrayList<>();
+        for (StockSignalEntity signal : allSignals) {
+            if (clockService.getServerTime().isEqual(signal.getDate())) {
+                Optional<HistorySignalEntity> entity = historySignalRepository.existsHistorySignalEntityBy(signal.getDate(), signal.getSecid());
+                if (entity.isPresent()) {
+                    continue;
+                }
+                SignalHistoryDto signalHistoryDto = new SignalHistoryDto();
+                signalHistoryDto.setId(signal.getId());
+                signalHistoryDto.setDate(signal.getDate());
+                signalHistoryDto.setSecid(signal.getSecid());
+                signalHistoryDto.setShortname(signal.getShortname());
+                signalHistoryDto.setOpen(signal.getOpen());
+                signalHistoryDto.setStop(signal.getStop());
+                signalHistoryDto.setProfitFix(signal.getProfitFix());
+                saveStockSignalInHistory(signalHistoryDto);
+                savedSignalsList.add(signalHistoryDto);
+            }
+        }
+    }
+
+    private void saveStockSignalInHistory(SignalHistoryDto signalHistoryDto) {
+        HistorySignalEntity historySignalEntity = new HistorySignalEntity();
+        historySignalEntity.setDate(signalHistoryDto.getDate());
+        historySignalEntity.setShortname(signalHistoryDto.getShortname());
+        historySignalEntity.setSecid(signalHistoryDto.getSecid());
+        historySignalEntity.setOpen(signalHistoryDto.getOpen());
+        historySignalEntity.setProfitFix(signalHistoryDto.getProfitFix());
+        historySignalEntity.setStop(signalHistoryDto.getStop());
+        this.historySignalRepository.save(historySignalEntity);
+    }
 
     public List<SignalResponse> getSignalsOfThisDay() {
         List<SignalResponse> stockSignals = new ArrayList<>();
@@ -132,7 +168,6 @@ public class SignalService {
 //                saveStockSignal(signalData);
 //                continue;
 //            }
-            saveStockSignalInHistory(signalData);
             saveStockSignal(signalData);
         }
     }
@@ -190,16 +225,6 @@ public class SignalService {
         stockSignalEntity.setProfitFix(signalData.get(7).getOpen() + signalData.get(7).getOpen() * 0.06);
         stockSignalEntity.setStop(signalData.get(5).getLow() - 0.0005 * signalData.get(5).getLow());
         this.signalRepository.save(stockSignalEntity);
-    }
-    private void saveStockSignalInHistory(ArrayList<SignalDto> signalData) {
-        HistorySignalEntity historySignalEntity = new HistorySignalEntity();
-        historySignalEntity.setDate(signalData.get(7).getTradedate());
-        historySignalEntity.setShortname(signalData.get(7).getShortname());
-        historySignalEntity.setSecid(signalData.get(7).getSecid());
-        historySignalEntity.setOpen(signalData.get(7).getOpen());
-        historySignalEntity.setProfitFix(signalData.get(7).getOpen() + signalData.get(7).getOpen() * 0.06);
-        historySignalEntity.setStop(signalData.get(5).getLow() - 0.0005 * signalData.get(5).getLow());
-        this.historySignalRepository.save(historySignalEntity);
     }
 
     private ArrayList<SignalDto> parseXmlResponse(String xmlResponse) {

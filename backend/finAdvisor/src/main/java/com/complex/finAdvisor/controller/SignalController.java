@@ -68,4 +68,16 @@ public class SignalController {
             return ResponseEntity.badRequest().body("Error");
         }
     }
+
+    @PutMapping("/updateSignalsHistory")
+    @Operation(summary = "Обновляет историю сигналов за всё время")
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    ResponseEntity<?> updateAllSignalsInHistory() {
+        try {
+            signalService.saveSignalsOfThisDayInHistory();
+            return ResponseEntity.ok().body("success");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error");
+        }
+    }
 }
